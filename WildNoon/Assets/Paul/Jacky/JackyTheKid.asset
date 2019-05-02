@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a453030362866b24089c377e432cdd29, type: 3}
+  m_Name: JackyTheKid
+  m_EditorClassIdentifier: 
+  m_name: Jacky The Kid
+  m_punshLine: '"I am iron man"'
+  characterArtwork: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_courage: 80
+  m_heatlh: 90
+  m_armor: 90
+  m_damage: 40
+  m_range: 40
+  m_mobility: 90
+  firstSpell: {fileID: 11400000, guid: 3948c1f016a484841bb4e7322e39b1ac, type: 2}
+  secondSpell: {fileID: 11400000, guid: d8e8915ed3f6b4347b0d956604ebc055, type: 2}
+  thirdSpell: {fileID: 11400000, guid: 354bcec2f2be7a94ebf241805dd63735, type: 2}
+  FourthSpell: {fileID: 11400000, guid: 83f73b6339d1dae41aeb395571419469, type: 2}

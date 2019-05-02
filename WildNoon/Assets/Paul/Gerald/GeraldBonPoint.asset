@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a453030362866b24089c377e432cdd29, type: 3}
+  m_Name: GeraldBonPoint
+  m_EditorClassIdentifier: 
+  m_name: Lulu
+  m_punshLine: '"Cyber Run ? What''s that ?"'
+  characterArtwork: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  m_courage: 50
+  m_heatlh: 100
+  m_armor: 30
+  m_damage: 30
+  m_range: 45
+  m_mobility: 40
+  firstSpell: {fileID: 11400000, guid: 715921fbd9a3af748b4206581ec50d13, type: 2}
+  secondSpell: {fileID: 11400000, guid: 3b3a32f2486ef014392075c5ca56c961, type: 2}
+  thirdSpell: {fileID: 11400000, guid: 4c2a087cf95f0e94187b8d02fe33761f, type: 2}
+  FourthSpell: {fileID: 11400000, guid: f03fb1d160a6c19468b8cb7888d93a5b, type: 2}

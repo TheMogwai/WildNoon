@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43da54277c1545c48bdf10f967582dd2, type: 3}
+  m_Name: Jacky_Spell_1
+  m_EditorClassIdentifier: 
+  cost: 5
+  coolDown: 5
+  artwork: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  spell_Description: "Ce spell fait plein de truc vraiment tr\xE8s sympa, faut vraiment
+    l'utiliser tout le temps, askip il peut m\xEAme faire pleuvoir des g\xE2teaux
+    \xE0 la fraise sur tes ennemis, parce que les g\xE2teaux \xE0 la fraise c'est
+    vachement moins bien que les g\xE2teaux aux chocolats, tout le monde sait \xE7a."
