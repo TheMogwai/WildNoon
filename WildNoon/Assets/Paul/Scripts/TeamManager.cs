@@ -87,12 +87,15 @@ public class TeamManager : MonoBehaviour
     int m_countCharaTeam_1;
     int m_countCharaTeam_2;
 
+    GameObject m_unit_Spawer;
+
 
     private void Awake()
     {
         SlotsTeam_1 = TeamBuildTeam_1.GetComponentsInChildren<Image>();
         SlotsTeam_2 = TeamBuildTeam_2.GetComponentsInChildren<Image>();
         character = CharactersParents.GetComponentsInChildren<UnitStatsButtons>();
+        m_unit_Spawer = FindObjectOfType<Unit_Spawer>().gameObject;
         StatsDisplay = new Image[6] { m_courage, m_heatlh, m_armor, m_damage, m_range, m_mobility };
         SpellArtDisplay = new Image[4] { m_spell_1, m_spell_2, m_spell_3, m_spell_4 };
         SpellDescription = new Text[4] { m_spell_1_Description, m_spell_2_Description, m_spell_3_Description, m_spell_4_Description};
@@ -308,5 +311,8 @@ public class TeamManager : MonoBehaviour
     public void ReadyToPlay()
     {
         SceneManager.LoadScene(1);
+        m_unit_Spawer.GetComponent<Unit_Spawer>().Team_1 = m_Team_1;
+        m_unit_Spawer.GetComponent<Unit_Spawer>().Team_2 = m_Team_2;
+        DontDestroyOnLoad(m_unit_Spawer);
     }
 }
