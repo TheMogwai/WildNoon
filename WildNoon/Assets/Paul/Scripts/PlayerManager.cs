@@ -23,16 +23,10 @@ public class PlayerManager : MonoBehaviour
 
     int turnCount;
 
-    
-
-    private void Awake()
+    public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
         UnitsInGame = GameObject.FindGameObjectsWithTag("Units");
-    }
-
-    public void Start()
-    {
         UnitsInGameCara = new UnitCara[UnitsInGame.Length];
 
         for (int i = 0, l = UnitsInGame.Length; i < l; ++i)

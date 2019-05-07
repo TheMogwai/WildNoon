@@ -1990,6 +1990,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f87f388f7eed443866c7e4429a16a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Team_1_AsInt: 00000000000000000000000000000000
+  Team_2_AsInt: 00000000000000000000000000000000
+  unitsPrefab:
+  - {fileID: 1429458607837904, guid: 90ef98847836b044d914b14099e651b6, type: 3}
+  - {fileID: 1807804350652734, guid: 698ab2a487d43c347a3b76c2048f8d92, type: 3}
 --- !u!1 &665697626
 GameObject:
   m_ObjectHideFlags: 0
@@ -4082,7 +4087,7 @@ GameObject:
   - component: {fileID: 1204373714}
   - component: {fileID: 1204373713}
   m_Layer: 5
-  m_Name: GeraldBonpoint
+  m_Name: Gerald_Bonpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4404,7 +4409,7 @@ GameObject:
   - component: {fileID: 1246958599}
   - component: {fileID: 1246958600}
   m_Layer: 5
-  m_Name: JackyTheKid
+  m_Name: Jacky_The_Kid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

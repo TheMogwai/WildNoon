@@ -26,6 +26,9 @@ public class UnitCara : MonoBehaviour {
     Spells[] Spells;
     public Characters unitStats;
     int[] coolDownCount;
+
+    bool isTeam2;
+
     #region Get Set
     public bool HasPlayed
     {
@@ -80,17 +83,33 @@ public class UnitCara : MonoBehaviour {
             coolDownCount = value;
         }
     }
+
+    public bool IsTeam2
+    {
+        get
+        {
+            return isTeam2;
+        }
+
+        set
+        {
+            isTeam2 = value;
+        }
+    }
     #endregion
     private void Awake()
     {
-        
+        m_actionPoints = 6;
+        Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
+        CoolDownCount = new int[4] { 0, 0, 0, 0 };
     }
 
     public void Start()
     {
-        m_actionPoints = 6;
-        Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
-        CoolDownCount = new int[4] { 0,0,0,0 };
+        if (GetComponentInParent<Team_Check>() != null)
+        {
+            gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        }
     }
 
 

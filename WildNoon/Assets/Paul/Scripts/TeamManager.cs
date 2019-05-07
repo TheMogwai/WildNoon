@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 public class TeamManager : MonoBehaviour
 {
 
+
     public GameObject CharactersParents;
     public GameObject CharactersInfoDisplay;
     public GameObject ReadyToPlayButton;
@@ -75,8 +76,8 @@ public class TeamManager : MonoBehaviour
     Image[] SpellArtDisplay;
     Text[] SpellDescription;
 
-    UnitStatsButtons[] m_Team_1 = new UnitStatsButtons[4];
-    UnitStatsButtons[] m_Team_2 = new UnitStatsButtons[4];
+    GameObject[] m_Team_1 = new GameObject[4];
+    GameObject[] m_Team_2 = new GameObject[4];
 
     #endregion
 
@@ -92,6 +93,9 @@ public class TeamManager : MonoBehaviour
 
     private void Awake()
     {
+
+
+
         SlotsTeam_1 = TeamBuildTeam_1.GetComponentsInChildren<Image>();
         SlotsTeam_2 = TeamBuildTeam_2.GetComponentsInChildren<Image>();
         character = CharactersParents.GetComponentsInChildren<UnitStatsButtons>();
@@ -148,6 +152,7 @@ public class TeamManager : MonoBehaviour
         CheckTotalChoose(m_nbrCharacterToChoose_Team_1);
         CheckTotalChoose(m_nbrCharacterToChoose_Team_2);
 
+
     }
 
     #region Debug Array Turn To Choose
@@ -197,7 +202,10 @@ public class TeamManager : MonoBehaviour
                     if (m_countCharaTeam_1 < SlotsTeam_1.Length)
                     {
                         SlotsTeam_1[m_countCharaTeam_1].color = Color.red;                              //Pour afficher le fait que le perso a été choisi
-                        m_Team_1[m_countCharaTeam_1] = character[charaNbrInTheList];
+                        m_Team_1[m_countCharaTeam_1] = character[charaNbrInTheList].gameObject;
+
+                        m_unit_Spawer.GetComponent<Unit_Spawer>().Team1[m_countCharaTeam_1] = character[charaNbrInTheList].gameObject;
+
                     }
                     m_characterPressed = false;
                     m_countCharaTeam_1++;
@@ -215,7 +223,10 @@ public class TeamManager : MonoBehaviour
                     if (m_countCharaTeam_2 < SlotsTeam_2.Length)
                     {
                         SlotsTeam_2[m_countCharaTeam_2].color = Color.red;                              //Pour afficher le fait que le perso a été choisi
-                        m_Team_2[m_countCharaTeam_2] = character[charaNbrInTheList];
+                        m_Team_2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
+
+                        m_unit_Spawer.GetComponent<Unit_Spawer>().Team2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
+
                     }
                     m_characterPressed = false;
                     m_countCharaTeam_2++;
@@ -310,9 +321,16 @@ public class TeamManager : MonoBehaviour
 
     public void ReadyToPlay()
     {
+        m_unit_Spawer.GetComponent<Unit_Spawer>().OnConvertArray(m_Team_1,m_Team_2);
+        StartCoroutine(Gitanerie());
+    }
+
+    IEnumerator Gitanerie()
+    {
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(1);
-        m_unit_Spawer.GetComponent<Unit_Spawer>().Team_1 = m_Team_1;
-        m_unit_Spawer.GetComponent<Unit_Spawer>().Team_2 = m_Team_2;
         DontDestroyOnLoad(m_unit_Spawer);
     }
+
+
 }
