@@ -108,7 +108,7 @@ public class UnitCara : MonoBehaviour {
     {
         if (GetComponentInParent<Team_Check>() != null)
         {
-            gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
         }
     }
 
