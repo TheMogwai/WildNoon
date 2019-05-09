@@ -62,7 +62,7 @@ namespace Pathfinding.Legacy {
 		protected Vector3 lastFoundWaypointPosition;
 		protected float lastFoundWaypointTime = -9999;
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			if (rvoController != null) {
 				if (rvoController is LegacyRVOController) (rvoController as LegacyRVOController).enableRotation = false;

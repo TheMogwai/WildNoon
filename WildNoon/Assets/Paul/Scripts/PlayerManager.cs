@@ -23,6 +23,21 @@ public class PlayerManager : MonoBehaviour
 
     int turnCount;
 
+    #region
+    public UnitCara OnActiveUnit1
+    {
+        get
+        {
+            return OnActiveUnit;
+        }
+
+        set
+        {
+            OnActiveUnit = value;
+        }
+    }
+    #endregion
+
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
@@ -31,7 +46,7 @@ public class PlayerManager : MonoBehaviour
 
         for (int i = 0, l = UnitsInGame.Length; i < l; ++i)
         {
-            if(UnitsInGame[i].GetComponent<UnitCara>() != null)
+            if (UnitsInGame[i].GetComponent<UnitCara>() != null)
             {
                 UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
             }
@@ -43,7 +58,12 @@ public class PlayerManager : MonoBehaviour
     public void OnTurnPassed()
     {
         turnCount--;
-        OnActiveUnit = GetMax().GetComponent<UnitCara>();
+        OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
+        for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
+        {
+            UnitsInGameCara[i].ActivateSelectedGameObject(false);
+        }
+        OnActiveUnit1.ActivateSelectedGameObject(true);
         OnPositionCamera();
         OnTableTurnOver();
         OnChangingUI();
@@ -52,11 +72,11 @@ public class PlayerManager : MonoBehaviour
     #region Personnage lance un Spell
     public void OnSpellCast(int SpellNbr)
     {
-        OnActiveUnit.OnUsingSpell(OnActiveUnit.Spells1[SpellNbr], SpellNbr);
+        OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
 
-        if (OnActiveUnit.CoolDownCount[SpellNbr] != 0)
+        if (OnActiveUnit1.CoolDownCount[SpellNbr] != 0)
         {
-            SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit.CoolDownCount[SpellNbr].ToString();
+            SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[SpellNbr].ToString();
         }
         else
         {
@@ -70,10 +90,10 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0, l = SpellsButton.Length; i < l; ++i)
         {
-            SpellsButton[i].image.sprite = OnActiveUnit.Spells1[i].artwork;
-            if (OnActiveUnit.CoolDownCount[i] != 0)
+            SpellsButton[i].image.sprite = OnActiveUnit1.Spells1[i].artwork;
+            if (OnActiveUnit1.CoolDownCount[i] != 0)
             {
-                SpellsButton[i].GetComponentInChildren<Text>().text = OnActiveUnit.CoolDownCount[i].ToString();
+                SpellsButton[i].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[i].ToString();
             }
             else
             {
@@ -84,7 +104,7 @@ public class PlayerManager : MonoBehaviour
 
     void OnPositionCamera()
     {
-        cam.targetFollow = OnActiveUnit.gameObject.transform;
+        cam.targetFollow = OnActiveUnit1.gameObject.transform;
     }
     #endregion
 

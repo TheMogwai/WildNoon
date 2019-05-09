@@ -101,7 +101,7 @@ namespace Pathfinding {
 			lastPosition = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
 		}
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			tr = transform;
 		}

@@ -25,6 +25,7 @@ public class UnitCara : MonoBehaviour {
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
+    public GameObject Selceted;
     int[] coolDownCount;
 
     bool isTeam2;
@@ -109,7 +110,17 @@ public class UnitCara : MonoBehaviour {
         if (GetComponentInParent<Team_Check>() != null)
         {
             gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            isTeam2 = true;
         }
+        else
+        {
+            isTeam2 = false;
+        }
+    }
+
+    public void ActivateSelectedGameObject(bool b)
+    {
+        Selceted.SetActive(b);
     }
 
 

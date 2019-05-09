@@ -140,7 +140,7 @@ namespace Pathfinding {
 		}
 
 		/** Initializes a few variables */
-		protected override void Awake () {
+		public override void Awake () {
 			base.Awake();
 			startEndModifier.Awake(this);
 		}

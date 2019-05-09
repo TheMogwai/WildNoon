@@ -245,7 +245,7 @@ namespace Pathfinding {
 		/** Initializes reference variables.
 		 * If you override this function you should in most cases call base.Awake () at the start of it.
 		 * */
-		protected override void Awake () {
+		public override void Awake () {
 			base.Awake();
 			//This is a simple optimization, cache the transform component lookup
 			tr = transform;

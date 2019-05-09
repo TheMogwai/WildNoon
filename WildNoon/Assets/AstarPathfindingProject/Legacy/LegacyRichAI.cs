@@ -30,7 +30,7 @@ namespace Pathfinding.Legacy {
 		Vector3 lastTargetPoint;
 		Vector3 currentTargetDirection;
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			if (rvoController != null) {
 				if (rvoController is LegacyRVOController) (rvoController as LegacyRVOController).enableRotation = false;

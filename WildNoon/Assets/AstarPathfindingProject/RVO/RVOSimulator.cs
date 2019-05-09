@@ -98,7 +98,7 @@ namespace Pathfinding.RVO {
 			active = this;
 		}
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			if (simulator == null && Application.isPlaying) {
 				int threadCount = AstarPath.CalculateThreadCount(workerThreads);
