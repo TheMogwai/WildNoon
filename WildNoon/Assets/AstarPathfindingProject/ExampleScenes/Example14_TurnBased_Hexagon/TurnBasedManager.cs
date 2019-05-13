@@ -51,6 +51,8 @@ namespace Pathfinding.Examples {
         PlayerManager player;
         static int mouvementLeft;
 
+        int nbrTotalNodes;
+        int nbrTotalNodesFix;
 
         #region Get Set
         public Ray Ray
@@ -122,6 +124,7 @@ namespace Pathfinding.Examples {
             {
                 mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility;
             }
+
         }
 
 
@@ -137,7 +140,7 @@ namespace Pathfinding.Examples {
         Ray ray;
         TurnBasedAI unitUnderMouse;
 
-
+        int MoveRange;
 
         void Update () {
 
@@ -179,8 +182,12 @@ namespace Pathfinding.Examples {
 		}
         public void OnSetMouvement()
         {
-                mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility+1;
-
+            mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility+1;
+            MoveRange = player.OnActiveUnit1.unitStats.m_mobility + 1;
+            for (int i = 0, l = MoveRange; i < l; ++i)
+            {
+                nbrTotalNodesFix += 6 * i;
+            }
         }
 
         public void OnUnitSelected()
@@ -295,34 +302,39 @@ namespace Pathfinding.Examples {
         }
 
 		public void DestroyPossibleMoves () {
-			foreach (var go in possibleMoves) {
+            nbrTotalNodes = 0;
+            foreach (var go in possibleMoves) {
+                
 				GameObject.Destroy(go);
-			}
-			possibleMoves.Clear();
+            }
+            possibleMoves.Clear();
 		}
 
-		public void GeneratePossibleMoves (TurnBasedAI unit) {
+
+        //ConstantPath path;
+        public void GeneratePossibleMoves(TurnBasedAI unit)
+        {
             var path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
-            if (unit.MovementPoints < 5)
-            {
-                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
-            }
-            else if (unit.MovementPoints < 7)
-            {
-                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 -1) * 1000 + 1);
-            }
-            else if(unit.MovementPoints < 9)
-            {
-                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 2) * 1000 + 1);
-            }
-            else if (unit.MovementPoints < 11)
-            {
-                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 3) * 1000 + 1);
-            }
-            else
-            {
-               // Debug.LogError("Appel Paul, il saura pourquoi ca bug");
-            }
+            //if (unit.MovementPoints < 5)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 7)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 1) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 9)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 2) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 11)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 3) * 1000 + 1);
+            //}
+            //else
+            //{
+            //    Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+            //}
 
             path.traversalProvider = unit.traversalProvider;
 
@@ -334,7 +346,55 @@ namespace Pathfinding.Examples {
 			// this will not cause any lag
 			path.BlockUntilCalculated();
 
-			foreach (var node in path.allNodes) {
+            for (int i = 0, l = mouvementLeft; i < l; ++i)
+            {
+                nbrTotalNodes += 6 * i;
+            }
+            
+            Debug.Log("checkFix : " + nbrTotalNodesFix);
+            for (int i = 0, l = nbrTotalNodesFix + 1; i < l; ++i)
+            {
+                if (path.allNodes[i] != path.startNode)
+                {
+                    GameObject go;
+                    if (i < nbrTotalNodes+1)
+                    {
+                        // Create a new node prefab to indicate a node that can be reached
+                        // NOTE: If you are going to use this in a real game, you might want to
+                        // use an object pool to avoid instantiating new GameObjects all the time
+                        go = GameObject.Instantiate(nodePrefabMovement, (Vector3)path.allNodes[i].position, Quaternion.identity) as GameObject;
+                        Debug.Log("check");
+
+                    }
+                    else
+                    {
+                        go = GameObject.Instantiate(nodePrefabRange, (Vector3)path.allNodes[i].position, Quaternion.identity) as GameObject;
+                    }
+                    possibleMoves.Add(go);
+
+                    go.GetComponent<Astar3DButton>().node = path.allNodes[i];
+                }
+            }
+            /*for (int l = nbrTotalNodesFix+1; I < l; I++)
+            {
+                Debug.Log("check : "+I);
+                Debug.Log("checkFix : "+ l);
+                //if (path.allNodes[I] != null)
+                //{
+                    
+                    // Create a new node prefab to indicate a node that can be reached
+                    // NOTE: If you are going to use this in a real game, you might want to
+                    // use an object pool to avoid instantiating new GameObjects all the time
+                    var go = GameObject.Instantiate(nodePrefabRange, (Vector3)path.allNodes[I].position, Quaternion.identity) as GameObject;
+                //possibleMoves.Add(go);
+
+                //go.GetComponent<Astar3DButton>().node = path.allNodes[I];
+                possibleMoves.Add(go);
+
+                go.GetComponent<Astar3DButton>().node = path.allNodes[I];
+                //}
+            }*/
+            /*foreach (var node in path.allNodes) {
 				if (node != path.startNode) {
                     // Create a new node prefab to indicate a node that can be reached
                     // NOTE: If you are going to use this in a real game, you might want to
@@ -344,8 +404,8 @@ namespace Pathfinding.Examples {
 
 					go.GetComponent<Astar3DButton>().node = node;
 				}
-			}
-		}
+			}*/
+        }
 
         public void GeneratePossibleRange(TurnBasedAI unit, int range)
         {
