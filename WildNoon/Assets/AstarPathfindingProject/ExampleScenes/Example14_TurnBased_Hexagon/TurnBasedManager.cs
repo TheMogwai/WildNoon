@@ -37,16 +37,6 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-        private void Awake()
-        {
-            m_sM.AddStates(new List<IState> {
-            new SelectUnit(this),            // Numéro 0
-		});
-
-
-            eventSystem = FindObjectOfType<EventSystem>();
-            player = FindObjectOfType<PlayerManager>();
-        }
 
         TurnBasedAI selected;
 
@@ -59,6 +49,81 @@ namespace Pathfinding.Examples {
 		EventSystem eventSystem;
 
         PlayerManager player;
+        static int mouvementLeft;
+
+
+        #region Get Set
+        public Ray Ray
+        {
+            get
+            {
+                return ray;
+            }
+
+            set
+            {
+                ray = value;
+            }
+        }
+
+        public TurnBasedAI UnitUnderMouse
+        {
+            get
+            {
+                return unitUnderMouse;
+            }
+
+            set
+            {
+                unitUnderMouse = value;
+            }
+        }
+
+        public PlayerManager Player
+        {
+            get
+            {
+                return player;
+            }
+
+            set
+            {
+                player = value;
+            }
+        }
+
+        public bool IsMoving
+        {
+            get
+            {
+                return isMoving;
+            }
+
+            set
+            {
+                isMoving = value;
+            }
+        }
+        #endregion
+
+        private void Awake()
+        {
+            m_sM.AddStates(new List<IState> {
+            new SelectUnit(this),                   // Numéro 0
+            new SelectTarget(this),                 // Numéro 1
+            new UnitRangeAttack(this),              // Numéro 2
+            new UnitsMoving(this),                  // Numéro 3
+		});
+
+
+            eventSystem = FindObjectOfType<EventSystem>();
+            Player = FindObjectOfType<PlayerManager>();
+            if (player.OnActiveUnit1 != null)
+            {
+                mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility;
+            }
+        }
+
 
 		public State state = State.SelectUnit;
 
@@ -69,38 +134,38 @@ namespace Pathfinding.Examples {
 			Move
 		}
 
-		void Update () {
+        Ray ray;
+        TurnBasedAI unitUnderMouse;
+
+
+
+        void Update () {
 
             m_sM.Update();
-
-			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			// Ignore any input while the mouse is over a UI element
-			if (eventSystem.IsPointerOverGameObject()) {
-				return;
-			}
-
-            if(state == State.Attack || state == State.SelectTarget)
+            Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            UnitUnderMouse = GetByRay<TurnBasedAI>(Ray);
+            if(UnitUnderMouse != null)
             {
-                if (Input.GetButton("Jump")/*GetKey(KeyCode.A)*/)
-                {
-                    state = State.Attack;
-                    var unitUnderMouse = GetByRay<TurnBasedAI>(ray);
+                Debug.Log(UnitUnderMouse.gameObject.name);
+            }
 
-                    if (unitUnderMouse != null)
-                    {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
 
-                    }
-                    Debug.Log("Attack");
-                }
-                else
+                if (UnitUnderMouse == Player.OnActiveUnit1.GetComponent<TurnBasedAI>())
                 {
-                    state = State.SelectTarget;
-                    Debug.Log("Target");
+                    ChangeState(1);
                 }
             }
 
-            if(state == State.Attack)
+            // Ignore any input while the mouse is over a UI element
+            if (eventSystem.IsPointerOverGameObject()) {
+				return;
+			}
+
+            
+
+            /*if(state == State.Attack)
             {
                 DestroyPossibleMoves();
                 GeneratePossibleRange(selected, player.OnActiveUnit1.unitStats.m_range);
@@ -109,35 +174,35 @@ namespace Pathfinding.Examples {
             {
                     DestroyPossibleMoves();
                     GeneratePossibleMoves(selected);
-            }
+            }*/
 
-            if (state == State.SelectTarget) {
-				HandleButtonUnderRay(ray);
-			}
-
-			if (state == State.SelectUnit || state == State.SelectTarget) {
-				if (Input.GetKeyDown(KeyCode.Mouse0)) {
-					var unitUnderMouse = GetByRay<TurnBasedAI>(ray);
-
-					if (unitUnderMouse != null) {
-                        Select(unitUnderMouse);
-                        DestroyPossibleMoves();
-						GeneratePossibleMoves(selected);
-                        state = State.SelectTarget;
-                    }
-				}
-			}
 		}
+        public void OnSetMouvement()
+        {
+                mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility+1;
+
+        }
+
+        public void OnUnitSelected()
+        {
+            DestroyPossibleMoves();
+            GeneratePossibleMoves(selected);
+        }
+
+        public void OnUnitAttack()
+        {
+            DestroyPossibleMoves();
+            GeneratePossibleRange(selected , player.OnActiveUnit1.unitStats.m_range);
+        }
 
 		// TODO: Move to separate class
-		void HandleButtonUnderRay (Ray ray) {
+		public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
 
 			if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
 				button.OnClick();
 
-				DestroyPossibleMoves();
-				state = State.Move;
+                ChangeState(3);
 				StartCoroutine(MoveToNode(selected, button.node));
 			}
 		}
@@ -146,21 +211,22 @@ namespace Pathfinding.Examples {
 			RaycastHit hit;
 
 			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, layerMask)) {
-                if ((hit.rigidbody == player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) || ((hit.rigidbody != player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) &&(hit.transform.gameObject.layer == 0)))
-                {
-                    //Debug.Log("prout");
+                
                     return hit.transform.GetComponentInParent<T>();
-                }
 			}
 
             return null;
 		}
+    /*if ((hit.rigidbody == Player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) || ((hit.rigidbody != Player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) &&(hit.transform.gameObject.layer == 0)))
+                {*/
 
-		void Select (TurnBasedAI unit) {
-			selected = unit;
+		public void Select () {
+            selected = player.OnActiveUnit1.GetComponent<TurnBasedAI>();
 		}
 
-		IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
+        bool isMoving;
+		public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
+            IsMoving = true;
 			var path = ABPath.Construct(unit.transform.position, (Vector3)node.position);
 
 			path.traversalProvider = unit.traversalProvider;
@@ -190,12 +256,13 @@ namespace Pathfinding.Examples {
 
 			unit.blocker.BlockAtCurrentPosition();
 
-			// Select a new unit to move
-			state = State.SelectUnit;
+            // Select a new unit to move
+            IsMoving = false;
+            state = State.SelectUnit;
 		}
 
 		/** Interpolates the unit along the path */
-		static IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
+		IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
 			if (path.error || path.vectorPath.Count == 0)
 				throw new System.ArgumentException("Cannot follow an empty path");
 
@@ -222,36 +289,39 @@ namespace Pathfinding.Examples {
 			}
 
 			unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
-		}
+            Debug.Log(path.vectorPath.Count);                                                                   //Nbr de Nodes Parcouru
+            mouvementLeft -= path.vectorPath.Count-1;
 
-		void DestroyPossibleMoves () {
+        }
+
+		public void DestroyPossibleMoves () {
 			foreach (var go in possibleMoves) {
 				GameObject.Destroy(go);
 			}
 			possibleMoves.Clear();
 		}
 
-		void GeneratePossibleMoves (TurnBasedAI unit) {
-            var path = ConstantPath.Construct(unit.transform.position, (unit.MovementPoints * 3) * 1000 + 1);
+		public void GeneratePossibleMoves (TurnBasedAI unit) {
+            var path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
             if (unit.MovementPoints < 5)
             {
-                path = ConstantPath.Construct(unit.transform.position, (unit.MovementPoints * 3) * 1000 + 1);
+                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
             }
             else if (unit.MovementPoints < 7)
             {
-                path = ConstantPath.Construct(unit.transform.position, (unit.MovementPoints * 3 -1) * 1000 + 1);
+                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 -1) * 1000 + 1);
             }
             else if(unit.MovementPoints < 9)
             {
-                path = ConstantPath.Construct(unit.transform.position, (unit.MovementPoints * 3 - 2) * 1000 + 1);
+                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 2) * 1000 + 1);
             }
             else if (unit.MovementPoints < 11)
             {
-                path = ConstantPath.Construct(unit.transform.position, (unit.MovementPoints * 3 - 3) * 1000 + 1);
+                path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 3) * 1000 + 1);
             }
             else
             {
-                Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+               // Debug.LogError("Appel Paul, il saura pourquoi ca bug");
             }
 
             path.traversalProvider = unit.traversalProvider;
@@ -276,7 +346,8 @@ namespace Pathfinding.Examples {
 				}
 			}
 		}
-        void GeneratePossibleRange(TurnBasedAI unit, int range)
+
+        public void GeneratePossibleRange(TurnBasedAI unit, int range)
         {
             var path = ConstantPath.Construct(unit.transform.position, (range * 3) * 1000 + 1); ;
             if (range < 5)
@@ -324,5 +395,6 @@ namespace Pathfinding.Examples {
                 }
             }
         }
+
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using RTS_Cam;
+using Pathfinding.Examples;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -17,11 +18,15 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
 
+    TurnBasedManager m_turnBasedManager;
+
     public Button[] SpellsButton;
 
     RTS_Camera cam;
 
     int turnCount;
+
+
 
     #region
     public UnitCara OnActiveUnit1
@@ -37,6 +42,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
     #endregion
+
+    private void Awake()
+    {
+        m_turnBasedManager = FindObjectOfType<TurnBasedManager>();
+    }
 
     public void Start()
     {
@@ -55,18 +65,24 @@ public class PlayerManager : MonoBehaviour
         OnTurnPassed();
     }
 
+
     public void OnTurnPassed()
     {
-        turnCount--;
-        OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
-        for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
+        if (!m_turnBasedManager.IsMoving)
         {
-            UnitsInGameCara[i].ActivateSelectedGameObject(false);
+            turnCount--;
+            OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
+            for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
+            {
+                UnitsInGameCara[i].ActivateSelectedGameObject(false);
+            }
+            OnActiveUnit1.ActivateSelectedGameObject(true);
+            OnPositionCamera();
+            OnTableTurnOver();
+            OnChangingUI();
+            m_turnBasedManager.ChangeState(0);
+            m_turnBasedManager.OnSetMouvement();
         }
-        OnActiveUnit1.ActivateSelectedGameObject(true);
-        OnPositionCamera();
-        OnTableTurnOver();
-        OnChangingUI();
     }
 
     #region Personnage lance un Spell
