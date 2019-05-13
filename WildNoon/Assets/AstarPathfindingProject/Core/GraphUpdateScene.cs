@@ -369,7 +369,7 @@ namespace Pathfinding {
 			}
 		}
 
-		protected override void Awake () {
+        public override void Awake () {
 			if (serializedVersion == 0) {
 				// Use the old behavior if some points are already set
 				if (points != null && points.Length > 0) legacyMode = true;

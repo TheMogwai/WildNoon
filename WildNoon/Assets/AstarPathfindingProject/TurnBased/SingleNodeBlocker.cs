@@ -18,12 +18,17 @@ namespace Pathfinding {
 	public class SingleNodeBlocker : VersionedMonoBehaviour {
 		public GraphNode lastBlocked { get; private set; }
 		public BlockManager manager;
+        public override void Awake()
+        {
+            base.Awake();
+            manager = FindObjectOfType<BlockManager>();
+        }
 
-		/** Block node closest to the position of this object.
+        /** Block node closest to the position of this object.
 		 *
 		 * Will unblock the last node that was reserved (if any)
 		 */
-		public void BlockAtCurrentPosition () {
+        public void BlockAtCurrentPosition () {
 			BlockAt(transform.position);
 		}
 

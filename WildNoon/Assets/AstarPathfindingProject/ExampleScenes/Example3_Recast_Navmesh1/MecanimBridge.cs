@@ -40,7 +40,7 @@ namespace Pathfinding.Examples {
 		/** Cached reference to the left and right feet */
 		Transform[] footTransforms;
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			ai = GetComponent<IAstarAI>();
 			anim = GetComponent<Animator>();

@@ -182,7 +182,7 @@ namespace Pathfinding {
 		Vector3 lastPosition;
 		Quaternion lastRotation;
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			tr = transform;
 		}

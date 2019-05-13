@@ -8,62 +8,208 @@ namespace Pathfinding.Examples {
 	/** Helper script in the example scene 'Turn Based' */
 	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_examples_1_1_turn_based_manager.php")]
 	public class TurnBasedManager : MonoBehaviour {
-		TurnBasedAI selected;
+
+        [SerializeField] bool m_isInstatiate = true;
+
+        #region State Machine
+
+        public StateMachine m_sM = new StateMachine();
+
+
+        public virtual void OnEnable()
+        {
+
+            if (!m_isInstatiate)
+            {
+                ChangeState(0);
+            }
+        }
+
+        public void ChangeState(int i)
+        {
+            m_sM.ChangeState(i);
+        }
+
+        public int GetLastStateIndex()
+        {
+            return m_sM.LastStateIndex;
+        }
+
+        #endregion
+
+
+        TurnBasedAI selected;
 
 		public float movementSpeed;
-		public GameObject nodePrefab;
-		public LayerMask layerMask;
+		public GameObject nodePrefabMovement;
+		public GameObject nodePrefabRange;
+        public LayerMask layerMask;
 
 		List<GameObject> possibleMoves = new List<GameObject>();
 		EventSystem eventSystem;
+
+        PlayerManager player;
+        static int mouvementLeft;
+
+        int nbrTotalNodes;
+        int nbrTotalNodesFix;
+
+        #region Get Set
+        public Ray Ray
+        {
+            get
+            {
+                return ray;
+            }
+
+            set
+            {
+                ray = value;
+            }
+        }
+
+        public TurnBasedAI UnitUnderMouse
+        {
+            get
+            {
+                return unitUnderMouse;
+            }
+
+            set
+            {
+                unitUnderMouse = value;
+            }
+        }
+
+        public PlayerManager Player
+        {
+            get
+            {
+                return player;
+            }
+
+            set
+            {
+                player = value;
+            }
+        }
+
+        public bool IsMoving
+        {
+            get
+            {
+                return isMoving;
+            }
+
+            set
+            {
+                isMoving = value;
+            }
+        }
+        #endregion
+
+        private void Awake()
+        {
+            m_sM.AddStates(new List<IState> {
+            new SelectUnit(this),                   // Numéro 0
+            new SelectTarget(this),                 // Numéro 1
+            new UnitRangeAttack(this),              // Numéro 2
+            new UnitsMoving(this),                  // Numéro 3
+		});
+
+
+            eventSystem = FindObjectOfType<EventSystem>();
+            Player = FindObjectOfType<PlayerManager>();
+            if (player.OnActiveUnit1 != null)
+            {
+                mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility;
+            }
+
+        }
+
 
 		public State state = State.SelectUnit;
 
 		public enum State {
 			SelectUnit,
 			SelectTarget,
+            Attack,
 			Move
 		}
 
-		void Awake () {
-			eventSystem = FindObjectOfType<EventSystem>();
-		}
+        Ray ray;
+        TurnBasedAI unitUnderMouse;
 
-		void Update () {
-			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        int MoveRange;
 
-			// Ignore any input while the mouse is over a UI element
-			if (eventSystem.IsPointerOverGameObject()) {
+        void Update () {
+
+            m_sM.Update();
+            Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            UnitUnderMouse = GetByRay<TurnBasedAI>(Ray);
+            if(UnitUnderMouse != null)
+            {
+                Debug.Log(UnitUnderMouse.gameObject.name);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+
+                if (UnitUnderMouse == Player.OnActiveUnit1.GetComponent<TurnBasedAI>())
+                {
+                    ChangeState(1);
+                }
+            }
+
+            // Ignore any input while the mouse is over a UI element
+            if (eventSystem.IsPointerOverGameObject()) {
 				return;
 			}
 
-			if (state == State.SelectTarget) {
-				HandleButtonUnderRay(ray);
-			}
+            
 
-			if (state == State.SelectUnit || state == State.SelectTarget) {
-				if (Input.GetKeyDown(KeyCode.Mouse0)) {
-					var unitUnderMouse = GetByRay<TurnBasedAI>(ray);
+            /*if(state == State.Attack)
+            {
+                DestroyPossibleMoves();
+                GeneratePossibleRange(selected, player.OnActiveUnit1.unitStats.m_range);
+            }
+            else if(state == State.SelectTarget)
+            {
+                    DestroyPossibleMoves();
+                    GeneratePossibleMoves(selected);
+            }*/
 
-					if (unitUnderMouse != null) {
-						Select(unitUnderMouse);
-						DestroyPossibleMoves();
-						GeneratePossibleMoves(selected);
-						state = State.SelectTarget;
-					}
-				}
-			}
 		}
+        public void OnSetMouvement()
+        {
+            mouvementLeft = player.OnActiveUnit1.unitStats.m_mobility+1;
+            MoveRange = player.OnActiveUnit1.unitStats.m_mobility + 1;
+            for (int i = 0, l = MoveRange; i < l; ++i)
+            {
+                nbrTotalNodesFix += 6 * i;
+            }
+        }
+
+        public void OnUnitSelected()
+        {
+            DestroyPossibleMoves();
+            GeneratePossibleMoves(selected);
+        }
+
+        public void OnUnitAttack()
+        {
+            DestroyPossibleMoves();
+            GeneratePossibleRange(selected , player.OnActiveUnit1.unitStats.m_range);
+        }
 
 		// TODO: Move to separate class
-		void HandleButtonUnderRay (Ray ray) {
+		public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
 
 			if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
 				button.OnClick();
 
-				DestroyPossibleMoves();
-				state = State.Move;
+                ChangeState(3);
 				StartCoroutine(MoveToNode(selected, button.node));
 			}
 		}
@@ -72,16 +218,22 @@ namespace Pathfinding.Examples {
 			RaycastHit hit;
 
 			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, layerMask)) {
-				return hit.transform.GetComponentInParent<T>();
+                
+                    return hit.transform.GetComponentInParent<T>();
 			}
-			return null;
+
+            return null;
+		}
+    /*if ((hit.rigidbody == Player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) || ((hit.rigidbody != Player.OnActiveUnit1.gameObject.GetComponent<Rigidbody>()) &&(hit.transform.gameObject.layer == 0)))
+                {*/
+
+		public void Select () {
+            selected = player.OnActiveUnit1.GetComponent<TurnBasedAI>();
 		}
 
-		void Select (TurnBasedAI unit) {
-			selected = unit;
-		}
-
-		IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
+        bool isMoving;
+		public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
+            IsMoving = true;
 			var path = ABPath.Construct(unit.transform.position, (Vector3)node.position);
 
 			path.traversalProvider = unit.traversalProvider;
@@ -111,12 +263,13 @@ namespace Pathfinding.Examples {
 
 			unit.blocker.BlockAtCurrentPosition();
 
-			// Select a new unit to move
-			state = State.SelectUnit;
+            // Select a new unit to move
+            IsMoving = false;
+            state = State.SelectUnit;
 		}
 
 		/** Interpolates the unit along the path */
-		static IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
+		IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
 			if (path.error || path.vectorPath.Count == 0)
 				throw new System.ArgumentException("Cannot follow an empty path");
 
@@ -143,19 +296,47 @@ namespace Pathfinding.Examples {
 			}
 
 			unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
-		}
+            Debug.Log(path.vectorPath.Count);                                                                   //Nbr de Nodes Parcouru
+            mouvementLeft -= path.vectorPath.Count-1;
 
-		void DestroyPossibleMoves () {
-			foreach (var go in possibleMoves) {
+        }
+
+		public void DestroyPossibleMoves () {
+            nbrTotalNodes = 0;
+            foreach (var go in possibleMoves) {
+                
 				GameObject.Destroy(go);
-			}
-			possibleMoves.Clear();
+            }
+            possibleMoves.Clear();
 		}
 
-		void GeneratePossibleMoves (TurnBasedAI unit) {
-			var path = ConstantPath.Construct(unit.transform.position, unit.movementPoints * 1000 + 1);
 
-			path.traversalProvider = unit.traversalProvider;
+        //ConstantPath path;
+        public void GeneratePossibleMoves(TurnBasedAI unit)
+        {
+            var path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
+            //if (unit.MovementPoints < 5)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 7)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 1) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 9)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 2) * 1000 + 1);
+            //}
+            //else if (unit.MovementPoints < 11)
+            //{
+            //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3 - 3) * 1000 + 1);
+            //}
+            //else
+            //{
+            //    Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+            //}
+
+            path.traversalProvider = unit.traversalProvider;
 
 			// Schedule the path for calculation
 			AstarPath.StartPath(path);
@@ -165,17 +346,115 @@ namespace Pathfinding.Examples {
 			// this will not cause any lag
 			path.BlockUntilCalculated();
 
-			foreach (var node in path.allNodes) {
+            for (int i = 0, l = mouvementLeft; i < l; ++i)
+            {
+                nbrTotalNodes += 6 * i;
+            }
+            
+            Debug.Log("checkFix : " + nbrTotalNodesFix);
+            for (int i = 0, l = nbrTotalNodesFix + 1; i < l; ++i)
+            {
+                if (path.allNodes[i] != path.startNode)
+                {
+                    GameObject go;
+                    if (i < nbrTotalNodes+1)
+                    {
+                        // Create a new node prefab to indicate a node that can be reached
+                        // NOTE: If you are going to use this in a real game, you might want to
+                        // use an object pool to avoid instantiating new GameObjects all the time
+                        go = GameObject.Instantiate(nodePrefabMovement, (Vector3)path.allNodes[i].position, Quaternion.identity) as GameObject;
+                        Debug.Log("check");
+
+                    }
+                    else
+                    {
+                        go = GameObject.Instantiate(nodePrefabRange, (Vector3)path.allNodes[i].position, Quaternion.identity) as GameObject;
+                    }
+                    possibleMoves.Add(go);
+
+                    go.GetComponent<Astar3DButton>().node = path.allNodes[i];
+                }
+            }
+            /*for (int l = nbrTotalNodesFix+1; I < l; I++)
+            {
+                Debug.Log("check : "+I);
+                Debug.Log("checkFix : "+ l);
+                //if (path.allNodes[I] != null)
+                //{
+                    
+                    // Create a new node prefab to indicate a node that can be reached
+                    // NOTE: If you are going to use this in a real game, you might want to
+                    // use an object pool to avoid instantiating new GameObjects all the time
+                    var go = GameObject.Instantiate(nodePrefabRange, (Vector3)path.allNodes[I].position, Quaternion.identity) as GameObject;
+                //possibleMoves.Add(go);
+
+                //go.GetComponent<Astar3DButton>().node = path.allNodes[I];
+                possibleMoves.Add(go);
+
+                go.GetComponent<Astar3DButton>().node = path.allNodes[I];
+                //}
+            }*/
+            /*foreach (var node in path.allNodes) {
 				if (node != path.startNode) {
-					// Create a new node prefab to indicate a node that can be reached
-					// NOTE: If you are going to use this in a real game, you might want to
-					// use an object pool to avoid instantiating new GameObjects all the time
-					var go = GameObject.Instantiate(nodePrefab, (Vector3)node.position, Quaternion.identity) as GameObject;
+                    // Create a new node prefab to indicate a node that can be reached
+                    // NOTE: If you are going to use this in a real game, you might want to
+                    // use an object pool to avoid instantiating new GameObjects all the time
+                    var go = GameObject.Instantiate(nodePrefabMovement, (Vector3)node.position, Quaternion.identity) as GameObject;
 					possibleMoves.Add(go);
 
 					go.GetComponent<Astar3DButton>().node = node;
 				}
-			}
-		}
-	}
+			}*/
+        }
+
+        public void GeneratePossibleRange(TurnBasedAI unit, int range)
+        {
+            var path = ConstantPath.Construct(unit.transform.position, (range * 3) * 1000 + 1); ;
+            if (range < 5)
+            {
+                path = ConstantPath.Construct(unit.transform.position, (range * 3) * 1000 + 1);
+            }
+            else if (range < 7)
+            {
+                path = ConstantPath.Construct(unit.transform.position, (range * 3 - 1) * 1000 + 1);
+            }
+            else if (range < 9)
+            {
+                path = ConstantPath.Construct(unit.transform.position, (range * 3 - 2) * 1000 + 1);
+            }
+            else if (range < 11)
+            {
+                path = ConstantPath.Construct(unit.transform.position, (range * 3 - 3) * 1000 + 1);
+            }
+            else
+            {
+                Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+            }
+
+            path.traversalProvider = unit.traversalProvider;
+
+            // Schedule the path for calculation
+            AstarPath.StartPath(path);
+
+            // Force the path request to complete immediately
+            // This assumes the graph is small enough that
+            // this will not cause any lag
+            path.BlockUntilCalculated();
+
+            foreach (var node in path.allNodes)
+            {
+                if (node != path.startNode)
+                {
+                    // Create a new node prefab to indicate a node that can be reached
+                    // NOTE: If you are going to use this in a real game, you might want to
+                    // use an object pool to avoid instantiating new GameObjects all the time
+                    var go = GameObject.Instantiate(nodePrefabRange, (Vector3)node.position, Quaternion.identity) as GameObject;
+                    possibleMoves.Add(go);
+
+                    go.GetComponent<Astar3DButton>().node = node;
+                }
+            }
+        }
+
+    }
 }

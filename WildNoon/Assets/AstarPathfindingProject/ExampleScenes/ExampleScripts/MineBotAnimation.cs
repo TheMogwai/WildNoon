@@ -38,7 +38,7 @@ namespace Pathfinding.Examples {
 		IAstarAI ai;
 		Transform tr;
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			ai = GetComponent<IAstarAI>();
 			tr = GetComponent<Transform>();

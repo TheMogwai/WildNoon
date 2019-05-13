@@ -15,12 +15,12 @@ MonoBehaviour:
   m_name: Jacky The Kid
   m_punshLine: '"I am iron man"'
   characterArtwork: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_courage: 80
-  m_heatlh: 90
-  m_armor: 90
-  m_damage: 40
-  m_range: 40
-  m_mobility: 90
+  m_courage: 5
+  m_heatlh: 5
+  m_armor: 5
+  m_damage: 5
+  m_range: 5
+  m_mobility: 7
   firstSpell: {fileID: 11400000, guid: 3948c1f016a484841bb4e7322e39b1ac, type: 2}
   secondSpell: {fileID: 11400000, guid: d8e8915ed3f6b4347b0d956604ebc055, type: 2}
   thirdSpell: {fileID: 11400000, guid: 354bcec2f2be7a94ebf241805dd63735, type: 2}
