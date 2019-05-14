@@ -13,7 +13,7 @@ namespace Pathfinding {
 		[HideInInspector]
 		int version = 0;
 
-		protected virtual void Awake () {
+		public virtual void Awake () {
 			// Make sure the version field is up to date for components created during runtime.
 			// Reset is not called when in play mode.
 			// If the data had to be upgraded then OnAfterDeserialize would have been called earlier.

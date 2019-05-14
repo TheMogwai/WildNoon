@@ -50,14 +50,14 @@ public class Unit_Spawer : MonoBehaviour
             {
                 for (int a = 0, f = team1.Length; a < f; ++a)
                 {
-                    if(unitsPrefab[i].gameObject.name == team1[a].gameObject.name)
+                    if(unitsPrefab[i].gameObject.GetComponent<UnitCara>().unitStats == team1[a].gameObject.GetComponent<UnitStatsButtons>().stats)
                     {
                         Team_1_AsInt[a] = i;
                     }
                 }
                 for (int a = 0, f = team2.Length; a < f; ++a)
                 {
-                    if (unitsPrefab[i].gameObject.name == team2[a].gameObject.name)
+                    if (unitsPrefab[i].gameObject.GetComponent<UnitCara>().unitStats == team2[a].gameObject.GetComponent<UnitStatsButtons>().stats)
                     {
                         Team_2_AsInt[a] = i;
                     }

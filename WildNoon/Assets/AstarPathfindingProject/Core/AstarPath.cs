@@ -1107,12 +1107,12 @@ public class AstarPath : VersionedMonoBehaviour {
 #endif
 	}
 
-	/** Sets up all needed variables and scans the graphs.
+    /** Sets up all needed variables and scans the graphs.
 	 * Calls Initialize, starts the ReturnPaths coroutine and scans all graphs.
 	 * Also starts threads if using multithreading
 	 * \see #OnAwakeSettings
 	 */
-	protected override void Awake () {
+    public override void Awake () {
 		base.Awake();
 		// Very important to set this. Ensures the singleton pattern holds
 		active = this;

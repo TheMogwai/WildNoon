@@ -69,7 +69,7 @@ namespace Pathfinding {
 			}
 		}
 
-		protected override void Awake () {
+        public override void Awake () {
 			base.Awake();
 			coll = GetComponent<Collider>();
 			coll2D = GetComponent<Collider2D>();
