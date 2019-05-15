@@ -1,0 +1,562 @@
+fileFormatVersion: 2
+guid: c09a731a827d47b4d80f166ce3edd9cb
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature_low
+    100002: Armature_low 1
+    100004: Arriere_low
+    100006: Arriere_low 1
+    100008: Balle_low
+    100010: Balle_low 1
+    100012: Barillet_low
+    100014: Barillet_low 1
+    100016: Bottes_low
+    100018: Boucle1_low
+    100020: Boucle2_low
+    100022: Boutons_low
+    100024: Canon_low
+    100026: Canon_low 1
+    100028: Ceinture1_low
+    100030: Ceinture2_low
+    100032: Chapeau_low
+    100034: Chemise_low
+    100036: Cheveux_low
+    100038: Chien_low
+    100040: Chien_low 1
+    100042: Crosse_low
+    100044: Crosse_low 1
+    100046: Dents_Bas_low
+    100048: Dents_Haut_low
+    100050: Detente1_low
+    100052: Detente1_low 1
+    100054: Detente2_low
+    100056: Detente2_low 1
+    100058: Etui_low
+    100060: Gants_low
+    100062: Jacky_low
+    100064: //RootNode
+    100066: Jeans_low
+    100068: Langue_low
+    100070: Ourlets_low
+    100072: PeaceMaker_Etui_low
+    100074: PeaceMaker_low
+    100076: PeaceMaker_Main_low
+    100078: Pilosite_low
+    100080: Plume_low
+    100082: Sangle_Arriere_low
+    100084: Tete_low
+    100086: Veste_low
+    100088: Yeux_low
+    400000: Armature_low
+    400002: Armature_low 1
+    400004: Arriere_low
+    400006: Arriere_low 1
+    400008: Balle_low
+    400010: Balle_low 1
+    400012: Barillet_low
+    400014: Barillet_low 1
+    400016: Bottes_low
+    400018: Boucle1_low
+    400020: Boucle2_low
+    400022: Boutons_low
+    400024: Canon_low
+    400026: Canon_low 1
+    400028: Ceinture1_low
+    400030: Ceinture2_low
+    400032: Chapeau_low
+    400034: Chemise_low
+    400036: Cheveux_low
+    400038: Chien_low
+    400040: Chien_low 1
+    400042: Crosse_low
+    400044: Crosse_low 1
+    400046: Dents_Bas_low
+    400048: Dents_Haut_low
+    400050: Detente1_low
+    400052: Detente1_low 1
+    400054: Detente2_low
+    400056: Detente2_low 1
+    400058: Etui_low
+    400060: Gants_low
+    400062: Jacky_low
+    400064: //RootNode
+    400066: Jeans_low
+    400068: Langue_low
+    400070: Ourlets_low
+    400072: PeaceMaker_Etui_low
+    400074: PeaceMaker_low
+    400076: PeaceMaker_Main_low
+    400078: Pilosite_low
+    400080: Plume_low
+    400082: Sangle_Arriere_low
+    400084: Tete_low
+    400086: Veste_low
+    400088: Yeux_low
+    2100000: Jacky
+    2300000: Armature_low
+    2300002: Armature_low 1
+    2300004: Arriere_low
+    2300006: Arriere_low 1
+    2300008: Balle_low
+    2300010: Balle_low 1
+    2300012: Barillet_low
+    2300014: Barillet_low 1
+    2300016: Bottes_low
+    2300018: Boucle1_low
+    2300020: Boucle2_low
+    2300022: Boutons_low
+    2300024: Canon_low
+    2300026: Canon_low 1
+    2300028: Ceinture1_low
+    2300030: Ceinture2_low
+    2300032: Chapeau_low
+    2300034: Chemise_low
+    2300036: Cheveux_low
+    2300038: Chien_low
+    2300040: Chien_low 1
+    2300042: Crosse_low
+    2300044: Crosse_low 1
+    2300046: Dents_Bas_low
+    2300048: Dents_Haut_low
+    2300050: Detente1_low
+    2300052: Detente1_low 1
+    2300054: Detente2_low
+    2300056: Detente2_low 1
+    2300058: Etui_low
+    2300060: Gants_low
+    2300062: Jeans_low
+    2300064: Langue_low
+    2300066: Ourlets_low
+    2300068: Pilosite_low
+    2300070: Plume_low
+    2300072: Sangle_Arriere_low
+    2300074: Tete_low
+    2300076: Veste_low
+    2300078: Yeux_low
+    3300000: Armature_low
+    3300002: Armature_low 1
+    3300004: Arriere_low
+    3300006: Arriere_low 1
+    3300008: Balle_low
+    3300010: Balle_low 1
+    3300012: Barillet_low
+    3300014: Barillet_low 1
+    3300016: Bottes_low
+    3300018: Boucle1_low
+    3300020: Boucle2_low
+    3300022: Boutons_low
+    3300024: Canon_low
+    3300026: Canon_low 1
+    3300028: Ceinture1_low
+    3300030: Ceinture2_low
+    3300032: Chapeau_low
+    3300034: Chemise_low
+    3300036: Cheveux_low
+    3300038: Chien_low
+    3300040: Chien_low 1
+    3300042: Crosse_low
+    3300044: Crosse_low 1
+    3300046: Dents_Bas_low
+    3300048: Dents_Haut_low
+    3300050: Detente1_low
+    3300052: Detente1_low 1
+    3300054: Detente2_low
+    3300056: Detente2_low 1
+    3300058: Etui_low
+    3300060: Gants_low
+    3300062: Jeans_low
+    3300064: Langue_low
+    3300066: Ourlets_low
+    3300068: Pilosite_low
+    3300070: Plume_low
+    3300072: Sangle_Arriere_low
+    3300074: Tete_low
+    3300076: Veste_low
+    3300078: Yeux_low
+    4300000: Tete_low
+    4300002: Cheveux_low
+    4300004: Pilosite_low
+    4300006: Veste_low
+    4300008: Ourlets_low
+    4300010: Gants_low
+    4300012: Chemise_low
+    4300014: Boutons_low
+    4300016: Ceinture1_low
+    4300018: Ceinture2_low
+    4300020: Boucle1_low
+    4300022: Boucle2_low
+    4300024: Jeans_low
+    4300026: Bottes_low
+    4300028: Sangle_Arriere_low
+    4300030: Chapeau_low
+    4300032: Plume_low
+    4300034: Langue_low
+    4300036: Yeux_low
+    4300038: Dents_Haut_low
+    4300040: Dents_Bas_low
+    4300042: Etui_low
+    4300044: Armature_low
+    4300046: Canon_low
+    4300048: Crosse_low
+    4300050: Arriere_low
+    4300052: Chien_low
+    4300054: Detente1_low
+    4300056: Detente2_low
+    4300058: Barillet_low
+    4300060: Balle_low
+    4300062: Armature_low
+    4300064: Canon_low
+    4300066: Crosse_low
+    4300068: Arriere_low
+    4300070: Chien_low
+    4300072: Detente1_low
+    4300074: Detente2_low
+    4300076: Barillet_low
+    4300078: Balle_low
+    9500000: //RootNode
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftLowerLeg' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human:
+    - boneName: PeaceMaker_Etui_low
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Arriere_low 1
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Balle_low 1
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Barillet_low 1
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Jacky_the_Kid_low(Clone)
+      parentName: 
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.01, y: 0.01, z: 0.01}
+    - name: Jacky_low
+      parentName: Jacky_the_Kid_low(Clone)
+      position: {x: -0, y: 1.6554343, z: 0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Tete_low
+      parentName: Jacky_low
+      position: {x: -0.000008257249, y: 0.00028839227, z: -0.29193288}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cheveux_low
+      parentName: Jacky_low
+      position: {x: -0, y: 0.11061903, z: -0.28944623}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Pilosite_low
+      parentName: Jacky_low
+      position: {x: 0.0002199967, y: 0.0026838845, z: -0.2247182}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Veste_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.38921168, z: -0.35995796}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ourlets_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.6469562, z: -0.38260877}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Gants_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.7962145, z: -0.3702092}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chemise_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.3768893, z: -0.34386057}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boutons_low
+      parentName: Jacky_low
+      position: {x: -0.0053556208, y: -0.365051, z: -0.25697577}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ceinture1_low
+      parentName: Jacky_low
+      position: {x: -0.0018467397, y: -0.60318875, z: -0.3505141}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ceinture2_low
+      parentName: Jacky_low
+      position: {x: -0.0066171135, y: -0.6450363, z: -0.35331798}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boucle1_low
+      parentName: Jacky_low
+      position: {x: 0.01101672, y: -0.5968391, z: -0.27117836}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boucle2_low
+      parentName: Jacky_low
+      position: {x: -0.013790943, y: -0.6515445, z: -0.2686864}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Jeans_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.9975905, z: -0.35837033}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bottes_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.4938177, z: -0.24399278}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Sangle_Arriere_low
+      parentName: Jacky_low
+      position: {x: -0.03580592, y: -0.26405454, z: -0.42556334}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chapeau_low
+      parentName: Jacky_low
+      position: {x: 0.000065506065, y: 0.15351947, z: -0.2834874}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Plume_low
+      parentName: Jacky_low
+      position: {x: -0.06211645, y: 0.21128742, z: -0.30062634}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Langue_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.0020938688, z: -0.26274383}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Yeux_low
+      parentName: Jacky_low
+      position: {x: -0, y: 0.057017412, z: -0.23208328}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Dents_Haut_low
+      parentName: Jacky_low
+      position: {x: -0, y: 0.0069118366, z: -0.23411661}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Dents_Bas_low
+      parentName: Jacky_low
+      position: {x: -0, y: -0.013881388, z: -0.24899904}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_Etui_low
+      parentName: Jacky_the_Kid_low(Clone)
+      position: {x: 0.17067367, y: 0.8333007, z: -0.06759973}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Etui_low
+      parentName: PeaceMaker_Etui_low
+      position: {x: -0.17067367, y: -0.8333007, z: 0.17212255}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_low
+      parentName: PeaceMaker_Etui_low
+      position: {x: -0.17067367, y: -0.8333007, z: 0.06759973}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16512111, y: 0.9363782, z: -0.08313518}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Canon_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.17303692, y: 0.75924647, z: -0.013754842}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Crosse_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16419715, y: 1.0019494, z: -0.16149014}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arriere_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16319093, y: 0.9678182, z: -0.08166283}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chien_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16254269, y: 0.9812829, z: -0.085715644}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente1_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16623524, y: 0.9450803, z: -0.12602554}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente2_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.16623455, y: 0.94518363, z: -0.12613708}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Barillet_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.1648537, y: 0.9342073, z: -0.07271791}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Balle_low 1
+      parentName: PeaceMaker_low
+      position: {x: 0.17091705, y: 0.828447, z: -0.066393696}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_Main_low
+      parentName: Jacky_the_Kid_low(Clone)
+      position: {x: -0.734402, y: 0.75997436, z: -0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.057482902, y: 0.086977355, z: -0.0052727223}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Canon_low
+      parentName: PeaceMaker_Main_low
+      position: {x: -0.08000066, y: -0.04457389, z: 0.0013960884}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Crosse_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.1561365, y: 0.11357036, z: -0.004789684}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arriere_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.069384314, y: 0.116113216, z: -0.0072290334}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chien_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.07872789, y: 0.1266256, z: -0.007804398}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente1_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.100037016, y: 0.076870464, z: -0.0033886814}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente2_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.10018163, y: 0.07691741, z: -0.0033873643}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Barillet_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.04712319, y: 0.08938018, z: -0.005727128}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Balle_low
+      parentName: PeaceMaker_Main_low
+      position: {x: -0.003137008, y: -0.0038964644, z: 0.00022169169}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 3
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
