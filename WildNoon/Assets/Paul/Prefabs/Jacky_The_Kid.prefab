@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitStats: {fileID: 11400000, guid: f9361b54e4c99564b9ffa82161dd19f4, type: 2}
-  Selceted: {fileID: 1814557310073648621}
+  Selected: {fileID: 1814557310073648621}
 --- !u!114 &6976015588322096657
 MonoBehaviour:
   m_ObjectHideFlags: 0
