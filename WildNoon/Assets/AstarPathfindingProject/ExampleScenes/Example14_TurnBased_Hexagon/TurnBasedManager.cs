@@ -37,38 +37,40 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-
         TurnBasedAI selected;
 
 		public float movementSpeed;
-		public GameObject nodePrefabMovement_1PA;
-		public GameObject nodePrefabMovement_2PA;
-        public GameObject nodePrefabRange;
+		public GameObject m_movementNode;
+        public GameObject m_rangeNode;
         public LayerMask layerMask;
 
 		List<GameObject> possibleMoves = new List<GameObject>();
 		EventSystem eventSystem;
 
         PlayerManager player;
-        float unitMobility;
-        float nbrNodesParcourus;
-
-        int nbrTotalNodes;
 
         Ray ray;
         TurnBasedAI unitUnderMouse;
 
         int MoveRange;
+        float unitMobility;
+
         bool isMoving;
 
-        float UnitActionPoints;
-
         public Color[] color;
-        float mobi;
-        float mobiLeft;
         MeshRenderer render;
-        float distanceToPlayer;
         Vector3 _heading;
+
+        int UnitActionPoints;
+        int nbrDeZoneDeMouvement;
+
+        float mobi;
+        float distanceToPlayer;
+        float mobiLeft;
+        float nbrNodesParcourus;
+
+        bool HardStop;
+
         #region Get Set
         public Ray Ray
         {
@@ -142,19 +144,20 @@ namespace Pathfinding.Examples {
                 {
                     unitMobility = player.OnActiveUnit1.Mobility;
                     UnitActionPoints = player.OnActiveUnit1.ActionPoints;
+                    nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
         }
 
 
-		public State state = State.SelectUnit;
+		/*public State state = State.SelectUnit;
 
 		public enum State {
 			SelectUnit,
 			SelectTarget,
             Attack,
 			Move
-		}
+		}*/
 
         
 
@@ -163,10 +166,6 @@ namespace Pathfinding.Examples {
             m_sM.Update();
             Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             UnitUnderMouse = GetByRay<TurnBasedAI>(Ray);
-            if(UnitUnderMouse != null)
-            {
-                //Debug.Log(UnitUnderMouse.gameObject.name);
-            }
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -197,6 +196,7 @@ namespace Pathfinding.Examples {
         public void OnSetMouvement()
         {
             UnitActionPoints = player.OnActiveUnit1.ActionPoints;
+            nbrDeZoneDeMouvement = UnitActionPoints;
             unitMobility = player.OnActiveUnit1.Mobility;
             MoveRange = (player.OnActiveUnit1.Mobility)*6;
             mobi = unitMobility * 2.5f;
@@ -220,16 +220,30 @@ namespace Pathfinding.Examples {
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
 
-			if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
+            if (eventSystem.IsPointerOverGameObject())
+            {
+                return;
+
+            }
+            else if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
                 if(UnitActionPoints - button.OnClick() >= 0)
                 {
 				    
                     //Debug.Log("Il ne reste que : " + player.OnActiveUnit1.ActionPoints + " points d'action");
                     ChangeState(3);
                     StartCoroutine(MoveToNode(selected, button.node));
+                    player.ActionPointsDisplay(UnitActionPoints- button.OnClick());                           //Call PlayerManager Action Display Method
                     //UnitActionPoints -= button.OnClick();
+                    //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
-
+            }
+            else if(button != null)
+            {
+                player.MovementCost(button.OnClick(), true);
+            }
+            else
+            {
+                player.MovementCost(0, false);
             }
         }
         #endregion
@@ -275,7 +289,7 @@ namespace Pathfinding.Examples {
 				// Likely a node was blocked between the possible moves being
 				// generated and the player choosing which node to move to
 				Debug.LogError("Path failed:\n" + path.errorLog);
-				state = State.SelectTarget;
+				//state = State.SelectTarget;
 				GeneratePossibleMoves(selected);
 				yield break;
 			}
@@ -291,7 +305,7 @@ namespace Pathfinding.Examples {
 
             // Select a new unit to move
             IsMoving = false;
-            state = State.SelectUnit;
+            //state = State.SelectUnit;
 		}
 
 		/** Interpolates the unit along the path */
@@ -328,12 +342,15 @@ namespace Pathfinding.Examples {
             mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
 
+            if (UnitActionPoints == 0 && mobiLeft == 0)
+            {
+                nbrDeZoneDeMouvement = 0;
+            }
             ChangeState(1);             //Respawn Nodes
 
         }
 
         public void DestroyPossibleMoves () {
-            nbrTotalNodes = 0;
             foreach (var go in possibleMoves) {
                 
 				GameObject.Destroy(go);
@@ -341,8 +358,6 @@ namespace Pathfinding.Examples {
             possibleMoves.Clear();
 		}
 
-        bool HardStop;
-        //ConstantPath path;
         public void GeneratePossibleMoves(TurnBasedAI unit)
         {
             var path = ConstantPath.Construct(unit.transform.position, (MoveRange * 3) * 1000 + 1);
@@ -352,67 +367,79 @@ namespace Pathfinding.Examples {
             AstarPath.StartPath(path);
 
             path.BlockUntilCalculated();
-            //if (mobiLeft == mobi)
-            //{
-            //    UnitActionPoints--;
-            //}
-            //else
-            //{
-            //    UnitActionPoints++;
-            //}
 
+            #region mobiLeft and ActionPoints Maths
+            Debug.Log("MobiLeft " + mobiLeft);
             if (mobiLeft <= 0)
             {
-                Debug.Log("MobiLeft " + mobiLeft);
 
                 for (int i = 0; i < 6; i++)
                 {
                     if (mobiLeft >= i * (-mobi))
                     {
-                        if(UnitActionPoints >= 0)
+                        if(UnitActionPoints- (i+1) > 0)
                         {
-                            UnitActionPoints -= i +1; //(nbrNodesParcourus / (mobi / 2.5f));
+                            UnitActionPoints -= i +1;
+                        }
+                        else
+                        {
+                            UnitActionPoints = 0;
                         }
                         break;
                     }
                 }
-                Debug.Log("Action Point Left " + UnitActionPoints);
-                nbrNodesParcourus = -(mobiLeft / 2.5f);
-                /*if (mobiLeft <= 0)
-                {
-                    mobiLeft = mobi;
-                }*/
+
                 
-                while(mobiLeft <= 0 && !HardStop)
+                if (UnitActionPoints == 0 && mobiLeft < 0)
+                {
+                    nbrDeZoneDeMouvement = 1;
+                }
+
+                while (mobiLeft <= 0 && !HardStop)
                 {
 
                     mobiLeft = mobi + mobiLeft;
 
                 }
-                /*for (int i = 0; i < 10; ++i)
+
+                if (mobiLeft == mobi)
                 {
-                    if(mobiLeft <= 0)
-                    {
-                        //break;
-                    }
-                }*/
-                /*if (mobiLeft == 0)
+                    nbrDeZoneDeMouvement = UnitActionPoints;
+                }
+                else
                 {
-                    mobiLeft = mobi;
-                }*/
+                    UnitActionPoints++;
+                    nbrDeZoneDeMouvement = UnitActionPoints;
+                }
             }
+            //Debug.Log("Action Point Left " + UnitActionPoints);
+
+            if(mobiLeft != mobi)
+            {
+                nbrNodesParcourus = (mobiLeft / 2.5f);
+            }
+            else
+            {
+                nbrNodesParcourus = 0;
+            }
+
+            //Debug.Log("NodesParcouru " + nbrNodesParcourus);
+
+
+            #endregion
 
             foreach (var node in path.allNodes)
             {
                 if (node != path.startNode)
                 {
-                    var go = GameObject.Instantiate(nodePrefabMovement_1PA, (Vector3)node.position, Quaternion.identity) as GameObject;
+                    var go = GameObject.Instantiate(m_movementNode, (Vector3)node.position, Quaternion.identity) as GameObject;
                     var heading = (Vector3)node.position - player.OnActiveUnit1.gameObject.transform.position;
                     _heading = heading;
                     distanceToPlayer = heading.magnitude;
                     render = go.GetComponentInChildren<MeshRenderer>();
 
-                    for (int i = 0; i < UnitActionPoints; ++i)
+                    #region Coloring Nodes
+                    for (int i = 0; i < nbrDeZoneDeMouvement; ++i)
                     {
                         if(i == 0)
                         {
@@ -449,12 +476,13 @@ namespace Pathfinding.Examples {
                             }
                         }
                     }
+                    #endregion
+
                     possibleMoves.Add(go);
 
                     go.GetComponent<Astar3DButton>().node = node;
                 }
             }
-            
         }
 
         public void GeneratePossibleRange(TurnBasedAI unit, int range)
@@ -498,7 +526,7 @@ namespace Pathfinding.Examples {
                     // Create a new node prefab to indicate a node that can be reached
                     // NOTE: If you are going to use this in a real game, you might want to
                     // use an object pool to avoid instantiating new GameObjects all the time
-                    var go = GameObject.Instantiate(nodePrefabRange, (Vector3)node.position, Quaternion.identity) as GameObject;
+                    var go = GameObject.Instantiate(m_rangeNode, (Vector3)node.position, Quaternion.identity) as GameObject;
                     possibleMoves.Add(go);
 
                     go.GetComponent<Astar3DButton>().node = node;

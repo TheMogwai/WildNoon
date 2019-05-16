@@ -22,6 +22,7 @@ public class SelectTarget : IState
 
     public void Exit()
     {
+        m_TurnBaseManager.Player.MovementCost(0, false);
     }
 
     public void FixedUpdate()
