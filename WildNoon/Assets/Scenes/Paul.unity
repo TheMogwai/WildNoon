@@ -658,6 +658,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2413b597c7de185449bbcc6c053c7f66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panSpeed: 20
+  panBorderThickness: 10
+  speedScroll: 20
+  minY: 20
+  maxY: 120
+  panLimit: {x: 0, y: 0}
 --- !u!1 &553340095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,7 +1423,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 3
-  state: 0
   color:
   - {r: 0.47726798, g: 1, b: 0, a: 1}
   - {r: 0.9427507, g: 1, b: 0, a: 1}
@@ -1425,6 +1430,7 @@ MonoBehaviour:
   - {r: 1, g: 0.41553438, b: 0, a: 1}
   - {r: 1, g: 0, b: 0.07238674, a: 1}
   - {r: 1, g: 0, b: 0.44821787, a: 1}
+  state: 0
 --- !u!4 &1010387147
 Transform:
   m_ObjectHideFlags: 0
