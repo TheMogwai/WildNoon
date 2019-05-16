@@ -10,7 +10,8 @@ namespace Pathfinding {
 	 *
 	 * \see #Pathfinding.AIPath
 	 * \see #Pathfinding.RichAI
-	 * \see #Pathfinding.IAstarAI (all movement scripts implement this interface)
+	 * \see #Pathfinding.IAstarAI (all 
+     * ment scripts implement this interface)
 	 */
 	[RequireComponent(typeof(Seeker))]
 	public abstract class AIBase : VersionedMonoBehaviour {

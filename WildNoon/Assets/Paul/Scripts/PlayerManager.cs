@@ -19,8 +19,15 @@ public class PlayerManager : MonoBehaviour
 
 
     TurnBasedManager m_turnBasedManager;
-
+    [Header("Spells Button Array")]
     public Button[] SpellsButton;
+
+    [Header("ActionPoints Layout")]
+    public GameObject ActionPointsLayout;
+    [Space]
+    public Text m_actionPointsCosts;
+
+    Image[] m_actionPointDisplay;
 
     RTS_Camera cam;
 
@@ -46,6 +53,9 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         m_turnBasedManager = FindObjectOfType<TurnBasedManager>();
+        m_actionPointDisplay = new Image[6];
+        m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
+        m_actionPointsCosts.gameObject.SetActive(false);
     }
 
     public void Start()
@@ -82,6 +92,40 @@ public class PlayerManager : MonoBehaviour
             OnChangingUI();
             m_turnBasedManager.ChangeState(0);
             m_turnBasedManager.OnSetMouvement();
+            for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
+            {
+                if (!m_actionPointDisplay[i].gameObject.activeSelf)
+                {
+                    m_actionPointDisplay[i].gameObject.SetActive(true);
+                }
+            }
+        }
+    }
+
+    public void ActionPointsDisplay(int AP_Left)
+    {
+        int actionPointMax = 6;
+        int actionPointLost = actionPointMax - AP_Left;
+
+        for (int i = 0, l = actionPointLost; i < l; ++i)
+        {
+            if (m_actionPointDisplay[i].gameObject.activeSelf)
+            {
+                m_actionPointDisplay[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void MovementCost(int cost, bool on)
+    {
+        m_actionPointsCosts.gameObject.SetActive(on);
+        if(cost <= 6)
+        {
+            m_actionPointsCosts.text = string.Format("Costs : {0} PA", cost);
+        }
+        else
+        {
+            m_actionPointsCosts.text = string.Format("Not enough PA");
         }
     }
 
