@@ -31,7 +31,6 @@ public class SelectTarget : IState
     public void Update()
     {
 		m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
-        m_TurnBaseManager.RayToNodes();
         if (m_TurnBaseManager.UnitUnderMouse != null)
         {
             if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
