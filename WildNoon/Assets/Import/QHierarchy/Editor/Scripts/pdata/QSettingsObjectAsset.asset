@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -59,7 +60,7 @@ MonoBehaviour:
   - FFCCCCCC
   - FFCCCCCC
   - 
-  - 0;1;2;3;4;5;6;7;8;9;10;11;12
+  - 6;3;0;1;2;4;5;7;8;9;10;11;12
   - FF383838
   - FFFFFF80
   - FF4F4F4F
@@ -97,7 +98,7 @@ MonoBehaviour:
   - QTools.QHierarchy_VerticesAndTrianglesLabelSize
   - QTools.QHierarchy_ComponentsIconSize
   - QTools.QHierarchy_AdditionalIdentation
-  settingIntValues: 000000000100000000000000000000004b0000000000000000000000000000000000000000000000000000000200000000000000
+  settingIntValues: 000000000100000000000000000000004b0000000000000002000000000000000000000000000000000000000200000000000000
   settingBoolNames:
   - QTools.QHierarchy_TreeMapShow
   - QTools.QHierarchy_TreeMapEnhanced
@@ -154,4 +155,4 @@ MonoBehaviour:
   - QTools.QHierarchy_AdditionalShowHiddenQHierarchyObjectList
   - QTools.QHierarchy_AdditionalHideIconsIfNotFit
   - QTools.QHierarchy_AdditionalShowModifierWarning
-  settingBoolValues: 00010000010100010001000000000000000101000100010101010000000000010001000100010100010100010000000001000000010101
+  settingBoolValues: 01010000010101010101010000010000000101000100010101010000000000010001000100010100010101010000000001000000010101

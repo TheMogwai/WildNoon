@@ -22,11 +22,24 @@ public class UnitCara : MonoBehaviour {
     public Spells FourthSpell;
     Spells[] Spells;*/
     int m_actionPoints;
+    int m_actionPointsPreview;
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
-    public GameObject Selceted;
+    public GameObject Selected;
     int[] coolDownCount;
+
+    #region Unit Stats
+    int _LifePoint;
+    int _ArmorPoint;
+    int _Courage;
+    int _Damage;
+    int _Range;
+    int _Mobility;
+
+
+    #endregion
+
 
     bool isTeam2;
 
@@ -43,21 +56,6 @@ public class UnitCara : MonoBehaviour {
             hasPlayed = value;
         }
     }
-
-    public int ActionPoints
-    {
-        get
-        {
-            return m_actionPoints;
-        }
-
-        set
-        {
-            m_actionPoints = value;
-        }
-    }
-
-    
 
     public Spells[] Spells1
     {
@@ -97,10 +95,122 @@ public class UnitCara : MonoBehaviour {
             isTeam2 = value;
         }
     }
+
+    public int LifePoint
+    {
+        get
+        {
+            return _LifePoint;
+        }
+
+        set
+        {
+            _LifePoint = value;
+        }
+    }
+
+    public int ArmorPoint
+    {
+        get
+        {
+            return _ArmorPoint;
+        }
+
+        set
+        {
+            _ArmorPoint = value;
+        }
+    }
+
+    public int Courage
+    {
+        get
+        {
+            return _Courage;
+        }
+
+        set
+        {
+            _Courage = value;
+        }
+    }
+
+    public int Damage
+    {
+        get
+        {
+            return _Damage;
+        }
+
+        set
+        {
+            _Damage = value;
+        }
+    }
+
+    public int Range
+    {
+        get
+        {
+            return _Range;
+        }
+
+        set
+        {
+            _Range = value;
+        }
+    }
+
+    public int Mobility
+    {
+        get
+        {
+            return _Mobility;
+        }
+
+        set
+        {
+            _Mobility = value;
+        }
+    }
+
+    public int ActionPoints
+    {
+        get
+        {
+            return m_actionPoints;
+        }
+
+        set
+        {
+            m_actionPoints = value;
+        }
+    }
+
+    public int ActionPointsPreview
+    {
+        get
+        {
+            return m_actionPointsPreview;
+        }
+
+        set
+        {
+            m_actionPointsPreview = value;
+        }
+    }
     #endregion
     private void Awake()
     {
-        m_actionPoints = 6;
+        LifePoint = unitStats.m_heatlh;
+        ArmorPoint = unitStats.m_armor;
+        Courage = unitStats.m_courage;
+        Damage = unitStats.m_damage;
+        Range = unitStats.m_range;
+        Mobility = unitStats.m_mobility;
+
+        ActionPoints = 6;
+        ActionPointsPreview = ActionPoints;
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
     }
@@ -120,7 +230,10 @@ public class UnitCara : MonoBehaviour {
 
     public void ActivateSelectedGameObject(bool b)
     {
-        Selceted.SetActive(b);
+        if(Selected != null)
+        {
+            Selected.SetActive(b);
+        }
     }
 
 
@@ -129,9 +242,9 @@ public class UnitCara : MonoBehaviour {
         //Debug.Log(Spell + " a encore" + Spell.CoolDownCount + " avant d'etre utilisable.");
         if(CoolDownCount[i] == 0)
         {
-            if (m_actionPoints > Spell.cost)
+            if (ActionPoints > Spell.cost)
             {
-                m_actionPoints -= Spell.cost;
+                ActionPoints -= Spell.cost;
                 CoolDownMethod(i);
             }
         }
