@@ -28,6 +28,7 @@ public class UnitCara : MonoBehaviour {
     public Characters unitStats;
     public GameObject Selected;
     int[] coolDownCount;
+    PlayerManager player;
 
     #region Unit Stats
     int _LifePoint;
@@ -199,6 +200,19 @@ public class UnitCara : MonoBehaviour {
             m_actionPointsPreview = value;
         }
     }
+
+    public PlayerManager Player
+    {
+        get
+        {
+            return player;
+        }
+
+        set
+        {
+            player = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -213,6 +227,8 @@ public class UnitCara : MonoBehaviour {
         ActionPointsPreview = ActionPoints;
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
+
+        Player = FindObjectOfType<PlayerManager>();
     }
 
     public void Start()
@@ -240,15 +256,31 @@ public class UnitCara : MonoBehaviour {
     public virtual void OnUsingSpell(Spells Spell, int i)
     {
         //Debug.Log(Spell + " a encore" + Spell.CoolDownCount + " avant d'etre utilisable.");
-        if(CoolDownCount[i] == 0)
+        Player.TurnBasedManager.ChangeState(5);
+        OnUsedSpell = Spell;
+        OnNbrSpell = i;
+    }
+
+    public virtual void OnCoolDown()
+    {
+        if (CoolDownCount[OnNbrSpell] == 0)
         {
-            if (ActionPoints > Spell.cost)
+            if (ActionPoints > OnUsedSpell.cost)
             {
-                ActionPoints -= Spell.cost;
-                CoolDownMethod(i);
+                ActionPoints -= OnUsedSpell.cost;
+                Player.ActionPointsDisplay(ActionPoints);
+                CoolDownMethod(OnNbrSpell);
             }
         }
     }
+
+    Spells OnUsedSpell;
+    int OnNbrSpell;
+    public virtual void OnUnitPassiveEffect()
+    {
+        
+    }
+
 
     public void ReduceCoolDown()
     {

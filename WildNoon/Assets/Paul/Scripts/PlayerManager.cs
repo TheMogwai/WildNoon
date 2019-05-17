@@ -17,7 +17,6 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-
     TurnBasedManager m_turnBasedManager;
     [Header("Spells Button Array")]
     public Button[] SpellsButton;
@@ -32,6 +31,8 @@ public class PlayerManager : MonoBehaviour
     RTS_Camera cam;
 
     int turnCount;
+
+    int m_onUsedSpell;
 
 
 
@@ -48,11 +49,37 @@ public class PlayerManager : MonoBehaviour
             OnActiveUnit = value;
         }
     }
+
+    public TurnBasedManager TurnBasedManager
+    {
+        get
+        {
+            return m_turnBasedManager;
+        }
+
+        set
+        {
+            m_turnBasedManager = value;
+        }
+    }
+
+    public int OnUsedSpell
+    {
+        get
+        {
+            return m_onUsedSpell;
+        }
+
+        set
+        {
+            m_onUsedSpell = value;
+        }
+    }
     #endregion
 
     private void Awake()
     {
-        m_turnBasedManager = FindObjectOfType<TurnBasedManager>();
+        TurnBasedManager = FindObjectOfType<TurnBasedManager>();
         m_actionPointDisplay = new Image[6];
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
         m_actionPointsCosts.gameObject.SetActive(false);
@@ -78,7 +105,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnTurnPassed()
     {
-        if (!m_turnBasedManager.IsMoving)
+        if (!TurnBasedManager.IsMoving)
         {
             turnCount--;
             OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
@@ -90,8 +117,10 @@ public class PlayerManager : MonoBehaviour
             OnPositionCamera();
             OnTableTurnOver();
             OnChangingUI();
-            m_turnBasedManager.ChangeState(0);
-            m_turnBasedManager.OnSetMouvement();
+            TurnBasedManager.ChangeState(0);
+            TurnBasedManager.OnSetMouvement();
+            OnPassiveEffectTrigger();
+
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
             {
                 if (!m_actionPointDisplay[i].gameObject.activeSelf)
@@ -132,8 +161,8 @@ public class PlayerManager : MonoBehaviour
     #region Personnage lance un Spell
     public void OnSpellCast(int SpellNbr)
     {
+        OnUsedSpell = SpellNbr;
         OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
-
         if (OnActiveUnit1.CoolDownCount[SpellNbr] != 0)
         {
             SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[SpellNbr].ToString();
@@ -144,6 +173,16 @@ public class PlayerManager : MonoBehaviour
         }
     }
     #endregion
+
+    public void OnPassiveEffectTrigger()
+    {
+        OnActiveUnit1.OnUnitPassiveEffect();
+    }
+
+    public void OnCoolDownspell()
+    {
+        OnActiveUnit1.OnCoolDown();
+    }
 
     #region Fin de tour de personnage
     void OnChangingUI()

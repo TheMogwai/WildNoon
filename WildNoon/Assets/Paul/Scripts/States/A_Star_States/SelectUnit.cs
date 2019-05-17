@@ -16,6 +16,7 @@ public class SelectUnit : IState
     public void Enter()
     {
         m_TurnBaseManager.DestroyPossibleMoves();
+        m_TurnBaseManager.Select();
     }
 
     public void Exit()
