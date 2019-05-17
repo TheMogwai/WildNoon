@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour
     RTS_Camera cam;
 
     int turnCount;
+    int turnCountMax;
 
     int m_onUsedSpell;
 
@@ -75,6 +76,19 @@ public class PlayerManager : MonoBehaviour
             m_onUsedSpell = value;
         }
     }
+
+    public int TurnCount
+    {
+        get
+        {
+            return turnCount;
+        }
+
+        set
+        {
+            turnCount = value;
+        }
+    }
     #endregion
 
     private void Awake()
@@ -88,6 +102,14 @@ public class PlayerManager : MonoBehaviour
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
+        ResetArray();
+        OnTurnPassed();
+        TurnCount = turnCountMax;
+    }
+
+    void ResetArray()
+    {
+        UnitsInGame = new GameObject[0];
         UnitsInGame = GameObject.FindGameObjectsWithTag("Units");
         UnitsInGameCara = new UnitCara[UnitsInGame.Length];
 
@@ -98,16 +120,16 @@ public class PlayerManager : MonoBehaviour
                 UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
             }
         }
-        turnCount = UnitsInGame.Length;
-        OnTurnPassed();
+        turnCountMax = UnitsInGame.Length;
     }
-
-
     public void OnTurnPassed()
     {
         if (!TurnBasedManager.IsMoving)
         {
-            turnCount--;
+            ResetArray();
+            TurnCount--;
+            OnTableTurnOver();
+            Debug.Log(TurnCount);
             OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
             for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
             {
@@ -115,7 +137,6 @@ public class PlayerManager : MonoBehaviour
             }
             OnActiveUnit1.ActivateSelectedGameObject(true);
             OnPositionCamera();
-            OnTableTurnOver();
             OnChangingUI();
             TurnBasedManager.ChangeState(0);
             TurnBasedManager.OnSetMouvement();
@@ -162,7 +183,16 @@ public class PlayerManager : MonoBehaviour
     public void OnSpellCast(int SpellNbr)
     {
         OnUsedSpell = SpellNbr;
-        OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
+        if(OnActiveUnit1.ActionPoints - OnActiveUnit1.Spells1[SpellNbr].cost >= 0 && OnActiveUnit1.CoolDownCount[SpellNbr] == 0)
+        {
+            OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
+        }
+        
+    }
+    #endregion
+
+    public void OnCoolDownDisplay(int SpellNbr)
+    {
         if (OnActiveUnit1.CoolDownCount[SpellNbr] != 0)
         {
             SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[SpellNbr].ToString();
@@ -172,7 +202,6 @@ public class PlayerManager : MonoBehaviour
             SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = "Spell " + SpellNbr;
         }
     }
-    #endregion
 
     public void OnPassiveEffectTrigger()
     {
@@ -210,7 +239,7 @@ public class PlayerManager : MonoBehaviour
     #region Fin De Tour De Table
     void OnTableTurnOver()
     {
-        if (turnCount == 0)
+        if (TurnCount == 0)
         {
             for (int i = 0, l = UnitsInGameCara.Length; i < l; ++i)
             {
@@ -222,14 +251,16 @@ public class PlayerManager : MonoBehaviour
                 }
             }
             Debug.Log("Next Turn");
-            turnCount = UnitsInGame.Length;
+            ResetArray();
+            TurnCount = turnCountMax;
         }
     }
     #endregion
 
     GameObject GetMax()
     {
-        Array.Sort(UnitsInGameCara, delegate (UnitCara x, UnitCara y) { return y.unitStats.m_courage.CompareTo(x.unitStats.m_courage); });
+        
+        Array.Sort(UnitsInGameCara, delegate (UnitCara x, UnitCara y) { return y.Courage.CompareTo(x.Courage); });
 
         if(UnitsInGameCara != null)
         {

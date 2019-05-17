@@ -29,5 +29,19 @@ public class SelectUnit : IState
 
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (m_TurnBaseManager.Player != null)
+            {
+                if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<TurnBasedAI>())
+                {
+                    m_TurnBaseManager.ChangeState(1);
+                }
+            }
+            else
+            {
+                m_TurnBaseManager.ChangeState(1);
+            }
+        }
     }
 }

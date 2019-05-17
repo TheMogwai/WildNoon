@@ -12,16 +12,15 @@ public class JackyTheKid : UnitCara
             case 0:
                 break;
             case 1:
-                JackyTeleport();
+                Player.TurnBasedManager.ChangeState(5);
                 break;
             case 2:
-                print("Whadya want?");
+                Player.TurnBasedManager.ChangeState(4);
                 break;
             case 3:
                 print("Grog SMASH!");
                 break;
             default:
-                print("Incorrect intelligence level.");
                 break;
         }
 
@@ -31,19 +30,12 @@ public class JackyTheKid : UnitCara
     {
         if(ArmorPoint + Spells1[0].m_armorBonus < unitStats.m_armor)
         {
-            Debug.Log(name + " il lui reste : " + ArmorPoint);
             ArmorPoint += Spells1[0].m_armorBonus;
         }
         else
         {
 
             ArmorPoint = unitStats.m_armor;
-            Debug.Log(name + " est full armure");
         }
-    }
-
-
-    void JackyTeleport()
-    {
     }
 }
