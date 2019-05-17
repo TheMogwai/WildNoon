@@ -43,6 +43,8 @@ public class UnitCara : MonoBehaviour {
 
 
     bool isTeam2;
+    Spells OnUsedSpell;
+    int OnNbrSpell;
 
     #region Get Set
     public bool HasPlayed
@@ -213,6 +215,19 @@ public class UnitCara : MonoBehaviour {
             player = value;
         }
     }
+
+    public Spells OnUsedSpell1
+    {
+        get
+        {
+            return OnUsedSpell;
+        }
+
+        set
+        {
+            OnUsedSpell = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -256,26 +271,17 @@ public class UnitCara : MonoBehaviour {
     public virtual void OnUsingSpell(Spells Spell, int i)
     {
         //Debug.Log(Spell + " a encore" + Spell.CoolDownCount + " avant d'etre utilisable.");
-        Player.TurnBasedManager.ChangeState(5);
-        OnUsedSpell = Spell;
+        OnUsedSpell1 = Spell;
         OnNbrSpell = i;
     }
 
     public virtual void OnCoolDown()
     {
-        if (CoolDownCount[OnNbrSpell] == 0)
-        {
-            if (ActionPoints > OnUsedSpell.cost)
-            {
-                ActionPoints -= OnUsedSpell.cost;
-                Player.ActionPointsDisplay(ActionPoints);
-                CoolDownMethod(OnNbrSpell);
-            }
-        }
+        ActionPoints -= OnUsedSpell1.cost;
+        Player.ActionPointsDisplay(ActionPoints);
+        CoolDownMethod(OnNbrSpell);
     }
 
-    Spells OnUsedSpell;
-    int OnNbrSpell;
     public virtual void OnUnitPassiveEffect()
     {
         
@@ -293,7 +299,19 @@ public class UnitCara : MonoBehaviour {
         }
     }
 
-
+    public bool OnCheckIfCCWorks()
+    {
+        float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
+        float random = Random.Range(0, armorpercent);
+        if(random < armorpercent)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
     public int CoolDownMethod(int i)
@@ -307,5 +325,39 @@ public class UnitCara : MonoBehaviour {
             CoolDownCount[i] = Spells[i].coolDown;
         }
         return CoolDownCount[i];
+    }
+
+
+    public void OnTakingDamage(int damage)
+    {
+        if((LifePoint + ArmorPoint)-damage > 0)
+        {
+            if(ArmorPoint - damage >= 0)
+            {
+                ArmorPoint -= damage;
+            }
+            else
+            {
+                ArmorPoint -= damage;
+                LifePoint += ArmorPoint;
+                ArmorPoint = 0;
+            }
+
+            if(LifePoint <= 0)
+            {
+                LifePoint = 0;
+                OnUnitDead();
+            }
+        }
+        else
+        {
+            LifePoint = 0;
+            OnUnitDead();
+        }
+    }
+
+    void OnUnitDead()
+    {
+        player.TurnCount--;
     }
 }

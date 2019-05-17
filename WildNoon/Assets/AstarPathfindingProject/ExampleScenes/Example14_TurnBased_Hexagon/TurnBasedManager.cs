@@ -123,6 +123,45 @@ namespace Pathfinding.Examples {
                 isMoving = value;
             }
         }
+
+        public EventSystem EventSystem
+        {
+            get
+            {
+                return eventSystem;
+            }
+
+            set
+            {
+                eventSystem = value;
+            }
+        }
+
+        public TurnBasedAI Selected
+        {
+            get
+            {
+                return selected;
+            }
+
+            set
+            {
+                selected = value;
+            }
+        }
+
+        public int UnitActionPoints1
+        {
+            get
+            {
+                return UnitActionPoints;
+            }
+
+            set
+            {
+                UnitActionPoints = value;
+            }
+        }
         #endregion
         public float nodes;
 
@@ -133,36 +172,23 @@ namespace Pathfinding.Examples {
             new SelectTarget(this),                 // Numéro 1
             new UnitRangeAttack(this),              // Numéro 2
             new UnitsMoving(this),                  // Numéro 3
-            new PlayerLookingForTravel(this),       // Numéro 4
-            new SpellRange(this),                   // Numéro 5
+            new Jacky_SlowRange(this),              // Numéro 4
+            new Jacky_TpRange(this),                // Numéro 5
 		});
 
 
-            eventSystem = FindObjectOfType<EventSystem>();
+            EventSystem = FindObjectOfType<EventSystem>();
             Player = FindObjectOfType<PlayerManager>();
             if(player != null)
             {
                 if (player.OnActiveUnit1 != null)
                 {
                     unitMobility = player.OnActiveUnit1.Mobility;
-                    UnitActionPoints = player.OnActiveUnit1.ActionPoints;
+                    UnitActionPoints1 = player.OnActiveUnit1.ActionPoints;
                     nbrDeZoneDeMouvement = 2;
-                    OneTimeThing = true;
                 }
             }
         }
-
-        
-		/*public State state = State.SelectUnit;
-
-		public enum State {
-			SelectUnit,
-			SelectTarget,
-            Attack,
-			Move
-		}*/
-
-        
 
         void Update () {
 
@@ -170,20 +196,6 @@ namespace Pathfinding.Examples {
             Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             UnitUnderMouse = GetByRay<TurnBasedAI>(Ray);
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if(Player != null)
-                {
-                    if (UnitUnderMouse == Player.OnActiveUnit1.GetComponent<TurnBasedAI>())
-                    {
-                        ChangeState(1);
-                    }
-                }
-                else
-                {
-                    ChangeState(1);
-                }
-            }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -191,40 +203,39 @@ namespace Pathfinding.Examples {
             }
 
             // Ignore any input while the mouse is over a UI element
-            if (eventSystem.IsPointerOverGameObject()) {
+            if (EventSystem.IsPointerOverGameObject()) {
 				return;
 			}
         }
 
         public void OnSetMouvement()
         {
-            UnitActionPoints = player.OnActiveUnit1.ActionPoints;
+            UnitActionPoints1 = player.OnActiveUnit1.ActionPoints;
             nbrDeZoneDeMouvement = 2;
             unitMobility = player.OnActiveUnit1.Mobility;
             MoveRange = (player.OnActiveUnit1.Mobility)*6;
             mobi = unitMobility * nodes;
             mobiLeft = mobi;
             nbrNodesParcourus = 0;
-            OneTimeThing = true;
         }
 
         public void OnUnitSelected()
         {
             DestroyPossibleMoves();
-            GeneratePossibleMoves(selected);
+            GeneratePossibleMoves(Selected);
         }
 
         public void OnUnitAttack()
         {
             DestroyPossibleMoves();
-            GeneratePossibleRange(selected , player.OnActiveUnit1.Range);
+            GeneratePossibleRange(Selected , player.OnActiveUnit1.Range);
         }
 
         public void OnShowRange()
         {
             DestroyPossibleMoves();
-            Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
-            GeneratePossibleRange(selected, player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
+            //Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
+            GeneratePossibleRange(Selected, player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
         }
 
         //int moveCost;
@@ -232,21 +243,21 @@ namespace Pathfinding.Examples {
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
 
-            if (eventSystem.IsPointerOverGameObject())
+            if (EventSystem.IsPointerOverGameObject())
             {
                 return;
 
             }
             else if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
-                if(UnitActionPoints - button.OnClick() >= 0)
+                if(UnitActionPoints1 - button.OnClick() >= 0)
                 {
 				    
                     //Debug.Log("Il ne reste que : " + player.OnActiveUnit1.ActionPoints + " points d'action");
                     ChangeState(3);
-                    StartCoroutine(MoveToNode(selected, button.node));
-                    player.ActionPointsDisplay(UnitActionPoints- button.OnClick());                           //Call PlayerManager Action Display Method
+                    StartCoroutine(MoveToNode(Selected, button.node));
+                    player.ActionPointsDisplay(UnitActionPoints1- button.OnClick());                           //Call PlayerManager Action Display Method
                     //moveCost = button.OnClick();
-                    UnitActionPoints -= button.OnClick();
+                    UnitActionPoints1 -= button.OnClick();
                     //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
@@ -261,27 +272,7 @@ namespace Pathfinding.Examples {
         }
         #endregion
 
-        public void HandleButtonUnderRaySpellRange(Ray ray)
-        {
-            var button = GetByRay<Astar3DButton>(ray);
-
-            if (eventSystem.IsPointerOverGameObject())
-            {
-                return;
-
-            }
-            else if (button != null && Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if (UnitActionPoints > 0)
-                {
-                    player.OnCoolDownspell();
-                    ChangeState(0);
-                    StartCoroutine(TpToNode(selected, button.node));
-                }
-            }
-        }
-
-        T GetByRay<T>(Ray ray) where T : class {
+        public T GetByRay<T>(Ray ray) where T : class {
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, float.PositiveInfinity, layerMask)) {
@@ -295,11 +286,11 @@ namespace Pathfinding.Examples {
 		public void Select () {
             if(player != null)
             {
-                selected = player.OnActiveUnit1.GetComponent<TurnBasedAI>();
+                Selected = player.OnActiveUnit1.GetComponent<TurnBasedAI>();
             }
             else
             {
-                selected = unitUnderMouse;
+                Selected = unitUnderMouse;
             }
 		}
         
@@ -323,7 +314,7 @@ namespace Pathfinding.Examples {
 				// generated and the player choosing which node to move to
 				Debug.LogError("Path failed:\n" + path.errorLog);
 				//state = State.SelectTarget;
-				GeneratePossibleMoves(selected);
+				GeneratePossibleMoves(Selected);
 				yield break;
 			}
 
@@ -376,24 +367,36 @@ namespace Pathfinding.Examples {
             mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
 
-            if (UnitActionPoints >= 2)
+            if (UnitActionPoints1 >= 2)
             {
                 nbrDeZoneDeMouvement = 2;
             }
             else
             {
-                nbrDeZoneDeMouvement = UnitActionPoints;
+                nbrDeZoneDeMouvement = UnitActionPoints1;
             }
             ChangeState(1);             //Respawn Nodes
 
         }
 
-        IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
+        public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
 
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
+
+        }
+
+        public IEnumerator SlowAttack(TurnBasedAI unit, UnitCara target)
+        {
+
+            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            if (target.OnCheckIfCCWorks())
+            {
+                target.Mobility -= unit.GetComponent<UnitCara>().OnUsedSpell1.m_mobilityMalus;
+            }
+            target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
 
         }
 
@@ -404,8 +407,6 @@ namespace Pathfinding.Examples {
             }
             possibleMoves.Clear();
 		}
-        bool OneTimeThing;
-        public float indiceGitanerie = 0.95f;
         public void GeneratePossibleMoves(TurnBasedAI unit)
         {
             var path = ConstantPath.Construct(unit.transform.position, (MoveRange * 3) * 1000 + 1);
@@ -495,7 +496,7 @@ namespace Pathfinding.Examples {
 
 
                     #region Coloring Nodes
-                    for (int i = 0; i < UnitActionPoints; ++i)
+                    for (int i = 0; i < UnitActionPoints1; ++i)
                     {
                         if(i == 0)
                         {
@@ -593,6 +594,14 @@ namespace Pathfinding.Examples {
 
     }
 }
+/*public State state = State.SelectUnit;
+
+public enum State {
+    SelectUnit,
+    SelectTarget,
+    Attack,
+    Move
+}*/
 //if (unit.MovementPoints < 5)
 //{
 //    path = ConstantPath.Construct(unit.transform.position, (mouvementLeft * 3) * 1000 + 1);
