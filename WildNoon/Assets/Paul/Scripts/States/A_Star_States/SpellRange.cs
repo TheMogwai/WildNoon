@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding.Examples;
 
-public class UnitRangeAttack : IState
+public class SpellRange : IState
 {
 
     TurnBasedManager m_TurnBaseManager;
-    public UnitRangeAttack(TurnBasedManager turnBaseManager)
+    public SpellRange(TurnBasedManager turnBaseManager)
     {
         m_TurnBaseManager = turnBaseManager;
     }
@@ -15,7 +15,7 @@ public class UnitRangeAttack : IState
 
     public void Enter()
     {
-        m_TurnBaseManager.OnUnitAttack();
+        m_TurnBaseManager.OnShowRange();
     }
 
 
@@ -25,11 +25,9 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
-        if(m_TurnBaseManager.UnitUnderMouse == null)
-        {
-            GetOutOfState();
-        }
-        else if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 == m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
+        m_TurnBaseManager.HandleButtonUnderRaySpellRange(m_TurnBaseManager.Ray);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             GetOutOfState();
         }
@@ -38,8 +36,10 @@ public class UnitRangeAttack : IState
     public void Exit()
     {
     }
+
+
     void GetOutOfState()
     {
-        m_TurnBaseManager.ChangeState(1);
+        m_TurnBaseManager.ChangeState(0);
     }
 }

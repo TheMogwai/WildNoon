@@ -8,8 +8,18 @@ namespace Pathfinding.Examples {
 		public GraphNode node;
         public int cost;
 
+        /*float distance;
 
-		public void OnHover (TurnBasedAI unit)
+        PlayerManager player;
+
+        private void Awake()
+        {
+            player = FindObjectOfType<PlayerManager>();
+            distance = (transform.position - player.OnActiveUnit1.gameObject.transform.position).magnitude;
+        }*/
+
+
+        public void OnHover (TurnBasedAI unit)
         {
             // TODO: Play animation
         }

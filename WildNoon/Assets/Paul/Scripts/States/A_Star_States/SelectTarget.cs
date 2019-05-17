@@ -16,7 +16,6 @@ public class SelectTarget : IState
 
     public void Enter()
     {
-        m_TurnBaseManager.Select();
         m_TurnBaseManager.OnUnitSelected();
     }
 

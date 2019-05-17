@@ -124,6 +124,7 @@ namespace Pathfinding.Examples {
             }
         }
         #endregion
+        public float nodes;
 
         private void Awake()
         {
@@ -133,6 +134,7 @@ namespace Pathfinding.Examples {
             new UnitRangeAttack(this),              // Numéro 2
             new UnitsMoving(this),                  // Numéro 3
             new PlayerLookingForTravel(this),       // Numéro 4
+            new SpellRange(this),                   // Numéro 5
 		});
 
 
@@ -144,12 +146,13 @@ namespace Pathfinding.Examples {
                 {
                     unitMobility = player.OnActiveUnit1.Mobility;
                     UnitActionPoints = player.OnActiveUnit1.ActionPoints;
-                    nbrDeZoneDeMouvement = UnitActionPoints;
+                    nbrDeZoneDeMouvement = 2;
+                    OneTimeThing = true;
                 }
             }
         }
 
-
+        
 		/*public State state = State.SelectUnit;
 
 		public enum State {
@@ -196,12 +199,13 @@ namespace Pathfinding.Examples {
         public void OnSetMouvement()
         {
             UnitActionPoints = player.OnActiveUnit1.ActionPoints;
-            nbrDeZoneDeMouvement = UnitActionPoints;
+            nbrDeZoneDeMouvement = 2;
             unitMobility = player.OnActiveUnit1.Mobility;
             MoveRange = (player.OnActiveUnit1.Mobility)*6;
-            mobi = unitMobility * 2.5f;
+            mobi = unitMobility * nodes;
             mobiLeft = mobi;
             nbrNodesParcourus = 0;
+            OneTimeThing = true;
         }
 
         public void OnUnitSelected()
@@ -216,6 +220,14 @@ namespace Pathfinding.Examples {
             GeneratePossibleRange(selected , player.OnActiveUnit1.Range);
         }
 
+        public void OnShowRange()
+        {
+            DestroyPossibleMoves();
+            Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
+            GeneratePossibleRange(selected, player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
+        }
+
+        //int moveCost;
         #region Player Clique Sur Un Node
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
@@ -233,7 +245,8 @@ namespace Pathfinding.Examples {
                     ChangeState(3);
                     StartCoroutine(MoveToNode(selected, button.node));
                     player.ActionPointsDisplay(UnitActionPoints- button.OnClick());                           //Call PlayerManager Action Display Method
-                    //UnitActionPoints -= button.OnClick();
+                    //moveCost = button.OnClick();
+                    UnitActionPoints -= button.OnClick();
                     //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
@@ -247,6 +260,26 @@ namespace Pathfinding.Examples {
             }
         }
         #endregion
+
+        public void HandleButtonUnderRaySpellRange(Ray ray)
+        {
+            var button = GetByRay<Astar3DButton>(ray);
+
+            if (eventSystem.IsPointerOverGameObject())
+            {
+                return;
+
+            }
+            else if (button != null && Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (UnitActionPoints > 0)
+                {
+                    player.OnCoolDownspell();
+                    ChangeState(0);
+                    StartCoroutine(TpToNode(selected, button.node));
+                }
+            }
+        }
 
         T GetByRay<T>(Ray ray) where T : class {
             RaycastHit hit;
@@ -339,14 +372,28 @@ namespace Pathfinding.Examples {
 
             nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
 
+            Debug.Log("NodesParcouru " + nbrNodesParcourus);
             mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
 
-            if (UnitActionPoints == 0 && mobiLeft == 0)
+            if (UnitActionPoints >= 2)
             {
-                nbrDeZoneDeMouvement = 0;
+                nbrDeZoneDeMouvement = 2;
+            }
+            else
+            {
+                nbrDeZoneDeMouvement = UnitActionPoints;
             }
             ChangeState(1);             //Respawn Nodes
+
+        }
+
+        IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
+        {
+
+            yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
+            unit.transform.position = (Vector3)node.position;
+            unit.blocker.BlockAtCurrentPosition();
 
         }
 
@@ -357,7 +404,8 @@ namespace Pathfinding.Examples {
             }
             possibleMoves.Clear();
 		}
-
+        bool OneTimeThing;
+        public float indiceGitanerie = 0.95f;
         public void GeneratePossibleMoves(TurnBasedAI unit)
         {
             var path = ConstantPath.Construct(unit.transform.position, (MoveRange * 3) * 1000 + 1);
@@ -367,17 +415,16 @@ namespace Pathfinding.Examples {
             AstarPath.StartPath(path);
 
             path.BlockUntilCalculated();
+            Debug.Log("MobiLeft " + mobiLeft);
 
             #region mobiLeft and ActionPoints Maths
-            Debug.Log("MobiLeft " + mobiLeft);
-            if (mobiLeft <= 0)
+            /*if (mobiLeft <= 0)
             {
-
                 for (int i = 0; i < 6; i++)
                 {
-                    if (mobiLeft >= i * (-mobi))
+                    if (mobiLeft >= i * (-mobi) && moveCost !=0)
                     {
-                        if(UnitActionPoints- (i+1) > 0)
+                        if(UnitActionPoints- (i) > 0)
                         {
                             UnitActionPoints -= i +1;
                         }
@@ -402,30 +449,37 @@ namespace Pathfinding.Examples {
 
                 }
 
+                /*if(UnitActionPoints == 0 && mobiLeft == mobi && OneTimeThing)
+                {
+                    UnitActionPoints++;
+                    OneTimeThing = false;
+                }*//*
+
                 if (mobiLeft == mobi)
                 {
                     nbrDeZoneDeMouvement = UnitActionPoints;
                 }
                 else
                 {
-                    UnitActionPoints++;
                     nbrDeZoneDeMouvement = UnitActionPoints;
+                    nbrDeZoneDeMouvement++;
+                    //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
-            //Debug.Log("Action Point Left " + UnitActionPoints);
 
             if(mobiLeft != mobi)
             {
-                nbrNodesParcourus = (mobiLeft / 2.5f);
+                nbrNodesParcourus = ((mobi - mobiLeft) / 2.5f);
             }
             else
             {
                 nbrNodesParcourus = 0;
             }
+                Debug.Log("Action Point Left " + UnitActionPoints);
 
-            //Debug.Log("NodesParcouru " + nbrNodesParcourus);
+            Debug.Log("nbrDeZoneDeMouvement " + nbrDeZoneDeMouvement);*/
 
-
+    
             #endregion
 
             foreach (var node in path.allNodes)
@@ -438,40 +492,43 @@ namespace Pathfinding.Examples {
                     distanceToPlayer = heading.magnitude;
                     render = go.GetComponentInChildren<MeshRenderer>();
 
+
+
                     #region Coloring Nodes
-                    for (int i = 0; i < nbrDeZoneDeMouvement; ++i)
+                    for (int i = 0; i < UnitActionPoints; ++i)
                     {
                         if(i == 0)
                         {
                             
-                            if (distanceToPlayer < ((mobiLeft)))
+                            if (distanceToPlayer < ((mobi)))
                             {
                                 render.material.color = color[0];
 
-                                if (mobiLeft == mobi)
-                                {
-                                    go.GetComponent<Astar3DButton>().cost = (1);
-                                }
-                                else
-                                {
-                                    go.GetComponent<Astar3DButton>().cost = (0);
-                                }
+                                go.GetComponent<Astar3DButton>().cost = (1);
+
+                                //if (mobiLeft == mobi)
+                                //{
+                                //}
+                                //else
+                                //{
+                                //    go.GetComponent<Astar3DButton>().cost = (0);
+                                //}
                                 break;
                             }
                         }
                         else
                         {
-                            if (distanceToPlayer < ((mobi) * (i))+mobiLeft)
+                            if (distanceToPlayer < (mobi) * (i + 1))
                             {
                                 render.material.color = color[i];
-                                if(mobiLeft == mobi)
+                                go.GetComponent<Astar3DButton>().cost = (i+1);
+                                /*if(mobiLeft == mobi)
                                 {
                                     go.GetComponent<Astar3DButton>().cost = (i+1);
                                 }
                                 else
                                 {
-                                    go.GetComponent<Astar3DButton>().cost = (i);
-                                }
+                                }*/
                                 break;
                             }
                         }
