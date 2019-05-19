@@ -61,7 +61,6 @@ namespace Pathfinding.Examples {
         MeshRenderer render;
         Vector3 _heading;
 
-        int UnitActionPoints;
         int nbrDeZoneDeMouvement;
 
         float mobi;
@@ -150,18 +149,6 @@ namespace Pathfinding.Examples {
             }
         }
 
-        public int UnitActionPoints1
-        {
-            get
-            {
-                return UnitActionPoints;
-            }
-
-            set
-            {
-                UnitActionPoints = value;
-            }
-        }
         #endregion
         public float nodes;
 
@@ -184,7 +171,6 @@ namespace Pathfinding.Examples {
                 if (player.OnActiveUnit1 != null)
                 {
                     unitMobility = player.OnActiveUnit1.Mobility;
-                    UnitActionPoints1 = player.OnActiveUnit1.ActionPoints;
                     nbrDeZoneDeMouvement = 2;
                 }
             }
@@ -210,7 +196,6 @@ namespace Pathfinding.Examples {
 
         public void OnSetMouvement()
         {
-            UnitActionPoints1 = player.OnActiveUnit1.ActionPoints;
             nbrDeZoneDeMouvement = 2;
             unitMobility = player.OnActiveUnit1.Mobility;
             MoveRange = (player.OnActiveUnit1.Mobility)*6;
@@ -249,15 +234,15 @@ namespace Pathfinding.Examples {
 
             }
             else if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
-                if(UnitActionPoints1 - button.OnClick() >= 0)
+                if(player.OnActiveUnit1.ActionPoints - button.OnClick() >= 0)
                 {
 				    
                     //Debug.Log("Il ne reste que : " + player.OnActiveUnit1.ActionPoints + " points d'action");
                     ChangeState(3);
                     StartCoroutine(MoveToNode(Selected, button.node));
-                    player.ActionPointsDisplay(UnitActionPoints1- button.OnClick());                           //Call PlayerManager Action Display Method
+                    player.ActionPointsDisplay(player.OnActiveUnit1.ActionPoints - button.OnClick());                           //Call PlayerManager Action Display Method
                     //moveCost = button.OnClick();
-                    UnitActionPoints1 -= button.OnClick();
+                    player.OnActiveUnit1.ActionPoints -= button.OnClick();
                     //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
@@ -363,17 +348,17 @@ namespace Pathfinding.Examples {
 
             nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
 
-            Debug.Log("NodesParcouru " + nbrNodesParcourus);
+            //Debug.Log("NodesParcouru " + nbrNodesParcourus);
             mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
 
-            if (UnitActionPoints1 >= 2)
+            if (player.OnActiveUnit1.ActionPoints >= 2)
             {
                 nbrDeZoneDeMouvement = 2;
             }
             else
             {
-                nbrDeZoneDeMouvement = UnitActionPoints1;
+                nbrDeZoneDeMouvement = player.OnActiveUnit1.ActionPoints;
             }
             ChangeState(1);             //Respawn Nodes
 
@@ -381,8 +366,9 @@ namespace Pathfinding.Examples {
 
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
-
+            Player.OnActiveUnit1.m_isInAnimation = true;
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
+            Player.OnActiveUnit1.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
 
@@ -390,8 +376,11 @@ namespace Pathfinding.Examples {
 
         public IEnumerator SlowAttack(TurnBasedAI unit, UnitCara target)
         {
+            Player.OnActiveUnit1.m_isInAnimation = true;
 
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            Player.OnActiveUnit1.m_isInAnimation = false;
+
             if (target.OnCheckIfCCWorks())
             {
                 target.Mobility -= unit.GetComponent<UnitCara>().OnUsedSpell1.m_mobilityMalus;
@@ -407,6 +396,7 @@ namespace Pathfinding.Examples {
             }
             possibleMoves.Clear();
 		}
+
         public void GeneratePossibleMoves(TurnBasedAI unit)
         {
             var path = ConstantPath.Construct(unit.transform.position, (MoveRange * 3) * 1000 + 1);
@@ -416,72 +406,8 @@ namespace Pathfinding.Examples {
             AstarPath.StartPath(path);
 
             path.BlockUntilCalculated();
-            Debug.Log("MobiLeft " + mobiLeft);
+            //Debug.Log("MobiLeft " + mobiLeft);
 
-            #region mobiLeft and ActionPoints Maths
-            /*if (mobiLeft <= 0)
-            {
-                for (int i = 0; i < 6; i++)
-                {
-                    if (mobiLeft >= i * (-mobi) && moveCost !=0)
-                    {
-                        if(UnitActionPoints- (i) > 0)
-                        {
-                            UnitActionPoints -= i +1;
-                        }
-                        else
-                        {
-                            UnitActionPoints = 0;
-                        }
-                        break;
-                    }
-                }
-
-                
-                if (UnitActionPoints == 0 && mobiLeft < 0)
-                {
-                    nbrDeZoneDeMouvement = 1;
-                }
-
-                while (mobiLeft <= 0 && !HardStop)
-                {
-
-                    mobiLeft = mobi + mobiLeft;
-
-                }
-
-                /*if(UnitActionPoints == 0 && mobiLeft == mobi && OneTimeThing)
-                {
-                    UnitActionPoints++;
-                    OneTimeThing = false;
-                }*//*
-
-                if (mobiLeft == mobi)
-                {
-                    nbrDeZoneDeMouvement = UnitActionPoints;
-                }
-                else
-                {
-                    nbrDeZoneDeMouvement = UnitActionPoints;
-                    nbrDeZoneDeMouvement++;
-                    //nbrDeZoneDeMouvement = UnitActionPoints;
-                }
-            }
-
-            if(mobiLeft != mobi)
-            {
-                nbrNodesParcourus = ((mobi - mobiLeft) / 2.5f);
-            }
-            else
-            {
-                nbrNodesParcourus = 0;
-            }
-                Debug.Log("Action Point Left " + UnitActionPoints);
-
-            Debug.Log("nbrDeZoneDeMouvement " + nbrDeZoneDeMouvement);*/
-
-    
-            #endregion
 
             foreach (var node in path.allNodes)
             {
@@ -496,7 +422,7 @@ namespace Pathfinding.Examples {
 
 
                     #region Coloring Nodes
-                    for (int i = 0; i < UnitActionPoints1; ++i)
+                    for (int i = 0; i < player.OnActiveUnit1.ActionPoints; ++i)
                     {
                         if(i == 0)
                         {
@@ -594,6 +520,71 @@ namespace Pathfinding.Examples {
 
     }
 }
+#region mobiLeft and ActionPoints Maths
+/*if (mobiLeft <= 0)
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (mobiLeft >= i * (-mobi) && moveCost !=0)
+        {
+            if(UnitActionPoints- (i) > 0)
+            {
+                UnitActionPoints -= i +1;
+            }
+            else
+            {
+                UnitActionPoints = 0;
+            }
+            break;
+        }
+    }
+
+
+    if (UnitActionPoints == 0 && mobiLeft < 0)
+    {
+        nbrDeZoneDeMouvement = 1;
+    }
+
+    while (mobiLeft <= 0 && !HardStop)
+    {
+
+        mobiLeft = mobi + mobiLeft;
+
+    }
+
+    /*if(UnitActionPoints == 0 && mobiLeft == mobi && OneTimeThing)
+    {
+        UnitActionPoints++;
+        OneTimeThing = false;
+    }*//*
+
+    if (mobiLeft == mobi)
+    {
+        nbrDeZoneDeMouvement = UnitActionPoints;
+    }
+    else
+    {
+        nbrDeZoneDeMouvement = UnitActionPoints;
+        nbrDeZoneDeMouvement++;
+        //nbrDeZoneDeMouvement = UnitActionPoints;
+    }
+}
+
+if(mobiLeft != mobi)
+{
+    nbrNodesParcourus = ((mobi - mobiLeft) / 2.5f);
+}
+else
+{
+    nbrNodesParcourus = 0;
+}
+    Debug.Log("Action Point Left " + UnitActionPoints);
+
+Debug.Log("nbrDeZoneDeMouvement " + nbrDeZoneDeMouvement);*/
+
+
+#endregion
+
 /*public State state = State.SelectUnit;
 
 public enum State {
