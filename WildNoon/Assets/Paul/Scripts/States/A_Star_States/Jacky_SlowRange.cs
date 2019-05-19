@@ -57,7 +57,7 @@ public class Jacky_SlowRange : IState
             }
             else if (unit.gameObject.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2 && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (m_TurnBaseManager.UnitActionPoints1 > 0)
+                if (m_TurnBaseManager.Player.OnActiveUnit1.ActionPoints > 0)
                 {
                     m_TurnBaseManager.Player.OnCoolDownspell();
                     m_TurnBaseManager.Player.OnCoolDownDisplay(2);

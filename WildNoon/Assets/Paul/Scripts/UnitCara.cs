@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pathfinding;
+using Pathfinding.Examples;
 
 public class UnitCara : MonoBehaviour {
 
@@ -26,18 +28,25 @@ public class UnitCara : MonoBehaviour {
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
+    public GameObject ArmorBar;
+    public GameObject LifeBar;
+    public GameObject m_canvas;
+
+
     public GameObject Selected;
     int[] coolDownCount;
     PlayerManager player;
 
+
     #region Unit Stats
     int _LifePoint;
     int _ArmorPoint;
-    int _Courage;
+    float _Courage;
     int _Damage;
     int _Range;
     int _Mobility;
 
+    Sprite _UnitWheelArt;
 
     #endregion
 
@@ -125,7 +134,7 @@ public class UnitCara : MonoBehaviour {
         }
     }
 
-    public int Courage
+    public float Courage
     {
         get
         {
@@ -228,6 +237,32 @@ public class UnitCara : MonoBehaviour {
             OnUsedSpell = value;
         }
     }
+
+    public Sprite UnitWheelArt
+    {
+        get
+        {
+            return _UnitWheelArt;
+        }
+
+        set
+        {
+            _UnitWheelArt = value;
+        }
+    }
+
+    public bool m_isInAnimation
+    {
+        get
+        {
+            return IsInAnimation;
+        }
+
+        set
+        {
+            IsInAnimation = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -237,6 +272,7 @@ public class UnitCara : MonoBehaviour {
         Damage = unitStats.m_damage;
         Range = unitStats.m_range;
         Mobility = unitStats.m_mobility;
+        UnitWheelArt = unitStats.characterArtwork;
 
         ActionPoints = 6;
         ActionPointsPreview = ActionPoints;
@@ -257,6 +293,12 @@ public class UnitCara : MonoBehaviour {
         {
             isTeam2 = false;
         }
+    }
+    private void Update()
+    {
+        m_canvas.transform.LookAt(Camera.main.transform);
+        //ArmorBar.transform.LookAt(Camera.main.transform);
+        //LifeBar.transform.LookAt(Camera.main.transform);
     }
 
     public void ActivateSelectedGameObject(bool b)
@@ -302,14 +344,16 @@ public class UnitCara : MonoBehaviour {
     public bool OnCheckIfCCWorks()
     {
         float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
+        //Debug.Log("armor : "+armorpercent);
         float random = Random.Range(0, armorpercent);
-        if(random < armorpercent)
+        //Debug.Log("random : " + random);
+        if (random < armorpercent)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -354,10 +398,58 @@ public class UnitCara : MonoBehaviour {
             LifePoint = 0;
             OnUnitDead();
         }
+        ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint);
+        LifeBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_heatlh, LifePoint);
     }
 
     void OnUnitDead()
     {
         player.TurnCount--;
+        StartCoroutine(AniamtionDeath());
+    }
+
+    int nbrInTheList;
+    bool IsInAnimation;
+    public void WitchNbrInTheList(int i)
+    {
+        nbrInTheList = i;
+    }
+
+    IEnumerator AniamtionDeath()
+    {
+        m_isInAnimation = true;
+        yield return new WaitForSeconds(1f);             //Temps de l'animation de la mort
+        m_isInAnimation = false;
+
+        if(Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsFirstArtwork)
+        {
+            if(nbrInTheList == Player.m_UnitsInGameDisplay.Length - 1)
+            {
+                Player.m_UnitsInGameDisplay[0].sprite = Player.m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[0]._UnitWheelArt = Player.m_UnitsInGameDisplay[0].sprite;
+            }
+            else
+            {
+                Player.m_UnitsInGameDisplay[nbrInTheList + 1].sprite = Player.m_UnitsInGameCara[nbrInTheList + 1].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[nbrInTheList + 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[nbrInTheList + 1].sprite;
+            }
+        }
+        else if (Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsLastArtwork)
+        {
+            if(nbrInTheList == 0)
+            {
+                Player.m_UnitsInGameDisplay[Player.m_UnitsInGameDisplay.Length - 1].sprite = Player.m_UnitsInGameCara[Player.m_UnitsInGameDisplay.Length - 1].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[Player.m_UnitsInGameDisplay.Length - 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[Player.m_UnitsInGameDisplay.Length - 1].sprite;
+            }
+            else
+            {
+                Player.m_UnitsInGameDisplay[nbrInTheList - 1].sprite = Player.m_UnitsInGameCara[nbrInTheList - 1].unitStats.characterIsLastArtwork;
+                Player.m_UnitsInGameCara[nbrInTheList - 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[nbrInTheList - 1].sprite;
+            }
+        }
+        Destroy(Player.m_UnitsInGameDisplay[nbrInTheList].gameObject);
+        GetComponent<TurnBasedAI>().blocker.Unblock();
+        Destroy(gameObject);
+
     }
 }
