@@ -21,7 +21,7 @@ public class InGameSpawner : MonoBehaviour
     {
         if (!debug)
         {
-            
+
             m_teams = FindObjectOfType<Unit_Spawer>().gameObject;
             for (int i = 0, l = SpawnerTeam_1.Length; i < l; ++i)
             {

@@ -28,6 +28,10 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+        }
         if(m_TurnBaseManager.UnitUnderMouse == null)
         {
             GetOutOfState();

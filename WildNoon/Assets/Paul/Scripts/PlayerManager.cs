@@ -72,7 +72,7 @@ public class PlayerManager : MonoBehaviour
         {
             turnCount--;
             OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
-            for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
+            for (int i = 0, l = UnitsInGameCara.Length; i < l; ++i)
             {
                 UnitsInGameCara[i].ActivateSelectedGameObject(false);
             }
@@ -148,7 +148,7 @@ public class PlayerManager : MonoBehaviour
     {
         Array.Sort(UnitsInGameCara, delegate (UnitCara x, UnitCara y) { return y.unitStats.m_courage.CompareTo(x.unitStats.m_courage); });
 
-        if(UnitsInGameCara != null)
+        if (UnitsInGameCara != null)
         {
             for (int i = 0, l = UnitsInGameCara.Length; i < l; ++i)
             {
