@@ -18,9 +18,6 @@ public class UnitRangeAttack : IState
         m_TurnBaseManager.OnUnitAttack();
     }
 
-    public void Exit()
-    {
-    }
 
     public void FixedUpdate()
     {
@@ -28,6 +25,10 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+        }
         if(m_TurnBaseManager.UnitUnderMouse == null)
         {
             GetOutOfState();
@@ -38,8 +39,11 @@ public class UnitRangeAttack : IState
         }
     }
 
+    public void Exit()
+    {
+    }
     void GetOutOfState()
     {
-        m_TurnBaseManager.ChangeState(1);
+        m_TurnBaseManager.ChangeState(0);
     }
 }

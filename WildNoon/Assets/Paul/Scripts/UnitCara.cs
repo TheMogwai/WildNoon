@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Pathfinding;
+using Pathfinding.Examples;
 
 public class UnitCara : MonoBehaviour {
 
@@ -26,22 +28,32 @@ public class UnitCara : MonoBehaviour {
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
+    public GameObject ArmorBar;
+    public GameObject LifeBar;
+    public GameObject m_canvas;
+
+
     public GameObject Selected;
     int[] coolDownCount;
+    PlayerManager player;
+
 
     #region Unit Stats
     int _LifePoint;
     int _ArmorPoint;
-    int _Courage;
+    float _Courage;
     int _Damage;
     int _Range;
     int _Mobility;
 
+    Sprite _UnitWheelArt;
 
     #endregion
 
 
     bool isTeam2;
+    Spells OnUsedSpell;
+    int OnNbrSpell;
 
     #region Get Set
     public bool HasPlayed
@@ -122,7 +134,7 @@ public class UnitCara : MonoBehaviour {
         }
     }
 
-    public int Courage
+    public float Courage
     {
         get
         {
@@ -199,6 +211,58 @@ public class UnitCara : MonoBehaviour {
             m_actionPointsPreview = value;
         }
     }
+
+    public PlayerManager Player
+    {
+        get
+        {
+            return player;
+        }
+
+        set
+        {
+            player = value;
+        }
+    }
+
+    public Spells OnUsedSpell1
+    {
+        get
+        {
+            return OnUsedSpell;
+        }
+
+        set
+        {
+            OnUsedSpell = value;
+        }
+    }
+
+    public Sprite UnitWheelArt
+    {
+        get
+        {
+            return _UnitWheelArt;
+        }
+
+        set
+        {
+            _UnitWheelArt = value;
+        }
+    }
+
+    public bool m_isInAnimation
+    {
+        get
+        {
+            return IsInAnimation;
+        }
+
+        set
+        {
+            IsInAnimation = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -208,11 +272,14 @@ public class UnitCara : MonoBehaviour {
         Damage = unitStats.m_damage;
         Range = unitStats.m_range;
         Mobility = unitStats.m_mobility;
+        UnitWheelArt = unitStats.characterArtwork;
 
         ActionPoints = 6;
         ActionPointsPreview = ActionPoints;
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
+
+        Player = FindObjectOfType<PlayerManager>();
     }
 
     public void Start()
@@ -227,6 +294,12 @@ public class UnitCara : MonoBehaviour {
             isTeam2 = false;
         }
     }
+    private void Update()
+    {
+        m_canvas.transform.LookAt(Camera.main.transform);
+        //ArmorBar.transform.LookAt(Camera.main.transform);
+        //LifeBar.transform.LookAt(Camera.main.transform);
+    }
 
     public void ActivateSelectedGameObject(bool b)
     {
@@ -240,15 +313,22 @@ public class UnitCara : MonoBehaviour {
     public virtual void OnUsingSpell(Spells Spell, int i)
     {
         //Debug.Log(Spell + " a encore" + Spell.CoolDownCount + " avant d'etre utilisable.");
-        if(CoolDownCount[i] == 0)
-        {
-            if (ActionPoints > Spell.cost)
-            {
-                ActionPoints -= Spell.cost;
-                CoolDownMethod(i);
-            }
-        }
+        OnUsedSpell1 = Spell;
+        OnNbrSpell = i;
     }
+
+    public virtual void OnCoolDown()
+    {
+        ActionPoints -= OnUsedSpell1.cost;
+        Player.ActionPointsDisplay(ActionPoints);
+        CoolDownMethod(OnNbrSpell);
+    }
+
+    public virtual void OnUnitPassiveEffect()
+    {
+        
+    }
+
 
     public void ReduceCoolDown()
     {
@@ -261,7 +341,21 @@ public class UnitCara : MonoBehaviour {
         }
     }
 
-
+    public bool OnCheckIfCCWorks()
+    {
+        float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
+        //Debug.Log("armor : "+armorpercent);
+        float random = Random.Range(0, armorpercent);
+        //Debug.Log("random : " + random);
+        if (random < armorpercent)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
 
     public int CoolDownMethod(int i)
@@ -275,5 +369,87 @@ public class UnitCara : MonoBehaviour {
             CoolDownCount[i] = Spells[i].coolDown;
         }
         return CoolDownCount[i];
+    }
+
+
+    public void OnTakingDamage(int damage)
+    {
+        if((LifePoint + ArmorPoint)-damage > 0)
+        {
+            if(ArmorPoint - damage >= 0)
+            {
+                ArmorPoint -= damage;
+            }
+            else
+            {
+                ArmorPoint -= damage;
+                LifePoint += ArmorPoint;
+                ArmorPoint = 0;
+            }
+
+            if(LifePoint <= 0)
+            {
+                LifePoint = 0;
+                OnUnitDead();
+            }
+        }
+        else
+        {
+            LifePoint = 0;
+            OnUnitDead();
+        }
+        ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint);
+        LifeBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_heatlh, LifePoint);
+    }
+
+    void OnUnitDead()
+    {
+        player.TurnCount--;
+        StartCoroutine(AniamtionDeath());
+    }
+
+    int nbrInTheList;
+    bool IsInAnimation;
+    public void WitchNbrInTheList(int i)
+    {
+        nbrInTheList = i;
+    }
+
+    IEnumerator AniamtionDeath()
+    {
+        m_isInAnimation = true;
+        yield return new WaitForSeconds(1f);             //Temps de l'animation de la mort
+        m_isInAnimation = false;
+
+        if(Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsFirstArtwork)
+        {
+            if(nbrInTheList == Player.m_UnitsInGameDisplay.Length - 1)
+            {
+                Player.m_UnitsInGameDisplay[0].sprite = Player.m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[0]._UnitWheelArt = Player.m_UnitsInGameDisplay[0].sprite;
+            }
+            else
+            {
+                Player.m_UnitsInGameDisplay[nbrInTheList + 1].sprite = Player.m_UnitsInGameCara[nbrInTheList + 1].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[nbrInTheList + 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[nbrInTheList + 1].sprite;
+            }
+        }
+        else if (Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsLastArtwork)
+        {
+            if(nbrInTheList == 0)
+            {
+                Player.m_UnitsInGameDisplay[Player.m_UnitsInGameDisplay.Length - 1].sprite = Player.m_UnitsInGameCara[Player.m_UnitsInGameDisplay.Length - 1].unitStats.characterIsFirstArtwork;
+                Player.m_UnitsInGameCara[Player.m_UnitsInGameDisplay.Length - 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[Player.m_UnitsInGameDisplay.Length - 1].sprite;
+            }
+            else
+            {
+                Player.m_UnitsInGameDisplay[nbrInTheList - 1].sprite = Player.m_UnitsInGameCara[nbrInTheList - 1].unitStats.characterIsLastArtwork;
+                Player.m_UnitsInGameCara[nbrInTheList - 1]._UnitWheelArt = Player.m_UnitsInGameDisplay[nbrInTheList - 1].sprite;
+            }
+        }
+        Destroy(Player.m_UnitsInGameDisplay[nbrInTheList].gameObject);
+        GetComponent<TurnBasedAI>().blocker.Unblock();
+        Destroy(gameObject);
+
     }
 }

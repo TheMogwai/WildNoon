@@ -16,12 +16,12 @@ public class SelectTarget : IState
 
     public void Enter()
     {
-        m_TurnBaseManager.Select();
         m_TurnBaseManager.OnUnitSelected();
     }
 
     public void Exit()
     {
+        m_TurnBaseManager.Player.MovementCost(0, false);
     }
 
     public void FixedUpdate()
@@ -30,20 +30,24 @@ public class SelectTarget : IState
 
     public void Update()
     {
-		m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
-        m_TurnBaseManager.RayToNodes();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GetOutOfState();
+        }
+
+		/*m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
         if (m_TurnBaseManager.UnitUnderMouse != null)
         {
             if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
             {
                 GetOutOfState();
             }
-        }
+        }*/
     }
 
     void GetOutOfState()
     {
-        m_TurnBaseManager.ChangeState(2);
+        m_TurnBaseManager.ChangeState(0);
     }
 
 
