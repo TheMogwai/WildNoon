@@ -346,8 +346,19 @@ namespace Pathfinding.Examples {
                 //nbrNodesParcourus = 0;
             }
             ActionPoint();
+
+            ChangeState(1);                                                                                      //Respawn Nodes
+
         }
         
+        void ActionPoint()
+        {
+            actionPointsTemp -= ((nbrNodesParcourus / unitMobility));
+            player.OnActiveUnit1.ActionPoints = (int)actionPointsTemp+1;
+            mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
+            //if(player.OnActiveUnit1.ActionPoints.)
+        }
+
         void ActionPoint()
         {
             actionPointsTemp -= ((nbrNodesParcourus / unitMobility));
