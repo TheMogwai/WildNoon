@@ -278,6 +278,11 @@ namespace Pathfinding.Examples {
                 Selected = unitUnderMouse;
             }
 		}
+
+        public void AutoAttack(UnitCara target)
+        {
+            target.OnTakingDamage(Player.OnActiveUnit1.Damage);
+        }
         
 
         public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {

@@ -43,5 +43,21 @@ public class SelectUnit : IState
                 m_TurnBaseManager.ChangeState(1);
             }
         }
+        else
+        {
+            if (m_TurnBaseManager.UnitUnderMouse != null)
+            {
+                if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
+                {
+                    GetOutOfState();
+                }
+            }
+        }
+
+        
+    }
+    void GetOutOfState()
+    {
+        m_TurnBaseManager.ChangeState(2);
     }
 }
