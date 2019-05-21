@@ -1,0 +1,237 @@
+fileFormatVersion: 2
+guid: 9e809132787b72e46a593a4d55294047
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: polySurface2612
+    100002: polySurface2613
+    100004: polySurface2614
+    100006: polySurface2615
+    100008: polySurface2616
+    100010: polySurface2617
+    100012: polySurface2618
+    100014: polySurface2618 1
+    100016: polySurface2619
+    100018: polySurface2620
+    100020: polySurface2621
+    100022: polySurface2622
+    100024: polySurface2623
+    100026: polySurface2624
+    100028: polySurface2625
+    100030: polySurface2626
+    100032: polySurface2627
+    100034: polySurface2628
+    100036: polySurface2629
+    100038: polySurface2630
+    100040: polySurface2631
+    100042: polySurface2632
+    100044: polySurface2633
+    100046: polySurface2634
+    100048: polySurface2635
+    100050: polySurface2636
+    100052: polySurface2637
+    100054: polySurface2638
+    100056: polySurface2639
+    100058: polySurface2640
+    100060: polySurface2641
+    100062: polySurface2642
+    100064: polySurface2643
+    100066: transform102
+    100068: transform103
+    100070: transform104
+    100072: transform105
+    100074: transform106
+    100076: transform107
+    100078: transform108
+    100080: transform109
+    100082: transform110
+    100084: transform111
+    100086: transform112
+    100088: transform113
+    100090: transform114
+    100092: transform115
+    100094: transform116
+    100096: transform117
+    100098: transform118
+    100100: transform119
+    100102: transform120
+    100104: transform121
+    100106: transform122
+    100108: transform123
+    100110: transform124
+    100112: transform125
+    100114: transform126
+    100116: transform127
+    100118: transform128
+    100120: transform129
+    100122: transform130
+    100124: transform131
+    100126: transform132
+    100128: transform133
+    100130: transform134
+    100132: transform135
+    100134: Wagon2
+    100136: wagon_bois
+    100138: //RootNode
+    400000: polySurface2612
+    400002: polySurface2613
+    400004: polySurface2614
+    400006: polySurface2615
+    400008: polySurface2616
+    400010: polySurface2617
+    400012: polySurface2618
+    400014: polySurface2618 1
+    400016: polySurface2619
+    400018: polySurface2620
+    400020: polySurface2621
+    400022: polySurface2622
+    400024: polySurface2623
+    400026: polySurface2624
+    400028: polySurface2625
+    400030: polySurface2626
+    400032: polySurface2627
+    400034: polySurface2628
+    400036: polySurface2629
+    400038: polySurface2630
+    400040: polySurface2631
+    400042: polySurface2632
+    400044: polySurface2633
+    400046: polySurface2634
+    400048: polySurface2635
+    400050: polySurface2636
+    400052: polySurface2637
+    400054: polySurface2638
+    400056: polySurface2639
+    400058: polySurface2640
+    400060: polySurface2641
+    400062: polySurface2642
+    400064: polySurface2643
+    400066: transform102
+    400068: transform103
+    400070: transform104
+    400072: transform105
+    400074: transform106
+    400076: transform107
+    400078: transform108
+    400080: transform109
+    400082: transform110
+    400084: transform111
+    400086: transform112
+    400088: transform113
+    400090: transform114
+    400092: transform115
+    400094: transform116
+    400096: transform117
+    400098: transform118
+    400100: transform119
+    400102: transform120
+    400104: transform121
+    400106: transform122
+    400108: transform123
+    400110: transform124
+    400112: transform125
+    400114: transform126
+    400116: transform127
+    400118: transform128
+    400120: transform129
+    400122: transform130
+    400124: transform131
+    400126: transform132
+    400128: transform133
+    400130: transform134
+    400132: transform135
+    400134: Wagon2
+    400136: wagon_bois
+    400138: //RootNode
+    2100000: lambert1
+    2300000: wagon_bois
+    3300000: wagon_bois
+    4300000: wagon_bois
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -12,6 +12,10 @@ public class Characters : ScriptableObject
     [Header("Artwork")]
     public Sprite characterArtwork;
     [Space]
+    public Sprite characterIsFirstArtwork;
+    public Sprite characterIsLastArtwork;
+    public Sprite characterIsNeitherArtwork;
+    [Space]
     [Header("Unit Stats")]
     public int m_courage;
     public int m_heatlh;

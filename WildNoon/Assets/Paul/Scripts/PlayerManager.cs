@@ -15,16 +15,29 @@ public class PlayerManager : MonoBehaviour
     UnitCara[] UnitsInGameCara;
     UnitCara OnActiveUnit;
 
+    Image[] UnitsInGameDisplay;
+
     #endregion
 
-
     TurnBasedManager m_turnBasedManager;
-
+    [Header("Spells Button Array")]
     public Button[] SpellsButton;
+
+    [Header("ActionPoints Layout")]
+    public GameObject ActionPointsLayout;
+    [Header("UnitsInGame Layout")]
+    public GameObject UnitsInGameLayout;
+    [Space]
+    public Text m_actionPointsCosts;
+
+    Image[] m_actionPointDisplay;
 
     RTS_Camera cam;
 
     int turnCount;
+    int turnCountMax;
+
+    int m_onUsedSpell;
 
 
 
@@ -41,55 +54,217 @@ public class PlayerManager : MonoBehaviour
             OnActiveUnit = value;
         }
     }
+
+    public TurnBasedManager TurnBasedManager
+    {
+        get
+        {
+            return m_turnBasedManager;
+        }
+
+        set
+        {
+            m_turnBasedManager = value;
+        }
+    }
+
+    public int OnUsedSpell
+    {
+        get
+        {
+            return m_onUsedSpell;
+        }
+
+        set
+        {
+            m_onUsedSpell = value;
+        }
+    }
+
+    public int TurnCount
+    {
+        get
+        {
+            return turnCount;
+        }
+
+        set
+        {
+            turnCount = value;
+        }
+    }
+
+    public UnitCara[] m_UnitsInGameCara
+    {
+        get
+        {
+            return UnitsInGameCara;
+        }
+
+        set
+        {
+            UnitsInGameCara = value;
+        }
+    }
+
+    public Image[] m_UnitsInGameDisplay
+    {
+        get
+        {
+            return UnitsInGameDisplay;
+        }
+
+        set
+        {
+            UnitsInGameDisplay = value;
+        }
+    }
     #endregion
 
     private void Awake()
     {
-        m_turnBasedManager = FindObjectOfType<TurnBasedManager>();
+        TurnBasedManager = FindObjectOfType<TurnBasedManager>();
+        m_actionPointDisplay = new Image[6];
+        m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
+        m_actionPointsCosts.gameObject.SetActive(false);
+        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
     }
 
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
+        ResetArray();
+        OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
+        OnTurnPassed();
+        InitiateWheelDisplay();
+
+
+        TurnCount = turnCountMax;
+    }
+
+    public void InitiateWheelDisplay()
+    {
+        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
+        {
+            if (i == 0 || i == m_UnitsInGameCara.Length - 1)
+            {
+                if (i == 0)
+                {
+                    m_UnitsInGameCara[0].UnitWheelArt = m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork;
+                }
+                else
+                {
+                    m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsLastArtwork;
+                }
+            }
+            else
+            {
+                m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsNeitherArtwork;
+            }
+
+            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+
+        }
+    }
+
+    void ResetArray()
+    {
+        UnitsInGame = new GameObject[0];
         UnitsInGame = GameObject.FindGameObjectsWithTag("Units");
-        UnitsInGameCara = new UnitCara[UnitsInGame.Length];
+        m_UnitsInGameCara = new UnitCara[UnitsInGame.Length];
 
         for (int i = 0, l = UnitsInGame.Length; i < l; ++i)
         {
             if (UnitsInGame[i].GetComponent<UnitCara>() != null)
             {
-                UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
+                m_UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
             }
         }
-        turnCount = UnitsInGame.Length;
-        OnTurnPassed();
+        turnCountMax = m_UnitsInGameCara.Length;
     }
 
+    void OnResetUnitsWheel()
+    {
+        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
+        {
+            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+        }
+    }
 
     public void OnTurnPassed()
     {
-        if (!m_turnBasedManager.IsMoving)
+        if (!TurnBasedManager.IsMoving && !OnActiveUnit1.m_isInAnimation)
         {
-            turnCount--;
+            ResetArray();
+            TurnCount--;
+            OnTableTurnOver();
+            //Debug.Log(TurnCount);
             OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
-            for (int i = 0, l = UnitsInGameCara.Length ; i < l; ++i)
+            for (int i = 0, l = m_UnitsInGameCara.Length ; i < l; ++i)
             {
-                UnitsInGameCara[i].ActivateSelectedGameObject(false);
+                m_UnitsInGameCara[i].ActivateSelectedGameObject(false);
+                m_UnitsInGameCara[i].WitchNbrInTheList(i);
             }
             OnActiveUnit1.ActivateSelectedGameObject(true);
             OnPositionCamera();
-            OnTableTurnOver();
             OnChangingUI();
-            m_turnBasedManager.ChangeState(0);
-            m_turnBasedManager.OnSetMouvement();
+            OnResetUnitsWheel();
+            TurnBasedManager.ChangeState(0);
+            TurnBasedManager.OnSetMouvement();
+            OnPassiveEffectTrigger();
+
+            for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
+            {
+                if (!m_actionPointDisplay[i].gameObject.activeSelf)
+                {
+                    m_actionPointDisplay[i].gameObject.SetActive(true);
+                }
+            }
+        }
+    }
+
+    public void ActionPointsDisplay(int AP_Left)
+    {
+        int actionPointMax = 6;
+        int actionPointLost = actionPointMax - AP_Left;
+
+        for (int i = 0, l = actionPointLost; i < l; ++i)
+        {
+            if (m_actionPointDisplay[i].gameObject.activeSelf)
+            {
+                m_actionPointDisplay[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void MovementCost(int cost, bool on)
+    {
+        m_actionPointsCosts.gameObject.SetActive(on);
+        if(cost <= 6)
+        {
+            m_actionPointsCosts.text = string.Format("Costs : {0} PA", cost);
+        }
+        else
+        {
+            m_actionPointsCosts.text = string.Format("Not enough PA");
         }
     }
 
     #region Personnage lance un Spell
     public void OnSpellCast(int SpellNbr)
     {
-        OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
+        OnUsedSpell = SpellNbr;
+        if(OnActiveUnit1.ActionPoints - OnActiveUnit1.Spells1[SpellNbr].cost >= 0 && OnActiveUnit1.CoolDownCount[SpellNbr] == 0)
+        {
+            OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
+        }
+        
+    }
+    #endregion
 
+    public void OnCoolDownDisplay(int SpellNbr)
+    {
         if (OnActiveUnit1.CoolDownCount[SpellNbr] != 0)
         {
             SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[SpellNbr].ToString();
@@ -99,7 +274,16 @@ public class PlayerManager : MonoBehaviour
             SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = "Spell " + SpellNbr;
         }
     }
-    #endregion
+
+    public void OnPassiveEffectTrigger()
+    {
+        OnActiveUnit1.OnUnitPassiveEffect();
+    }
+
+    public void OnCoolDownspell()
+    {
+        OnActiveUnit1.OnCoolDown();
+    }
 
     #region Fin de tour de personnage
     void OnChangingUI()
@@ -127,40 +311,45 @@ public class PlayerManager : MonoBehaviour
     #region Fin De Tour De Table
     void OnTableTurnOver()
     {
-        if (turnCount == 0)
+        if (TurnCount <= 0)
         {
-            for (int i = 0, l = UnitsInGameCara.Length; i < l; ++i)
+            for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
             {
-                if (UnitsInGameCara[i].GetComponent<UnitCara>() != null)
+                if (m_UnitsInGameCara[i].GetComponent<UnitCara>() != null)
                 {
-                    UnitsInGameCara[i].HasPlayed = false;
-                    UnitsInGameCara[i].ReduceCoolDown();
-                    UnitsInGameCara[i].ActionPoints = 6;
+                    m_UnitsInGameCara[i].HasPlayed = false;
+                    m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage * 10;
+                    m_UnitsInGameCara[i].ReduceCoolDown();
+                    m_UnitsInGameCara[i].ActionPoints = 6;
                 }
             }
-            Debug.Log("Next Turn");
-            turnCount = UnitsInGame.Length;
+            //Debug.Log("Next Turn");
+            ResetArray();
+            TurnCount = turnCountMax;
         }
     }
     #endregion
 
     GameObject GetMax()
     {
-        Array.Sort(UnitsInGameCara, delegate (UnitCara x, UnitCara y) { return y.unitStats.m_courage.CompareTo(x.unitStats.m_courage); });
+        
+        Array.Sort(m_UnitsInGameCara, delegate (UnitCara x, UnitCara y) { return y.Courage.CompareTo(x.Courage); });
 
-        if(UnitsInGameCara != null)
+        if (m_UnitsInGameCara != null)
         {
-            for (int i = 0, l = UnitsInGameCara.Length; i < l; ++i)
+            for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
             {
-                if (!UnitsInGameCara[i].HasPlayed)
+                if (!m_UnitsInGameCara[i].HasPlayed)
                 {
-                    GameObject max = UnitsInGameCara[i].gameObject;
-                    UnitsInGameCara[i].HasPlayed = true;
+                    GameObject max = m_UnitsInGameCara[i].gameObject;
+                    m_UnitsInGameCara[i].HasPlayed = true;
+                    m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage / 10;
                     //Debug.Log(max.name + " est l'unité avec le plus de courage.");
                     return max;
                 }
             }
         }
+        Debug.Log("Atchoum");
         return null;
     }
 }
