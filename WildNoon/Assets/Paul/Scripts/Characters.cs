@@ -24,6 +24,8 @@ public class Characters : ScriptableObject
     public int m_range;
     public int m_mobility;
     [Space]
+    public int m_autoAttackCost;
+    [Space]
     [Header("Unit Spells")]
     public Spells firstSpell;
     public Spells secondSpell;

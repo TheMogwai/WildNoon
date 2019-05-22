@@ -41,7 +41,7 @@ public class PlayerManager : MonoBehaviour
 
 
 
-    #region
+    # region Get Set
     public UnitCara OnActiveUnit1
     {
         get
@@ -119,7 +119,8 @@ public class PlayerManager : MonoBehaviour
             UnitsInGameDisplay = value;
         }
     }
-    #endregion
+    #endregion 
+
 
     private void Awake()
     {
@@ -213,6 +214,8 @@ public class PlayerManager : MonoBehaviour
             TurnBasedManager.ChangeState(0);
             TurnBasedManager.OnSetMouvement();
             OnPassiveEffectTrigger();
+            OnActiveUnit1.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, OnActiveUnit1.unitStats.m_armor, OnActiveUnit1.ArmorPoint);
+
 
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
             {
@@ -255,11 +258,21 @@ public class PlayerManager : MonoBehaviour
     public void OnSpellCast(int SpellNbr)
     {
         OnUsedSpell = SpellNbr;
-        if(OnActiveUnit1.ActionPoints - OnActiveUnit1.Spells1[SpellNbr].cost >= 0 && OnActiveUnit1.CoolDownCount[SpellNbr] == 0)
+        if (OnActiveUnit1.ActionPoints - OnActiveUnit1.Spells1[SpellNbr].cost >= 0 && OnActiveUnit1.CoolDownCount[SpellNbr] == 0)
         {
             OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
         }
-        
+    }
+    public void OnButtonHover(int SpellNbr)
+    {
+        //Debug.Log("HasEnter");
+        OnUsedSpell = SpellNbr;
+        TurnBasedManager.ChangeState(6); 
+    }
+    public void OnLeaveHover(int SpellNbr)
+    {
+        //Debug.Log("HasLeft");
+        TurnBasedManager.ChangeState(0);
     }
     #endregion
 
@@ -320,6 +333,8 @@ public class PlayerManager : MonoBehaviour
                     m_UnitsInGameCara[i].HasPlayed = false;
                     m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage * 10;
                     m_UnitsInGameCara[i].ReduceCoolDown();
+                    m_UnitsInGameCara[i].ReduceDebuff();
+                    m_UnitsInGameCara[i].ReduceTaunt();
                     m_UnitsInGameCara[i].ActionPoints = 6;
                 }
             }
@@ -349,7 +364,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Atchoum");
+        //Debug.Log("Atchoum");
         return null;
     }
 }

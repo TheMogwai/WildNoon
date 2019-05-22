@@ -5,8 +5,10 @@ using Pathfinding.Examples;
 
 public class UnitRangeAttack : IState
 {
-
+    Vector3 _heading;
+    float distanceToPlayer;
     TurnBasedManager m_TurnBaseManager;
+    float range;
     public UnitRangeAttack(TurnBasedManager turnBaseManager)
     {
         m_TurnBaseManager = turnBaseManager;
@@ -16,6 +18,7 @@ public class UnitRangeAttack : IState
     public void Enter()
     {
         m_TurnBaseManager.OnUnitAttack();
+        range = m_TurnBaseManager.Player.OnActiveUnit1.Range * m_TurnBaseManager.nodes;
     }
 
 
@@ -25,9 +28,16 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player.OnActiveUnit1.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null)
         {
-            m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+            var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player.OnActiveUnit1.gameObject.transform.position;
+            _heading = heading;
+            distanceToPlayer = heading.magnitude;
+
+            if(distanceToPlayer < range)
+            {
+                m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+            }
         }
         if(m_TurnBaseManager.UnitUnderMouse == null)
         {

@@ -18,7 +18,7 @@ public class JackyTheKid : UnitCara
                 Player.TurnBasedManager.ChangeState(4);
                 break;
             case 3:
-                print("Grog SMASH!");
+                Player.TurnBasedManager.ChangeState(7);
                 break;
             default:
                 break;
