@@ -23,6 +23,14 @@ public class Characters : ScriptableObject
     public int m_damage;
     public int m_range;
     public int m_mobility;
+    /*[Space]
+    [Header("Stats Max")]
+    public int m_maxCourage;
+    public int m_maxHeatlh;
+    public int m_maxArmor;
+    public int m_maxDamage;
+    public int m_maxRange;
+    public int m_maxMobility;*/
     [Space]
     public int m_autoAttackCost;
     [Space]
