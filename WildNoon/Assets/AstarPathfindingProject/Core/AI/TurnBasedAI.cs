@@ -7,8 +7,8 @@ namespace Pathfinding.Examples {
 	public class TurnBasedAI : VersionedMonoBehaviour {
         Characters m_unitStats;
         int movementPoints;
-		public BlockManager blockManager;
-		public SingleNodeBlocker blocker;
+        private BlockManager blockManager;
+        public SingleNodeBlocker blocker;
 		public GraphNode targetNode;
 		public BlockManager.TraversalProvider traversalProvider;
 
