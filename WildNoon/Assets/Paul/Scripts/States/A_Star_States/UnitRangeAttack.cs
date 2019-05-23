@@ -18,7 +18,7 @@ public class UnitRangeAttack : IState
     public void Enter()
     {
         m_TurnBaseManager.OnUnitAttack();
-        range = m_TurnBaseManager.Player.OnActiveUnit1.Range * m_TurnBaseManager.nodes;
+        range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
     }
 
 
@@ -28,9 +28,9 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player.OnActiveUnit1.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null)
         {
-            var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player.OnActiveUnit1.gameObject.transform.position;
+            var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player._onActiveUnit.gameObject.transform.position;
             _heading = heading;
             distanceToPlayer = heading.magnitude;
 
@@ -43,7 +43,7 @@ public class UnitRangeAttack : IState
         {
             GetOutOfState();
         }
-        else if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 == m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
+        else if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 == m_TurnBaseManager.Player._onActiveUnit.GetComponent<UnitCara>().IsTeam2)
         {
             GetOutOfState();
         }

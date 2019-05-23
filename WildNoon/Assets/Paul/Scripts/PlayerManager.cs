@@ -42,7 +42,7 @@ public class PlayerManager : MonoBehaviour
 
 
     # region Get Set
-    public UnitCara OnActiveUnit1
+    public UnitCara _onActiveUnit
     {
         get
         {
@@ -135,7 +135,7 @@ public class PlayerManager : MonoBehaviour
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
         ResetArray();
-        OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
+        _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
         InitiateWheelDisplay();
 
@@ -164,7 +164,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
-
+            m_UnitsInGameCara[i].Courage -= (i/ 10f);
         }
     }
 
@@ -179,6 +179,8 @@ public class PlayerManager : MonoBehaviour
             if (UnitsInGame[i].GetComponent<UnitCara>() != null)
             {
                 m_UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
+                //m_UnitsInGameCara[i].Courage -= i/10;// m_UnitsInGameCara[i].Courage/(i+1*10);
+
             }
         }
         turnCountMax = m_UnitsInGameCara.Length;
@@ -195,26 +197,26 @@ public class PlayerManager : MonoBehaviour
 
     public void OnTurnPassed()
     {
-        if (!TurnBasedManager.IsMoving && !OnActiveUnit1.m_isInAnimation)
+        if (!TurnBasedManager.IsMoving && !_onActiveUnit.m_isInAnimation)
         {
             ResetArray();
             TurnCount--;
             OnTableTurnOver();
             //Debug.Log(TurnCount);
-            OnActiveUnit1 = GetMax().GetComponent<UnitCara>();
+            _onActiveUnit = GetMax().GetComponent<UnitCara>();
             for (int i = 0, l = m_UnitsInGameCara.Length ; i < l; ++i)
             {
                 m_UnitsInGameCara[i].ActivateSelectedGameObject(false);
                 m_UnitsInGameCara[i].WitchNbrInTheList(i);
             }
-            OnActiveUnit1.ActivateSelectedGameObject(true);
+            _onActiveUnit.ActivateSelectedGameObject(true);
             OnPositionCamera();
             OnChangingUI();
             OnResetUnitsWheel();
             TurnBasedManager.ChangeState(0);
             TurnBasedManager.OnSetMouvement();
             OnPassiveEffectTrigger();
-            OnActiveUnit1.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, OnActiveUnit1.unitStats.m_armor, OnActiveUnit1.ArmorPoint);
+            _onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
 
 
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
@@ -224,6 +226,14 @@ public class PlayerManager : MonoBehaviour
                     m_actionPointDisplay[i].gameObject.SetActive(true);
                 }
             }
+
+            if (_onActiveUnit._isTaunt)
+            {
+
+                TurnBasedManager.StartCoroutine(TurnBasedManager.MoveTowardTarget(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.SpellCaster));
+
+            }
+            _onActiveUnit.Courage = _onActiveUnit.Courage / 10;
         }
     }
 
@@ -258,9 +268,9 @@ public class PlayerManager : MonoBehaviour
     public void OnSpellCast(int SpellNbr)
     {
         OnUsedSpell = SpellNbr;
-        if (OnActiveUnit1.ActionPoints - OnActiveUnit1.Spells1[SpellNbr].cost >= 0 && OnActiveUnit1.CoolDownCount[SpellNbr] == 0)
+        if (_onActiveUnit.ActionPoints - _onActiveUnit.Spells1[SpellNbr].cost >= 0 && _onActiveUnit.CoolDownCount[SpellNbr] == 0)
         {
-            OnActiveUnit1.OnUsingSpell(OnActiveUnit1.Spells1[SpellNbr], SpellNbr);
+            _onActiveUnit.OnUsingSpell(_onActiveUnit.Spells1[SpellNbr], SpellNbr);
         }
     }
     public void OnButtonHover(int SpellNbr)
@@ -278,9 +288,9 @@ public class PlayerManager : MonoBehaviour
 
     public void OnCoolDownDisplay(int SpellNbr)
     {
-        if (OnActiveUnit1.CoolDownCount[SpellNbr] != 0)
+        if (_onActiveUnit.CoolDownCount[SpellNbr] != 0)
         {
-            SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[SpellNbr].ToString();
+            SpellsButton[SpellNbr].GetComponentInChildren<Text>().text = _onActiveUnit.CoolDownCount[SpellNbr].ToString();
         }
         else
         {
@@ -290,12 +300,12 @@ public class PlayerManager : MonoBehaviour
 
     public void OnPassiveEffectTrigger()
     {
-        OnActiveUnit1.OnUnitPassiveEffect();
+        _onActiveUnit.OnUnitPassiveEffect();
     }
 
     public void OnCoolDownspell()
     {
-        OnActiveUnit1.OnCoolDown();
+        _onActiveUnit.OnCoolDown();
     }
 
     #region Fin de tour de personnage
@@ -303,10 +313,10 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0, l = SpellsButton.Length; i < l; ++i)
         {
-            SpellsButton[i].image.sprite = OnActiveUnit1.Spells1[i].artwork;
-            if (OnActiveUnit1.CoolDownCount[i] != 0)
+            SpellsButton[i].image.sprite = _onActiveUnit.Spells1[i].artwork;
+            if (_onActiveUnit.CoolDownCount[i] != 0)
             {
-                SpellsButton[i].GetComponentInChildren<Text>().text = OnActiveUnit1.CoolDownCount[i].ToString();
+                SpellsButton[i].GetComponentInChildren<Text>().text = _onActiveUnit.CoolDownCount[i].ToString();
             }
             else
             {
@@ -317,7 +327,7 @@ public class PlayerManager : MonoBehaviour
 
     void OnPositionCamera()
     {
-        cam.targetFollow = OnActiveUnit1.gameObject.transform;
+        cam.targetFollow = _onActiveUnit.gameObject.transform;
     }
     #endregion
 
@@ -332,8 +342,13 @@ public class PlayerManager : MonoBehaviour
                 {
                     m_UnitsInGameCara[i].HasPlayed = false;
                     m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage * 10;
+                    //m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].unitStats.m_courage;
+                    //m_UnitsInGameCara[i].Courage -= i;
                     m_UnitsInGameCara[i].ReduceCoolDown();
-                    m_UnitsInGameCara[i].ReduceDebuff();
+                    if (m_UnitsInGameCara[i].m_IsDebuffed)
+                    {
+                        m_UnitsInGameCara[i].ReduceDebuff();
+                    }
                     m_UnitsInGameCara[i].ReduceTaunt();
                     m_UnitsInGameCara[i].ActionPoints = 6;
                 }
@@ -358,7 +373,6 @@ public class PlayerManager : MonoBehaviour
                 {
                     GameObject max = m_UnitsInGameCara[i].gameObject;
                     m_UnitsInGameCara[i].HasPlayed = true;
-                    m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage / 10;
                     //Debug.Log(max.name + " est l'unité avec le plus de courage.");
                     return max;
                 }

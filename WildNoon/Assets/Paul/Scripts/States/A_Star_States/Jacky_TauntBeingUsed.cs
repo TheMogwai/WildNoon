@@ -23,7 +23,7 @@ public class Jacky_TauntBeingUsed : IState
 
         m_TurnBaseManager.DestroyPossibleMoves();
 
-        CheckCollision(m_TurnBaseManager.Player.OnActiveUnit1, m_TurnBaseManager.Player.OnActiveUnit1.transform.position, (m_TurnBaseManager.Player.OnActiveUnit1.unitStats.FourthSpell.m_spellRange) * m_TurnBaseManager.nodes);
+        CheckCollision(m_TurnBaseManager.Player._onActiveUnit, m_TurnBaseManager.Player._onActiveUnit.transform.position, (m_TurnBaseManager.Player._onActiveUnit.unitStats.FourthSpell.m_spellRange) * m_TurnBaseManager.nodes);
 
         m_TurnBaseManager.Player.OnCoolDownspell();
         m_TurnBaseManager.Player.OnCoolDownDisplay(3);

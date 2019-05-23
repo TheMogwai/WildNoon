@@ -321,6 +321,32 @@ public class UnitCara : MonoBehaviour {
             timerTaunt = value;
         }
     }
+
+    public bool _isTaunt
+    {
+        get
+        {
+            return isTaunt;
+        }
+
+        set
+        {
+            isTaunt = value;
+        }
+    }
+
+    public TurnBasedAI SpellCaster
+    {
+        get
+        {
+            return spellCaster;
+        }
+
+        set
+        {
+            spellCaster = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -428,6 +454,7 @@ public class UnitCara : MonoBehaviour {
 
     public void ResetStatsAfterDebuff()
     {
+        Debug.Log("nop");
         Courage = unitStats.m_courage;
         Damage = unitStats.m_damage;
         Range = unitStats.m_range;
@@ -439,25 +466,27 @@ public class UnitCara : MonoBehaviour {
     /// </summary>
     bool isTaunt;
     int timerTaunt;
+    TurnBasedAI spellCaster;
 
-    public void IsTaunt(int nbrOfTurnDebuffed, int i)
+    public void IsTaunt(int nbrOfTurnDebuffed, int i, TurnBasedAI Caster)
     {
-        isTaunt = true;
+        _isTaunt = true;
+        SpellCaster = Caster;
         nbrFxActif = i;
         TimerTaunt = nbrOfTurnDebuffed;
-        m_vfx[nbrFxActif].SetActive(isTaunt);
+        m_vfx[nbrFxActif].SetActive(_isTaunt);
     }
 
 
     public void ReduceTaunt()
     {
-        if (isTaunt && TimerTaunt - 1 > 0)
+        if (_isTaunt && TimerTaunt - 1 > 0)
         {
             TimerTaunt--;
         }
         else
         {
-            isTaunt = false;
+            _isTaunt = false;
             m_vfx[nbrFxActif].SetActive(m_IsDebuffed);
         }
     }
