@@ -34,6 +34,11 @@ public class UnitCara : MonoBehaviour {
 
 
     public GameObject Selected;
+
+    public GameObject FxParents;
+
+    public GameObject[] m_vfx;
+
     int[] coolDownCount;
     PlayerManager player;
 
@@ -45,6 +50,7 @@ public class UnitCara : MonoBehaviour {
     int _Damage;
     int _Range;
     int _Mobility;
+    int _AutoAttackCost;
 
     Sprite _UnitWheelArt;
 
@@ -263,6 +269,84 @@ public class UnitCara : MonoBehaviour {
             IsInAnimation = value;
         }
     }
+
+    public bool m_IsDebuffed
+    {
+        get
+        {
+            return isDebuffed;
+        }
+
+        set
+        {
+            isDebuffed = value;
+        }
+    }
+
+    public int TimeDebuffed
+    {
+        get
+        {
+            return timeDebuffed;
+        }
+
+        set
+        {
+            timeDebuffed = value;
+        }
+    }
+
+    public int AutoAttackCost
+    {
+        get
+        {
+            return _AutoAttackCost;
+        }
+
+        set
+        {
+            _AutoAttackCost = value;
+        }
+    }
+
+    public int TimerTaunt
+    {
+        get
+        {
+            return timerTaunt;
+        }
+
+        set
+        {
+            timerTaunt = value;
+        }
+    }
+
+    public bool _isTaunt
+    {
+        get
+        {
+            return isTaunt;
+        }
+
+        set
+        {
+            isTaunt = value;
+        }
+    }
+
+    public TurnBasedAI SpellCaster
+    {
+        get
+        {
+            return spellCaster;
+        }
+
+        set
+        {
+            spellCaster = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -273,11 +357,21 @@ public class UnitCara : MonoBehaviour {
         Range = unitStats.m_range;
         Mobility = unitStats.m_mobility;
         UnitWheelArt = unitStats.characterArtwork;
+        AutoAttackCost = unitStats.m_autoAttackCost;
 
         ActionPoints = 6;
         ActionPointsPreview = ActionPoints;
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
+
+        //m_vfx = FxParents.GetComponentsInChildren<GameObject>();
+        for (int i = 0, l = m_vfx.Length; i < l; ++i)
+        {
+            if (m_vfx[i].activeSelf)
+            {
+                m_vfx[i].SetActive(false);
+            }
+        }
 
         Player = FindObjectOfType<PlayerManager>();
     }
@@ -329,6 +423,75 @@ public class UnitCara : MonoBehaviour {
         
     }
 
+    #region Debuff Methods
+
+    bool isDebuffed;
+    int timeDebuffed;
+    int nbrFxActif;
+
+    public void IsDebuffed(int nbrOfTurnDebuffed, int i)
+    {
+        m_IsDebuffed = true;
+        nbrFxActif = i;
+        TimeDebuffed = nbrOfTurnDebuffed;
+        m_vfx[nbrFxActif].SetActive(m_IsDebuffed);
+    }
+
+
+    public void ReduceDebuff()
+    {
+        if (m_IsDebuffed && TimeDebuffed - 1 > 0)
+        {
+            TimeDebuffed--;
+        }
+        else
+        {
+            m_IsDebuffed = false;
+            m_vfx[nbrFxActif].SetActive(m_IsDebuffed);
+            ResetStatsAfterDebuff();
+        }
+    }
+
+    public void ResetStatsAfterDebuff()
+    {
+        Debug.Log("nop");
+        Courage = unitStats.m_courage;
+        Damage = unitStats.m_damage;
+        Range = unitStats.m_range;
+        Mobility = unitStats.m_mobility;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    bool isTaunt;
+    int timerTaunt;
+    TurnBasedAI spellCaster;
+
+    public void IsTaunt(int nbrOfTurnDebuffed, int i, TurnBasedAI Caster)
+    {
+        _isTaunt = true;
+        SpellCaster = Caster;
+        nbrFxActif = i;
+        TimerTaunt = nbrOfTurnDebuffed;
+        m_vfx[nbrFxActif].SetActive(_isTaunt);
+    }
+
+
+    public void ReduceTaunt()
+    {
+        if (_isTaunt && TimerTaunt - 1 > 0)
+        {
+            TimerTaunt--;
+        }
+        else
+        {
+            _isTaunt = false;
+            m_vfx[nbrFxActif].SetActive(m_IsDebuffed);
+        }
+    }
+
+    #endregion
 
     public void ReduceCoolDown()
     {
@@ -345,15 +508,19 @@ public class UnitCara : MonoBehaviour {
     {
         float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
         //Debug.Log("armor : "+armorpercent);
-        float random = Random.Range(0, armorpercent);
+        float random = Random.Range(0, 100);
         //Debug.Log("random : " + random);
         if (random < armorpercent)
         {
+            //Debug.Log(false);
             return false;
+
         }
         else
         {
+            //Debug.Log(gameObject.name + true);
             return true;
+
         }
     }
 
@@ -374,10 +541,12 @@ public class UnitCara : MonoBehaviour {
 
     public void OnTakingDamage(int damage)
     {
-        if((LifePoint + ArmorPoint)-damage > 0)
+        //Debug.Log("Prout");
+        if ((LifePoint + ArmorPoint)-damage > 0)
         {
             if(ArmorPoint - damage >= 0)
             {
+                Debug.Log("Attack");
                 ArmorPoint -= damage;
             }
             else
@@ -419,7 +588,6 @@ public class UnitCara : MonoBehaviour {
     {
         m_isInAnimation = true;
         yield return new WaitForSeconds(1f);             //Temps de l'animation de la mort
-        m_isInAnimation = false;
 
         if(Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsFirstArtwork)
         {
@@ -450,6 +618,7 @@ public class UnitCara : MonoBehaviour {
         Destroy(Player.m_UnitsInGameDisplay[nbrInTheList].gameObject);
         GetComponent<TurnBasedAI>().blocker.Unblock();
         Destroy(gameObject);
+        m_isInAnimation = false;
 
     }
 }

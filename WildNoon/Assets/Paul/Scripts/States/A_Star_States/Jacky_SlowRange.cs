@@ -7,6 +7,10 @@ using UnityEngine.EventSystems;
 
 public class Jacky_SlowRange : IState
 {
+    Vector3 _heading;
+    float distanceToPlayer;
+    float range;
+
     TurnBasedManager m_TurnBaseManager;
     public Jacky_SlowRange(TurnBasedManager turnBaseManager)
     {
@@ -17,6 +21,7 @@ public class Jacky_SlowRange : IState
     public void Enter()
     {
         m_TurnBaseManager.OnShowRange();
+        range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
     }
 
 
@@ -55,14 +60,20 @@ public class Jacky_SlowRange : IState
                 return;
 
             }
-            else if (unit.gameObject.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2 && Input.GetKeyDown(KeyCode.Mouse0))
+            else if (unit.gameObject.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player._onActiveUnit.GetComponent<UnitCara>().IsTeam2 && Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (m_TurnBaseManager.Player.OnActiveUnit1.ActionPoints > 0)
+                var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player._onActiveUnit.gameObject.transform.position;
+                _heading = heading;
+                distanceToPlayer = heading.magnitude;
+                if (m_TurnBaseManager.Player._onActiveUnit.ActionPoints > 0)
                 {
-                    m_TurnBaseManager.Player.OnCoolDownspell();
-                    m_TurnBaseManager.Player.OnCoolDownDisplay(2);
-                    m_TurnBaseManager.ChangeState(0);
-                    m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.SlowAttack(m_TurnBaseManager.Selected, unit));
+                    if(distanceToPlayer < range)
+                    {
+                        m_TurnBaseManager.Player.OnCoolDownspell();
+                        m_TurnBaseManager.Player.OnCoolDownDisplay(2);
+                        m_TurnBaseManager.ChangeState(0);
+                        m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.SlowAttack(m_TurnBaseManager.Selected, unit));
+                    }
                 }
             }
         }

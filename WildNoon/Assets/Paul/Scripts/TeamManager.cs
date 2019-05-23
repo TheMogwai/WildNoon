@@ -31,6 +31,14 @@ public class TeamManager : MonoBehaviour
     public Image m_mobility;
     public Image m_heatlh;
     public Image m_armor;
+    [Space]
+    [Header("Stats Max")]
+    public int m_courageMax;
+    public int m_damageMax;
+    public int m_rangeMax;
+    public int m_mobilityMax;
+    public int m_heatlhMax;
+    public int m_armorMax;
 
     [Header("Spell Art Display")]
     public Image m_spell_1;
@@ -126,10 +134,12 @@ public class TeamManager : MonoBehaviour
 
             #region Character Stats
 
-            int[] CharacterStats = new int[6] { character[0].stats.m_courage, character[0].stats.m_damage, character[0].stats.m_range, character[0].stats.m_mobility, character[0].stats.m_heatlh, character[0].stats.m_armor };
+            int[] CharacterStats = new int[6] { character[0].stats.m_courage, character[0].stats.m_heatlh, character[0].stats.m_armor, character[0].stats.m_damage, character[0].stats.m_range, character[0].stats.m_mobility  };
+            int[] CharacterStatsMax = new int[6] { m_courageMax, m_heatlhMax, m_armorMax, m_damageMax, m_rangeMax, m_mobilityMax };
             for (int i = 0, l = StatsDisplay.Length; i < l; ++i)
             {
-                StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, 100, CharacterStats[i]);
+
+                StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, CharacterStatsMax[i], CharacterStats[i]);
             }
 
             #endregion
@@ -298,10 +308,11 @@ public class TeamManager : MonoBehaviour
 
         #region Character Stats
 
-        int[] CharacterStats = new int[6] { character[nbrInTheList].stats.m_courage, character[nbrInTheList].stats.m_damage, character[nbrInTheList].stats.m_range, character[nbrInTheList].stats.m_mobility, character[nbrInTheList].stats.m_heatlh, character[nbrInTheList].stats.m_armor };
+        int[] CharacterStats = new int[6] { character[nbrInTheList].stats.m_courage, character[nbrInTheList].stats.m_heatlh, character[nbrInTheList].stats.m_armor, character[nbrInTheList].stats.m_damage, character[nbrInTheList].stats.m_range, character[nbrInTheList].stats.m_mobility };
+        int[] CharacterStatsMax = new int[6] { m_courageMax, m_heatlhMax, m_armorMax, m_damageMax, m_rangeMax, m_mobilityMax };
         for (int i = 0, l= StatsDisplay.Length; i < l; ++i)
         {
-            StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, 100, CharacterStats[i]);
+            StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, CharacterStatsMax[i], CharacterStats[i]);
         }
 
         #endregion

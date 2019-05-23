@@ -5,8 +5,10 @@ using Pathfinding.Examples;
 
 public class UnitRangeAttack : IState
 {
-
+    Vector3 _heading;
+    float distanceToPlayer;
     TurnBasedManager m_TurnBaseManager;
+    float range;
     public UnitRangeAttack(TurnBasedManager turnBaseManager)
     {
         m_TurnBaseManager = turnBaseManager;
@@ -16,6 +18,7 @@ public class UnitRangeAttack : IState
     public void Enter()
     {
         m_TurnBaseManager.OnUnitAttack();
+        range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
     }
 
 
@@ -25,15 +28,22 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null)
         {
-            m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+            var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player._onActiveUnit.gameObject.transform.position;
+            _heading = heading;
+            distanceToPlayer = heading.magnitude;
+
+            if(distanceToPlayer < range)
+            {
+                m_TurnBaseManager.AutoAttack(m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>());
+            }
         }
         if(m_TurnBaseManager.UnitUnderMouse == null)
         {
             GetOutOfState();
         }
-        else if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 == m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
+        else if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 == m_TurnBaseManager.Player._onActiveUnit.GetComponent<UnitCara>().IsTeam2)
         {
             GetOutOfState();
         }

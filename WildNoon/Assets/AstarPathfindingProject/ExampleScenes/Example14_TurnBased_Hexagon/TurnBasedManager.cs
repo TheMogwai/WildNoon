@@ -161,6 +161,8 @@ namespace Pathfinding.Examples {
             new UnitsMoving(this),                  // Numéro 3
             new Jacky_SlowRange(this),              // Numéro 4
             new Jacky_TpRange(this),                // Numéro 5
+            new Jacky_TauntRange(this),             // Numéro 6
+            new Jacky_TauntBeingUsed(this),             // Numéro 6
 		});
 
 
@@ -168,9 +170,9 @@ namespace Pathfinding.Examples {
             Player = FindObjectOfType<PlayerManager>();
             if(player != null)
             {
-                if (player.OnActiveUnit1 != null)
+                if (player._onActiveUnit != null)
                 {
-                    unitMobility = player.OnActiveUnit1.Mobility;
+                    unitMobility = player._onActiveUnit.Mobility;
                     nbrDeZoneDeMouvement = 2;
                 }
             }
@@ -197,8 +199,8 @@ namespace Pathfinding.Examples {
         public void OnSetMouvement()
         {
             nbrDeZoneDeMouvement = 2;
-            unitMobility = player.OnActiveUnit1.Mobility;
-            MoveRange = (player.OnActiveUnit1.Mobility)*6;
+            unitMobility = player._onActiveUnit.Mobility;
+            MoveRange = (player._onActiveUnit.Mobility)*6;
             mobi = unitMobility * nodes;
             mobiLeft = mobi;
             nbrNodesParcourus = 0;
@@ -213,14 +215,14 @@ namespace Pathfinding.Examples {
         public void OnUnitAttack()
         {
             DestroyPossibleMoves();
-            GeneratePossibleRange(Selected , player.OnActiveUnit1.Range);
+            GeneratePossibleRange(Selected , player._onActiveUnit.Range);
         }
 
         public void OnShowRange()
         {
             DestroyPossibleMoves();
             //Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
-            GeneratePossibleRange(Selected, player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
+            GeneratePossibleRange(Selected, player._onActiveUnit.Spells1[player.OnUsedSpell].m_spellRange);
         }
 
         //int moveCost;
@@ -234,15 +236,15 @@ namespace Pathfinding.Examples {
 
             }
             else if (button != null && Input.GetKeyDown(KeyCode.Mouse0)) {
-                if(player.OnActiveUnit1.ActionPoints - button.OnClick() >= 0)
+                if(player._onActiveUnit.ActionPoints - button.OnClick() >= 0)
                 {
 				    
                     //Debug.Log("Il ne reste que : " + player.OnActiveUnit1.ActionPoints + " points d'action");
                     ChangeState(3);
                     StartCoroutine(MoveToNode(Selected, button.node));
-                    player.ActionPointsDisplay(player.OnActiveUnit1.ActionPoints - button.OnClick());                           //Call PlayerManager Action Display Method
                     //moveCost = button.OnClick();
-                    player.OnActiveUnit1.ActionPoints -= button.OnClick();
+                    player._onActiveUnit.ActionPoints -= button.OnClick();
+                    player.ActionPointsDisplay(player._onActiveUnit.ActionPoints);                           //Call PlayerManager Action Display Method
                     //nbrDeZoneDeMouvement = UnitActionPoints;
                 }
             }
@@ -271,7 +273,7 @@ namespace Pathfinding.Examples {
 		public void Select () {
             if(player != null)
             {
-                Selected = player.OnActiveUnit1.GetComponent<TurnBasedAI>();
+                Selected = player._onActiveUnit.GetComponent<TurnBasedAI>();
             }
             else
             {
@@ -281,10 +283,10 @@ namespace Pathfinding.Examples {
 
         public void AutoAttack(UnitCara target)
         {
-            target.OnTakingDamage(Player.OnActiveUnit1.Damage);
+            StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target));
         }
-        
 
+        #region Move Unit
         public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
             IsMoving = true;
             var path = ABPath.Construct(unit.transform.position, (Vector3)node.position);
@@ -357,23 +359,192 @@ namespace Pathfinding.Examples {
             mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
 
-            if (player.OnActiveUnit1.ActionPoints >= 2)
+            /*if (player.OnActiveUnit1.ActionPoints >= 2)
             {
                 nbrDeZoneDeMouvement = 2;
             }
             else
             {
                 nbrDeZoneDeMouvement = player.OnActiveUnit1.ActionPoints;
-            }
+            }*/
             ChangeState(1);             //Respawn Nodes
+
+        }
+        #endregion
+
+        #region TauntMovement
+
+        public IEnumerator MoveTowardTarget(TurnBasedAI unit, TurnBasedAI target)
+        {
+
+            //NNInfo nn = AstarPath.active.GetNearest(transform.position, NNConstraint.Default);
+            //if (nn.node != null)
+            //{
+            //    Debug.Log("Found closest node at " + (Vector3)(nn.node.position) + " the closest point on the node was " + nn.clampedPosition);
+            //}
+            //else
+            //{
+            //    Debug.Log("No close node found, maybe adjust A* Inspector -> Settings -> Max Nearest Node Distance");
+            //}
+
+            //
+            target.blocker.Unblock();
+
+            NNInfo nnInfo = AstarPath.active.GetNearest(target.transform.position, NNConstraint.None);
+            //Debug.LogFormat("{0} - {1}", target.targetNode.position, nnInfo.position);
+
+            IsMoving = true;
+            var path = ABPath.Construct(unit.transform.position, nnInfo.position);
+
+            path.traversalProvider = unit.traversalProvider;
+
+            // Schedule the path for calculation
+            AstarPath.StartPath(path);
+
+            // Wait for the path calculation to complete
+            yield return StartCoroutine(path.WaitForPath());  // le path error vient d'ici
+            //Debug.Log(path.error);
+            if (path.error)
+            {
+                // Not obvious what to do here, but show the possible moves again
+                // and let the player choose another target node
+                // Likely a node was blocked between the possible moves being
+                // generated and the player choosing which node to move to
+                Debug.Log("Path failed:\n" + path.errorLog);
+                //state = State.SelectTarget;
+                GeneratePossibleMoves(Selected);
+                yield break;
+            }
+
+            // Set the target node so other scripts know which
+            // node is the end point in the path
+            unit.targetNode = path.path[path.path.Count - 1];
+
+
+            yield return StartCoroutine(MoveAlongTauntPath(unit, path, movementSpeed, target));
+
+            //target.blocker.Unblock();
+
+            unit.blocker.BlockAtCurrentPosition();
+
+            // Select a new unit to move
+            IsMoving = false;
+            //state = State.SelectUnit;
+        }
+        int nbrNodes = 0;
+
+        /** Interpolates the unit along the path */
+        IEnumerator MoveAlongTauntPath(TurnBasedAI unit, ABPath path, float speed, TurnBasedAI target)
+        {
+            if (path.error || path.vectorPath.Count == 0)
+                throw new System.ArgumentException("Cannot follow an empty path");
+
+            // Very simple movement, just interpolate using a catmull rom spline
+            float distanceAlongSegment = 0;
+            for (int i = 0; i < path.vectorPath.Count - 1; i++)
+            {
+                if (i < (path.vectorPath.Count-1)-(unit.GetComponent<UnitCara>().Range-1) && (unit.GetComponent<UnitCara>().ActionPoints-1)>=0)
+                {
+                    nbrNodes++;
+                    var p0 = path.vectorPath[Mathf.Max(i - 1, 0)];
+                    // Start of current segment
+                    var p1 = path.vectorPath[i];
+                    // End of current segment
+                    var p2 = path.vectorPath[i + 1];
+                    var p3 = path.vectorPath[Mathf.Min(i + 2, path.vectorPath.Count - 1)];
+
+                    var segmentLength = Vector3.Distance(p1, p2);
+
+                    while (distanceAlongSegment < segmentLength)
+                    {
+                        var interpolatedPoint = AstarSplines.CatmullRom(p0, p1, p2, p3, distanceAlongSegment / segmentLength);
+                        unit.transform.position = interpolatedPoint;
+                        yield return null;
+                        distanceAlongSegment += Time.deltaTime * speed;
+                    }
+
+                    distanceAlongSegment -= segmentLength;
+                    if(nbrNodes == unit.GetComponent<UnitCara>().Mobility)
+                    {
+                        nbrNodes = 0;
+                        unit.GetComponent<UnitCara>().ActionPoints--;
+                        player.ActionPointsDisplay(unit.GetComponent<UnitCara>().ActionPoints);                           //Call PlayerManager Action Display Method
+
+                    }
+                }
+            }
+            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
+            {
+                for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
+                {
+                    Debug.Log("AttackTaunt");
+                    Player._onActiveUnit.m_isInAnimation = true;
+                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                    AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
+                    Player._onActiveUnit.m_isInAnimation = false;
+
+                }
+            }
+
+
+            //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
+
+            nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
+
+            //Debug.Log("NodesParcouru " + nbrNodesParcourus);
+            mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
+
+
+            /*if (player.OnActiveUnit1.ActionPoints >= 2)
+            {
+                nbrDeZoneDeMouvement = 2;
+            }
+            else
+            {
+                nbrDeZoneDeMouvement = player.OnActiveUnit1.ActionPoints;
+            }*/
+            //ChangeState(1);             //Respawn Nodes
+
+        }
+
+        #endregion
+
+        void AutoAttackTaunt(UnitCara unit, UnitCara target)
+        {
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+            {
+                Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+                if (target != null)
+                {
+                    target.OnTakingDamage(unit.Damage);
+                }
+            }
+        }
+
+        public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target)
+        {
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+            {
+                Player._onActiveUnit.m_isInAnimation = true;
+                Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+
+                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                Player._onActiveUnit.m_isInAnimation = false;
+                if(target != null)
+                {
+                    target.OnTakingDamage(unit.Damage);
+                }
+            }
 
         }
 
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
-            Player.OnActiveUnit1.m_isInAnimation = true;
+            Player._onActiveUnit.m_isInAnimation = true;
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
-            Player.OnActiveUnit1.m_isInAnimation = false;
+            Player._onActiveUnit.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
 
@@ -381,17 +552,39 @@ namespace Pathfinding.Examples {
 
         public IEnumerator SlowAttack(TurnBasedAI unit, UnitCara target)
         {
-            Player.OnActiveUnit1.m_isInAnimation = true;
+            Player._onActiveUnit.m_isInAnimation = true;
 
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
-            Player.OnActiveUnit1.m_isInAnimation = false;
+            Player._onActiveUnit.m_isInAnimation = false;
 
             if (target.OnCheckIfCCWorks())
             {
                 target.Mobility -= unit.GetComponent<UnitCara>().OnUsedSpell1.m_mobilityMalus;
+                target.IsDebuffed(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting, 0);
             }
             target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
 
+        }
+        List<UnitCara> m_target;
+        public IEnumerator TauntAttack(TurnBasedAI unit, List<UnitCara> target)
+        {
+            m_target = target;
+            Player._onActiveUnit.m_isInAnimation = true;
+
+            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            Player._onActiveUnit.m_isInAnimation = false;
+
+            for (int i = 0, l = target.Count; i < l; ++i)
+            {
+                if(target[i] != null)
+                {
+                    if (target[i].OnCheckIfCCWorks())
+                    {
+                        target[i].IsTaunt(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting, 1, unit);
+                    }
+                    target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
+                }
+            }
         }
 
         public void DestroyPossibleMoves () {
@@ -419,7 +612,7 @@ namespace Pathfinding.Examples {
                 if (node != path.startNode)
                 {
                     var go = GameObject.Instantiate(m_movementNode, (Vector3)node.position, Quaternion.identity) as GameObject;
-                    var heading = (Vector3)node.position - player.OnActiveUnit1.gameObject.transform.position;
+                    var heading = (Vector3)node.position - player._onActiveUnit.gameObject.transform.position;
                     _heading = heading;
                     distanceToPlayer = heading.magnitude;
                     render = go.GetComponentInChildren<MeshRenderer>();
@@ -427,7 +620,7 @@ namespace Pathfinding.Examples {
 
 
                     #region Coloring Nodes
-                    for (int i = 0; i < player.OnActiveUnit1.ActionPoints; ++i)
+                    for (int i = 0; i < player._onActiveUnit.ActionPoints; ++i)
                     {
                         if(i == 0)
                         {

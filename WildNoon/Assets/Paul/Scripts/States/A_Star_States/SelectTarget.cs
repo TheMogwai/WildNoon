@@ -35,8 +35,8 @@ public class SelectTarget : IState
             GetOutOfState();
         }
 
-		/*m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
-        if (m_TurnBaseManager.UnitUnderMouse != null)
+		m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
+        /*if (m_TurnBaseManager.UnitUnderMouse != null)
         {
             if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
             {
