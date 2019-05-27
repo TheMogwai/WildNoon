@@ -21,9 +21,13 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     TurnBasedManager m_turnBasedManager;
+    [Header("UnitCara Exsisting")]
+    public UnitCara[] allUnits;
+    [Space]
     [Header("Spells Button Array")]
     public Button[] SpellsButton;
-
+    DescriptionPanel[] spellImage;
+    Text[] spellDescription;
     [Header("ActionPoints Layout")]
     public GameObject ActionPointsLayout;
     [Header("UnitsInGame Layout")]
@@ -143,6 +147,29 @@ public class PlayerManager : MonoBehaviour
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
         m_actionPointsCosts.gameObject.SetActive(false);
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+
+        #region Spell Description Var
+        spellImage = new DescriptionPanel[SpellsButton.Length];
+        spellDescription = new Text[spellImage.Length];
+
+        for (int i = 0; i < SpellsButton.Length; i++)
+        {
+            spellImage[i] = SpellsButton[i].GetComponentInChildren<DescriptionPanel>();
+        }
+        for (int i = 0; i < spellImage.Length; i++)
+        {
+            spellDescription[i] = spellImage[i].GetComponentInChildren<Text>();
+        }
+        for (int i = 0; i < SpellsButton.Length; i++)
+        {
+            if (spellImage[i].gameObject.activeSelf)
+            {
+                spellImage[i].gameObject.SetActive(false);
+            }
+        }
+        #endregion
+
+        #region Time Management Var
         m_TimeLeft = m_TimerParent.GetComponentsInChildren<Text>();
         m_SliderTimeLeft = m_TimerParent.GetComponentsInChildren<Image>();
         timeleft = new float[2];
@@ -159,6 +186,7 @@ public class PlayerManager : MonoBehaviour
             }
             OnSwitchDisplay(i,i);
         }
+        #endregion
     }
 
     public void Start()
@@ -194,7 +222,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    #region time manager
+    #region Time Manager
     void TimerMethod()
     {
         if(OnUnitPreviouslyActive.IsTeam2 != _onActiveUnit.IsTeam2)
@@ -288,6 +316,8 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
+    #region Wheel Methods
+
     public void InitiateWheelDisplay()
     {
         for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
@@ -313,6 +343,17 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    void OnResetUnitsWheel()
+    {
+        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
+        {
+            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+        }
+    }
+
+    #endregion
+
     void ResetArray()
     {
         UnitsInGame = new GameObject[0];
@@ -324,20 +365,9 @@ public class PlayerManager : MonoBehaviour
             if (UnitsInGame[i].GetComponent<UnitCara>() != null)
             {
                 m_UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
-                //m_UnitsInGameCara[i].Courage -= i/10;// m_UnitsInGameCara[i].Courage/(i+1*10);
-
             }
         }
         turnCountMax = m_UnitsInGameCara.Length;
-    }
-
-    void OnResetUnitsWheel()
-    {
-        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
-        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
-        {
-            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
-        }
     }
 
     public void OnTurnPassed()
@@ -351,7 +381,6 @@ public class PlayerManager : MonoBehaviour
             {
                 OnUnitPreviouslyActive = _onActiveUnit;
             }
-            //Debug.Log(TurnCount);
             _onActiveUnit = GetMax().GetComponent<UnitCara>();
             for (int i = 0, l = m_UnitsInGameCara.Length ; i < l; ++i)
             {
@@ -366,7 +395,6 @@ public class PlayerManager : MonoBehaviour
             TurnBasedManager.OnSetMouvement();
             OnPassiveEffectTrigger();
             _onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
-
 
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
             {
@@ -424,14 +452,22 @@ public class PlayerManager : MonoBehaviour
     }
     public void OnButtonHover(int SpellNbr)
     {
-        //Debug.Log("HasEnter");
-        OnUsedSpell = SpellNbr;
-        TurnBasedManager.ChangeState(6); 
+        if(_onActiveUnit.unitStats == allUnits[0].unitStats && SpellNbr == 3)
+        {
+            OnUsedSpell = SpellNbr;
+            TurnBasedManager.ChangeState(6); 
+        }
+        spellImage[SpellNbr].gameObject.SetActive(true);
+        spellDescription[SpellNbr].text = _onActiveUnit.Spells1[SpellNbr].spell_Description;
     }
     public void OnLeaveHover(int SpellNbr)
     {
-        //Debug.Log("HasLeft");
-        TurnBasedManager.ChangeState(0);
+        if (_onActiveUnit.unitStats == allUnits[0].unitStats && SpellNbr == 3)
+        {
+            TurnBasedManager.ChangeState(0);
+        }
+        spellImage[SpellNbr].gameObject.SetActive(false);
+
     }
     #endregion
 
@@ -522,12 +558,10 @@ public class PlayerManager : MonoBehaviour
                 {
                     GameObject max = m_UnitsInGameCara[i].gameObject;
                     m_UnitsInGameCara[i].HasPlayed = true;
-                    //Debug.Log(max.name + " est l'unité avec le plus de courage.");
                     return max;
                 }
             }
         }
-        //Debug.Log("Atchoum");
         return null;
     }
 }

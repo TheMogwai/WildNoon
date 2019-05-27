@@ -7,22 +7,6 @@ using Pathfinding.Examples;
 
 public class UnitCara : MonoBehaviour {
 
-    /*[Header("Unit Stats")]
-    public int m_courage;
-    public int m_heatlh;
-    public int m_armor;
-    public int m_damage;
-    public int m_range;
-    public int m_mobility;
-    int m_actionPoints;
-    bool hasPlayed = false;
-    [Space]
-    [Header("Unit Spells")]
-    public Spells firstSpell;
-    public Spells secondSpell;
-    public Spells thirdSpell;
-    public Spells FourthSpell;
-    Spells[] Spells;*/
     int m_actionPoints;
     int m_actionPointsPreview;
     bool hasPlayed = false;
@@ -454,7 +438,6 @@ public class UnitCara : MonoBehaviour {
 
     public void ResetStatsAfterDebuff()
     {
-        Debug.Log("nop");
         Courage = unitStats.m_courage;
         Damage = unitStats.m_damage;
         Range = unitStats.m_range;
@@ -507,18 +490,14 @@ public class UnitCara : MonoBehaviour {
     public bool OnCheckIfCCWorks()
     {
         float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
-        //Debug.Log("armor : "+armorpercent);
         float random = Random.Range(0, 100);
-        //Debug.Log("random : " + random);
         if (random < armorpercent)
         {
-            //Debug.Log(false);
             return false;
 
         }
         else
         {
-            //Debug.Log(gameObject.name + true);
             return true;
 
         }
@@ -541,12 +520,10 @@ public class UnitCara : MonoBehaviour {
 
     public void OnTakingDamage(int damage)
     {
-        //Debug.Log("Prout");
         if ((LifePoint + ArmorPoint)-damage > 0)
         {
             if(ArmorPoint - damage >= 0)
             {
-                Debug.Log("Attack");
                 ArmorPoint -= damage;
             }
             else

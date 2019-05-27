@@ -162,7 +162,7 @@ namespace Pathfinding.Examples {
             new Jacky_SlowRange(this),              // Numéro 4
             new Jacky_TpRange(this),                // Numéro 5
             new Jacky_TauntRange(this),             // Numéro 6
-            new Jacky_TauntBeingUsed(this),             // Numéro 6
+            new Jacky_TauntBeingUsed(this),         // Numéro 7
 		});
 
 
@@ -221,11 +221,9 @@ namespace Pathfinding.Examples {
         public void OnShowRange()
         {
             DestroyPossibleMoves();
-            //Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
             GeneratePossibleRange(Selected, player._onActiveUnit.Spells1[player.OnUsedSpell].m_spellRange);
         }
 
-        //int moveCost;
         #region Player Clique Sur Un Node
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
