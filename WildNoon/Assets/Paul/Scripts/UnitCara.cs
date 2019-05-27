@@ -12,12 +12,21 @@ public class UnitCara : MonoBehaviour {
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
+    [Space]
+    [Header("LifeBar Var")]
     public GameObject ArmorBar;
     public GameObject LifeBar;
     public GameObject m_canvas;
-
+    public float m_timeShowingLifeBar;
+    float _timeToShowLifeBar;
+    bool lifebarOn;
+    [Space]
+    [Header("Selection Nodes")]
 
     public GameObject Selected;
+
+    [Space]
+    [Header("Fx Var")]
 
     public GameObject FxParents;
 
@@ -331,6 +340,32 @@ public class UnitCara : MonoBehaviour {
             spellCaster = value;
         }
     }
+
+    public bool LifebarOn
+    {
+        get
+        {
+            return lifebarOn;
+        }
+
+        set
+        {
+            lifebarOn = value;
+        }
+    }
+
+    public float TimeToShowLifeBar
+    {
+        get
+        {
+            return _timeToShowLifeBar;
+        }
+
+        set
+        {
+            _timeToShowLifeBar = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -348,7 +383,7 @@ public class UnitCara : MonoBehaviour {
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
 
-        //m_vfx = FxParents.GetComponentsInChildren<GameObject>();
+        
         for (int i = 0, l = m_vfx.Length; i < l; ++i)
         {
             if (m_vfx[i].activeSelf)
@@ -375,8 +410,26 @@ public class UnitCara : MonoBehaviour {
     private void Update()
     {
         m_canvas.transform.LookAt(Camera.main.transform);
-        //ArmorBar.transform.LookAt(Camera.main.transform);
-        //LifeBar.transform.LookAt(Camera.main.transform);
+        ShowingLifeBar();
+    }
+
+    
+
+
+    void ShowingLifeBar()
+    {
+        if (LifebarOn && TimeToShowLifeBar > 0)
+        {
+            TimeToShowLifeBar -= Time.deltaTime;
+            m_canvas.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            LifebarOn = false;
+            m_canvas.gameObject.SetActive(false);
+            TimeToShowLifeBar = m_timeShowingLifeBar;
+        }
     }
 
     public void ActivateSelectedGameObject(bool b)
@@ -520,6 +573,12 @@ public class UnitCara : MonoBehaviour {
 
     public void OnTakingDamage(int damage)
     {
+        if (!m_canvas.gameObject.activeSelf)
+        {
+            LifebarOn = true;
+            TimeToShowLifeBar = m_timeShowingLifeBar;
+        }
+
         if ((LifePoint + ArmorPoint)-damage > 0)
         {
             if(ArmorPoint - damage >= 0)

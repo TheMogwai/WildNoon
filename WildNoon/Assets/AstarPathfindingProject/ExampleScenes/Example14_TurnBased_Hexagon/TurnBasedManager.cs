@@ -194,6 +194,13 @@ namespace Pathfinding.Examples {
             if (EventSystem.IsPointerOverGameObject()) {
 				return;
 			}
+
+
+            if (UnitUnderMouse != null && UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != Player._onActiveUnit.IsTeam2)
+            {
+                UnitUnderMouse.GetComponent<UnitCara>().LifebarOn = true;
+                UnitUnderMouse.GetComponent<UnitCara>().TimeToShowLifeBar = UnitUnderMouse.GetComponent<UnitCara>().m_timeShowingLifeBar;
+            }
         }
 
         public void OnSetMouvement()
@@ -256,6 +263,9 @@ namespace Pathfinding.Examples {
             }
         }
         #endregion
+
+        
+
 
         public T GetByRay<T>(Ray ray) where T : class {
             RaycastHit hit;

@@ -148,19 +148,21 @@ public class PlayerManager : MonoBehaviour
         m_actionPointsCosts.gameObject.SetActive(false);
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
 
+       
+
         #region Spell Description Var
         spellImage = new DescriptionPanel[SpellsButton.Length];
         spellDescription = new Text[spellImage.Length];
 
-        for (int i = 0; i < SpellsButton.Length; i++)
+        for (int i = 0, l = SpellsButton.Length; i < l; ++i)
         {
             spellImage[i] = SpellsButton[i].GetComponentInChildren<DescriptionPanel>();
         }
-        for (int i = 0; i < spellImage.Length; i++)
+        for (int i = 0, l= spellImage.Length; i < l; ++i)
         {
             spellDescription[i] = spellImage[i].GetComponentInChildren<Text>();
         }
-        for (int i = 0; i < SpellsButton.Length; i++)
+        for (int i = 0, l = SpellsButton.Length; i < l; ++i)
         {
             if (spellImage[i].gameObject.activeSelf)
             {
@@ -196,7 +198,13 @@ public class PlayerManager : MonoBehaviour
         _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
         InitiateWheelDisplay();
-
+        for (int i = 0; i < UnitsInGameCara.Length; i++)
+        {
+            if (UnitsInGameCara[i].m_canvas.gameObject.activeSelf)
+            {
+                UnitsInGameCara[i].m_canvas.gameObject.SetActive(false);
+            }
+        }
 
         TurnCount = turnCountMax;
     }
