@@ -475,17 +475,8 @@ namespace Pathfinding.Examples {
             }
             if(unit.GetComponent<UnitCara>().ActionPoints > 0)
             {
-                for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
-                {
-                    Debug.Log("AttackTaunt");
-                    Player._onActiveUnit.m_isInAnimation = true;
-                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
-                    AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
-                    Player._onActiveUnit.m_isInAnimation = false;
-
-                }
+                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
             }
-
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
 
@@ -509,16 +500,22 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-        void AutoAttackTaunt(UnitCara unit, UnitCara target)
+        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
             {
-                Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
-                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
-                if (target != null)
+                Player._onActiveUnit.m_isInAnimation = true;
+                if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
                 {
-                    target.OnTakingDamage(unit.Damage);
+                    Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+                    Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+                    if (target != null)
+                    {
+                        target.OnTakingDamage(unit.Damage);
+                    }
                 }
+                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                Player._onActiveUnit.m_isInAnimation = false;
             }
         }
 

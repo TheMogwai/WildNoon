@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     GameObject[] UnitsInGame;
     UnitCara[] UnitsInGameCara;
     UnitCara OnActiveUnit;
+    UnitCara OnUnitPreviouslyActive;
 
     Image[] UnitsInGameDisplay;
 
@@ -28,7 +29,20 @@ public class PlayerManager : MonoBehaviour
     [Header("UnitsInGame Layout")]
     public GameObject UnitsInGameLayout;
     [Space]
+    [Header("Movement Cost Display")]
     public Text m_actionPointsCosts;
+    [Space]
+    [Header("Timer Display")]
+    public GameObject m_TimerParent;
+    Text[] m_TimeLeft;
+    Image[] m_SliderTimeLeft;
+    float[] timeleft;
+    float[] minutes;
+    float[] seconds;
+    [Space]
+    [Header("Timer")]
+    public float m_time;
+    public float ropeTime;
 
     Image[] m_actionPointDisplay;
 
@@ -129,6 +143,22 @@ public class PlayerManager : MonoBehaviour
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
         m_actionPointsCosts.gameObject.SetActive(false);
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+        m_TimeLeft = m_TimerParent.GetComponentsInChildren<Text>();
+        m_SliderTimeLeft = m_TimerParent.GetComponentsInChildren<Image>();
+        timeleft = new float[2];
+        minutes = new float[2];
+        seconds = new float[2];
+        for (int i = 0; i < timeleft.Length; i++)
+        {
+            timeleft[i] = m_time;
+            minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+            seconds[i] = timeleft[i] % 60;
+            if (seconds[i] > 59)
+            {
+                seconds[i] = 59;
+            }
+            OnSwitchDisplay(i,i);
+        }
     }
 
     public void Start()
@@ -142,6 +172,121 @@ public class PlayerManager : MonoBehaviour
 
         TurnCount = turnCountMax;
     }
+
+    private void Update()
+    {
+        RopeMethod();
+        TimerMethod();
+        if (m_actionPointsCosts.gameObject.activeSelf)
+        {
+
+            Vector3 mousePosition = Input.mousePosition;
+            Debug.Log(mousePosition);
+
+            if (mousePosition.x < (Screen.width- (m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width/2)* m_actionPointsCosts.gameObject.transform.localScale.x))
+            {
+                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x+((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x )/ 3), mousePosition.y, mousePosition.z);
+            }
+            else
+            {
+                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x - ((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x) / 3), mousePosition.y, mousePosition.z);
+            }
+        }
+    }
+
+    #region time manager
+    void TimerMethod()
+    {
+        if(OnUnitPreviouslyActive.IsTeam2 != _onActiveUnit.IsTeam2)
+        {
+            if (!_onActiveUnit.IsTeam2)
+            {
+                
+                TimeCount(0);
+                OnSwitchDisplay(0, 0);
+                OnSwitchDisplay(1, 1);
+                
+            }
+            else
+            {
+                
+                TimeCount(1);
+
+                OnSwitchDisplay(0, 1);
+                OnSwitchDisplay(1, 0);
+                
+            }
+        }
+        else
+        {
+            if (!_onActiveUnit.IsTeam2)
+            {
+                
+                TimeCount(0);
+
+                OnSwitchDisplay(0, 0);
+            }
+            else
+            {
+                
+                TimeCount(1);
+
+                OnSwitchDisplay(0, 1);
+               
+            }
+        }
+    }
+
+    void OnSwitchDisplay(int i, int a)
+    {
+        if(m_TimeLeft[i] != null)
+        {
+            if (seconds[a] >= 10)
+            {
+                m_TimeLeft[i].text = string.Format(" {0}:{1}", minutes[a], (int)seconds[a]);
+            }
+            else
+            {
+                m_TimeLeft[i].text = string.Format(" {0}:0{1}", minutes[a], (int)seconds[a]);
+            }
+        }
+
+        if(m_SliderTimeLeft[i] != null)
+        {
+            m_SliderTimeLeft[i].fillAmount = Mathf.InverseLerp(0, m_time, timeleft[a]);
+        }
+    }
+
+    void RopeMethod()
+    {
+        for (int i = 0, l = timeleft.Length; i < l; ++i)
+        {
+            if(timeleft[i] <= 0)
+            {
+                timeleft[i] = ropeTime;
+                OnTurnPassed();
+            }
+        }
+    }
+
+    void TimeCount(int i)
+    {
+        timeleft[i] -= Time.deltaTime;
+        minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+        seconds[i] = timeleft[i] % 60;
+        if (seconds[i] > 59)
+        {
+            seconds[i] = 59;
+        }
+
+        if(minutes[i] <= 0 && seconds[i] <= 0)
+        {
+            minutes[i] = 0;
+            seconds[i] = ropeTime;
+        }
+    }
+
+    #endregion
 
     public void InitiateWheelDisplay()
     {
@@ -202,6 +347,10 @@ public class PlayerManager : MonoBehaviour
             ResetArray();
             TurnCount--;
             OnTableTurnOver();
+            if (_onActiveUnit !=null)
+            {
+                OnUnitPreviouslyActive = _onActiveUnit;
+            }
             //Debug.Log(TurnCount);
             _onActiveUnit = GetMax().GetComponent<UnitCara>();
             for (int i = 0, l = m_UnitsInGameCara.Length ; i < l; ++i)
