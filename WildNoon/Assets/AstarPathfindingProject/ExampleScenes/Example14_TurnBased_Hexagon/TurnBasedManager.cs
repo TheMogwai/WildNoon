@@ -467,24 +467,24 @@ namespace Pathfinding.Examples {
                     if(nbrNodes == unit.GetComponent<UnitCara>().Mobility)
                     {
                         nbrNodes = 0;
-                        unit.GetComponent<UnitCara>().ActionPoints--;
-                        player.ActionPointsDisplay(unit.GetComponent<UnitCara>().ActionPoints);                           //Call PlayerManager Action Display Method
+                        Player._onActiveUnit.ActionPoints--;
+                        player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);                           //Call PlayerManager Action Display Method
 
                     }
                 }
             }
-            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
-            {
-                for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
+            //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
+            //{
+            int actionLeft = Player._onActiveUnit.ActionPoints;
+            for (int a = 0; a < actionLeft; a++)
                 {
                     Debug.Log("AttackTaunt");
                     Player._onActiveUnit.m_isInAnimation = true;
-                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                    yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
                     AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
-                    Player._onActiveUnit.m_isInAnimation = false;
 
                 }
-            }
+            //}
 
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
@@ -511,7 +511,7 @@ namespace Pathfinding.Examples {
 
         void AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
             {
                 Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
                 Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
@@ -519,6 +519,7 @@ namespace Pathfinding.Examples {
                 {
                     target.OnTakingDamage(unit.Damage);
                 }
+                Player._onActiveUnit.m_isInAnimation = false;
             }
         }
 
@@ -530,7 +531,7 @@ namespace Pathfinding.Examples {
                 Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
                 Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
 
-                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
                 Player._onActiveUnit.m_isInAnimation = false;
                 if(target != null)
                 {
@@ -543,7 +544,7 @@ namespace Pathfinding.Examples {
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
             Player._onActiveUnit.m_isInAnimation = true;
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de tp
             Player._onActiveUnit.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
@@ -554,7 +555,7 @@ namespace Pathfinding.Examples {
         {
             Player._onActiveUnit.m_isInAnimation = true;
 
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 
             if (target.OnCheckIfCCWorks())
@@ -571,7 +572,7 @@ namespace Pathfinding.Examples {
             m_target = target;
             Player._onActiveUnit.m_isInAnimation = true;
 
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 
             for (int i = 0, l = target.Count; i < l; ++i)
@@ -688,7 +689,7 @@ namespace Pathfinding.Examples {
             }
             else
             {
-                Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+                //Debug.LogError("Appel Paul, il saura pourquoi ca bug");
             }
 
             path.traversalProvider = unit.traversalProvider;

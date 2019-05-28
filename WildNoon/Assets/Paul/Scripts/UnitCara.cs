@@ -546,7 +546,7 @@ public class UnitCara : MonoBehaviour {
         {
             if(ArmorPoint - damage >= 0)
             {
-                Debug.Log("Attack");
+                //Debug.Log("Attack");
                 ArmorPoint -= damage;
             }
             else
