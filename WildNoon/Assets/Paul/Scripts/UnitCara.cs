@@ -7,33 +7,26 @@ using Pathfinding.Examples;
 
 public class UnitCara : MonoBehaviour {
 
-    /*[Header("Unit Stats")]
-    public int m_courage;
-    public int m_heatlh;
-    public int m_armor;
-    public int m_damage;
-    public int m_range;
-    public int m_mobility;
-    int m_actionPoints;
-    bool hasPlayed = false;
-    [Space]
-    [Header("Unit Spells")]
-    public Spells firstSpell;
-    public Spells secondSpell;
-    public Spells thirdSpell;
-    public Spells FourthSpell;
-    Spells[] Spells;*/
     int m_actionPoints;
     int m_actionPointsPreview;
     bool hasPlayed = false;
     Spells[] Spells;
     public Characters unitStats;
+    [Space]
+    [Header("LifeBar Var")]
     public GameObject ArmorBar;
     public GameObject LifeBar;
     public GameObject m_canvas;
-
+    public float m_timeShowingLifeBar;
+    float _timeToShowLifeBar;
+    bool lifebarOn;
+    [Space]
+    [Header("Selection Nodes")]
 
     public GameObject Selected;
+
+    [Space]
+    [Header("Fx Var")]
 
     public GameObject FxParents;
 
@@ -347,6 +340,32 @@ public class UnitCara : MonoBehaviour {
             spellCaster = value;
         }
     }
+
+    public bool LifebarOn
+    {
+        get
+        {
+            return lifebarOn;
+        }
+
+        set
+        {
+            lifebarOn = value;
+        }
+    }
+
+    public float TimeToShowLifeBar
+    {
+        get
+        {
+            return _timeToShowLifeBar;
+        }
+
+        set
+        {
+            _timeToShowLifeBar = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -364,7 +383,7 @@ public class UnitCara : MonoBehaviour {
         Spells = new Spells[4] { unitStats.firstSpell, unitStats.secondSpell, unitStats.thirdSpell, unitStats.FourthSpell };
         CoolDownCount = new int[4] { 0, 0, 0, 0 };
 
-        //m_vfx = FxParents.GetComponentsInChildren<GameObject>();
+        
         for (int i = 0, l = m_vfx.Length; i < l; ++i)
         {
             if (m_vfx[i].activeSelf)
@@ -391,8 +410,26 @@ public class UnitCara : MonoBehaviour {
     private void Update()
     {
         m_canvas.transform.LookAt(Camera.main.transform);
-        //ArmorBar.transform.LookAt(Camera.main.transform);
-        //LifeBar.transform.LookAt(Camera.main.transform);
+        ShowingLifeBar();
+    }
+
+    
+
+
+    void ShowingLifeBar()
+    {
+        if (LifebarOn && TimeToShowLifeBar > 0)
+        {
+            TimeToShowLifeBar -= Time.deltaTime;
+            m_canvas.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            LifebarOn = false;
+            m_canvas.gameObject.SetActive(false);
+            TimeToShowLifeBar = m_timeShowingLifeBar;
+        }
     }
 
     public void ActivateSelectedGameObject(bool b)
@@ -454,7 +491,6 @@ public class UnitCara : MonoBehaviour {
 
     public void ResetStatsAfterDebuff()
     {
-        Debug.Log("nop");
         Courage = unitStats.m_courage;
         Damage = unitStats.m_damage;
         Range = unitStats.m_range;
@@ -507,18 +543,14 @@ public class UnitCara : MonoBehaviour {
     public bool OnCheckIfCCWorks()
     {
         float armorpercent = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint)*100;
-        //Debug.Log("armor : "+armorpercent);
         float random = Random.Range(0, 100);
-        //Debug.Log("random : " + random);
         if (random < armorpercent)
         {
-            //Debug.Log(false);
             return false;
 
         }
         else
         {
-            //Debug.Log(gameObject.name + true);
             return true;
 
         }
@@ -541,12 +573,20 @@ public class UnitCara : MonoBehaviour {
 
     public void OnTakingDamage(int damage)
     {
-        //Debug.Log("Prout");
+        if (!m_canvas.gameObject.activeSelf)
+        {
+            LifebarOn = true;
+            TimeToShowLifeBar = m_timeShowingLifeBar;
+        }
+
         if ((LifePoint + ArmorPoint)-damage > 0)
         {
             if(ArmorPoint - damage >= 0)
             {
+<<<<<<< HEAD
                 //Debug.Log("Attack");
+=======
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
                 ArmorPoint -= damage;
             }
             else

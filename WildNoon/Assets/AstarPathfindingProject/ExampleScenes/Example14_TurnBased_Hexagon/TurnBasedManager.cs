@@ -162,7 +162,7 @@ namespace Pathfinding.Examples {
             new Jacky_SlowRange(this),              // Numéro 4
             new Jacky_TpRange(this),                // Numéro 5
             new Jacky_TauntRange(this),             // Numéro 6
-            new Jacky_TauntBeingUsed(this),             // Numéro 6
+            new Jacky_TauntBeingUsed(this),         // Numéro 7
 		});
 
 
@@ -194,6 +194,13 @@ namespace Pathfinding.Examples {
             if (EventSystem.IsPointerOverGameObject()) {
 				return;
 			}
+
+
+            if (UnitUnderMouse != null && UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != Player._onActiveUnit.IsTeam2)
+            {
+                UnitUnderMouse.GetComponent<UnitCara>().LifebarOn = true;
+                UnitUnderMouse.GetComponent<UnitCara>().TimeToShowLifeBar = UnitUnderMouse.GetComponent<UnitCara>().m_timeShowingLifeBar;
+            }
         }
 
         public void OnSetMouvement()
@@ -221,11 +228,9 @@ namespace Pathfinding.Examples {
         public void OnShowRange()
         {
             DestroyPossibleMoves();
-            //Debug.Log("Jacky Dispose d'une range de : " + player.OnActiveUnit1.Spells1[player.OnUsedSpell].m_spellRange);
             GeneratePossibleRange(Selected, player._onActiveUnit.Spells1[player.OnUsedSpell].m_spellRange);
         }
 
-        //int moveCost;
         #region Player Clique Sur Un Node
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
@@ -258,6 +263,9 @@ namespace Pathfinding.Examples {
             }
         }
         #endregion
+
+        
+
 
         public T GetByRay<T>(Ray ray) where T : class {
             RaycastHit hit;
@@ -473,6 +481,7 @@ namespace Pathfinding.Examples {
                     }
                 }
             }
+<<<<<<< HEAD
             //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
             //{
             int actionLeft = Player._onActiveUnit.ActionPoints;
@@ -485,7 +494,12 @@ namespace Pathfinding.Examples {
 
                 }
             //}
-
+=======
+            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
+            {
+                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
+            }
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
 
@@ -509,16 +523,28 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-        void AutoAttackTaunt(UnitCara unit, UnitCara target)
+        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
+<<<<<<< HEAD
             if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
+=======
+            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
             {
-                Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
-                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
-                if (target != null)
+                Player._onActiveUnit.m_isInAnimation = true;
+                if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
                 {
-                    target.OnTakingDamage(unit.Damage);
+                    Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+                    Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+                    if (target != null)
+                    {
+                        target.OnTakingDamage(unit.Damage);
+                    }
                 }
+<<<<<<< HEAD
+=======
+                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
                 Player._onActiveUnit.m_isInAnimation = false;
             }
         }

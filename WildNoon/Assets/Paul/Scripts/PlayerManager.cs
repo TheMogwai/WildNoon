@@ -14,21 +14,39 @@ public class PlayerManager : MonoBehaviour
     GameObject[] UnitsInGame;
     UnitCara[] UnitsInGameCara;
     UnitCara OnActiveUnit;
+    UnitCara OnUnitPreviouslyActive;
 
     Image[] UnitsInGameDisplay;
 
     #endregion
 
     TurnBasedManager m_turnBasedManager;
+    [Header("UnitCara Exsisting")]
+    public UnitCara[] allUnits;
+    [Space]
     [Header("Spells Button Array")]
     public Button[] SpellsButton;
-
+    DescriptionPanel[] spellImage;
+    Text[] spellDescription;
     [Header("ActionPoints Layout")]
     public GameObject ActionPointsLayout;
     [Header("UnitsInGame Layout")]
     public GameObject UnitsInGameLayout;
     [Space]
+    [Header("Movement Cost Display")]
     public Text m_actionPointsCosts;
+    [Space]
+    [Header("Timer Display")]
+    public GameObject m_TimerParent;
+    Text[] m_TimeLeft;
+    Image[] m_SliderTimeLeft;
+    float[] timeleft;
+    float[] minutes;
+    float[] seconds;
+    [Space]
+    [Header("Timer")]
+    public float m_time;
+    public float ropeTime;
 
     Image[] m_actionPointDisplay;
 
@@ -129,6 +147,48 @@ public class PlayerManager : MonoBehaviour
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
         m_actionPointsCosts.gameObject.SetActive(false);
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+
+       
+
+        #region Spell Description Var
+        spellImage = new DescriptionPanel[SpellsButton.Length];
+        spellDescription = new Text[spellImage.Length];
+
+        for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+        {
+            spellImage[i] = SpellsButton[i].GetComponentInChildren<DescriptionPanel>();
+        }
+        for (int i = 0, l= spellImage.Length; i < l; ++i)
+        {
+            spellDescription[i] = spellImage[i].GetComponentInChildren<Text>();
+        }
+        for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+        {
+            if (spellImage[i].gameObject.activeSelf)
+            {
+                spellImage[i].gameObject.SetActive(false);
+            }
+        }
+        #endregion
+
+        #region Time Management Var
+        m_TimeLeft = m_TimerParent.GetComponentsInChildren<Text>();
+        m_SliderTimeLeft = m_TimerParent.GetComponentsInChildren<Image>();
+        timeleft = new float[2];
+        minutes = new float[2];
+        seconds = new float[2];
+        for (int i = 0; i < timeleft.Length; i++)
+        {
+            timeleft[i] = m_time;
+            minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+            seconds[i] = timeleft[i] % 60;
+            if (seconds[i] > 59)
+            {
+                seconds[i] = 59;
+            }
+            OnSwitchDisplay(i,i);
+        }
+        #endregion
     }
 
     public void Start()
@@ -138,10 +198,133 @@ public class PlayerManager : MonoBehaviour
         _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
         InitiateWheelDisplay();
-
+        for (int i = 0; i < UnitsInGameCara.Length; i++)
+        {
+            if (UnitsInGameCara[i].m_canvas.gameObject.activeSelf)
+            {
+                UnitsInGameCara[i].m_canvas.gameObject.SetActive(false);
+            }
+        }
 
         TurnCount = turnCountMax;
     }
+
+    private void Update()
+    {
+        RopeMethod();
+        TimerMethod();
+        if (m_actionPointsCosts.gameObject.activeSelf)
+        {
+
+            Vector3 mousePosition = Input.mousePosition;
+            Debug.Log(mousePosition);
+
+            if (mousePosition.x < (Screen.width- (m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width/2)* m_actionPointsCosts.gameObject.transform.localScale.x))
+            {
+                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x+((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x )/ 3), mousePosition.y, mousePosition.z);
+            }
+            else
+            {
+                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x - ((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x) / 3), mousePosition.y, mousePosition.z);
+            }
+        }
+    }
+
+    #region Time Manager
+    void TimerMethod()
+    {
+        if(OnUnitPreviouslyActive.IsTeam2 != _onActiveUnit.IsTeam2)
+        {
+            if (!_onActiveUnit.IsTeam2)
+            {
+                
+                TimeCount(0);
+                OnSwitchDisplay(0, 0);
+                OnSwitchDisplay(1, 1);
+                
+            }
+            else
+            {
+                
+                TimeCount(1);
+
+                OnSwitchDisplay(0, 1);
+                OnSwitchDisplay(1, 0);
+                
+            }
+        }
+        else
+        {
+            if (!_onActiveUnit.IsTeam2)
+            {
+                
+                TimeCount(0);
+
+                OnSwitchDisplay(0, 0);
+            }
+            else
+            {
+                
+                TimeCount(1);
+
+                OnSwitchDisplay(0, 1);
+               
+            }
+        }
+    }
+
+    void OnSwitchDisplay(int i, int a)
+    {
+        if(m_TimeLeft[i] != null)
+        {
+            if (seconds[a] >= 10)
+            {
+                m_TimeLeft[i].text = string.Format(" {0}:{1}", minutes[a], (int)seconds[a]);
+            }
+            else
+            {
+                m_TimeLeft[i].text = string.Format(" {0}:0{1}", minutes[a], (int)seconds[a]);
+            }
+        }
+
+        if(m_SliderTimeLeft[i] != null)
+        {
+            m_SliderTimeLeft[i].fillAmount = Mathf.InverseLerp(0, m_time, timeleft[a]);
+        }
+    }
+
+    void RopeMethod()
+    {
+        for (int i = 0, l = timeleft.Length; i < l; ++i)
+        {
+            if(timeleft[i] <= 0)
+            {
+                timeleft[i] = ropeTime;
+                OnTurnPassed();
+            }
+        }
+    }
+
+    void TimeCount(int i)
+    {
+        timeleft[i] -= Time.deltaTime;
+        minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+        seconds[i] = timeleft[i] % 60;
+        if (seconds[i] > 59)
+        {
+            seconds[i] = 59;
+        }
+
+        if(minutes[i] <= 0 && seconds[i] <= 0)
+        {
+            minutes[i] = 0;
+            seconds[i] = ropeTime;
+        }
+    }
+
+    #endregion
+
+    #region Wheel Methods
 
     public void InitiateWheelDisplay()
     {
@@ -168,6 +351,17 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    void OnResetUnitsWheel()
+    {
+        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
+        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
+        {
+            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+        }
+    }
+
+    #endregion
+
     void ResetArray()
     {
         UnitsInGame = new GameObject[0];
@@ -179,20 +373,9 @@ public class PlayerManager : MonoBehaviour
             if (UnitsInGame[i].GetComponent<UnitCara>() != null)
             {
                 m_UnitsInGameCara[i] = UnitsInGame[i].GetComponent<UnitCara>();
-                //m_UnitsInGameCara[i].Courage -= i/10;// m_UnitsInGameCara[i].Courage/(i+1*10);
-
             }
         }
         turnCountMax = m_UnitsInGameCara.Length;
-    }
-
-    void OnResetUnitsWheel()
-    {
-        m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
-        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
-        {
-            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
-        }
     }
 
     public void OnTurnPassed()
@@ -202,7 +385,10 @@ public class PlayerManager : MonoBehaviour
             ResetArray();
             TurnCount--;
             OnTableTurnOver();
-            //Debug.Log(TurnCount);
+            if (_onActiveUnit !=null)
+            {
+                OnUnitPreviouslyActive = _onActiveUnit;
+            }
             _onActiveUnit = GetMax().GetComponent<UnitCara>();
             for (int i = 0, l = m_UnitsInGameCara.Length ; i < l; ++i)
             {
@@ -217,7 +403,6 @@ public class PlayerManager : MonoBehaviour
             TurnBasedManager.OnSetMouvement();
             OnPassiveEffectTrigger();
             _onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
-
 
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
             {
@@ -275,14 +460,22 @@ public class PlayerManager : MonoBehaviour
     }
     public void OnButtonHover(int SpellNbr)
     {
-        //Debug.Log("HasEnter");
-        OnUsedSpell = SpellNbr;
-        TurnBasedManager.ChangeState(6); 
+        if(_onActiveUnit.unitStats == allUnits[0].unitStats && SpellNbr == 3)
+        {
+            OnUsedSpell = SpellNbr;
+            TurnBasedManager.ChangeState(6); 
+        }
+        spellImage[SpellNbr].gameObject.SetActive(true);
+        spellDescription[SpellNbr].text = _onActiveUnit.Spells1[SpellNbr].spell_Description;
     }
     public void OnLeaveHover(int SpellNbr)
     {
-        //Debug.Log("HasLeft");
-        TurnBasedManager.ChangeState(0);
+        if (_onActiveUnit.unitStats == allUnits[0].unitStats && SpellNbr == 3)
+        {
+            TurnBasedManager.ChangeState(0);
+        }
+        spellImage[SpellNbr].gameObject.SetActive(false);
+
     }
     #endregion
 
@@ -373,12 +566,10 @@ public class PlayerManager : MonoBehaviour
                 {
                     GameObject max = m_UnitsInGameCara[i].gameObject;
                     m_UnitsInGameCara[i].HasPlayed = true;
-                    //Debug.Log(max.name + " est l'unité avec le plus de courage.");
                     return max;
                 }
             }
         }
-        //Debug.Log("Atchoum");
         return null;
     }
 }
