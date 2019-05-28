@@ -451,7 +451,8 @@ namespace Pathfinding.Examples {
             float distanceAlongSegment = 0;
             for (int i = 0; i < path.vectorPath.Count - 1; i++)
             {
-                if (i < (path.vectorPath.Count-1)-(unit.GetComponent<UnitCara>().Range-1) && (unit.GetComponent<UnitCara>().ActionPoints-1)>=0)
+                UnitCara unitCara = unit.GetComponent<UnitCara>();
+                if (i < (path.vectorPath.Count-1)-(unitCara.Range-1) && (unitCara.ActionPoints-1)>=0)
                 {
                     nbrNodes++;
                     var p0 = path.vectorPath[Mathf.Max(i - 1, 0)];
@@ -472,18 +473,18 @@ namespace Pathfinding.Examples {
                     }
 
                     distanceAlongSegment -= segmentLength;
-                    if(nbrNodes == unit.GetComponent<UnitCara>().Mobility)
+                    if(nbrNodes == unitCara.Mobility)
                     {
                         nbrNodes = 0;
-                        unit.GetComponent<UnitCara>().ActionPoints--;
-                        player.ActionPointsDisplay(unit.GetComponent<UnitCara>().ActionPoints);                           //Call PlayerManager Action Display Method
+                        unitCara.ActionPoints--;
+                        player.ActionPointsDisplay(unitCara.ActionPoints);                           //Call PlayerManager Action Display Method
 
                     }
                 }
             }
-            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
+            if(unit.GetComponent<UnitCara>().ActionPoints >= 0)
             {
-                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
+                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>(), unit.GetComponent<UnitCara>().ActionPoints));
             }
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
@@ -508,9 +509,9 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
+        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target, int actions)
         {
-            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
+            for (int i = 0; i <= actions; i++)
             {
                 Player._onActiveUnit.m_isInAnimation = true;
                 if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
