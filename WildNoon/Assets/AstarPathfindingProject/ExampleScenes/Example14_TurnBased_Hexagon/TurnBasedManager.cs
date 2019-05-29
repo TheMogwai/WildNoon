@@ -451,7 +451,8 @@ namespace Pathfinding.Examples {
             float distanceAlongSegment = 0;
             for (int i = 0; i < path.vectorPath.Count - 1; i++)
             {
-                if (i < (path.vectorPath.Count-1)-(unit.GetComponent<UnitCara>().Range-1) && (unit.GetComponent<UnitCara>().ActionPoints-1)>=0)
+                UnitCara unitcara = unit.GetComponent<UnitCara>();
+                if (i < (path.vectorPath.Count-1)-(unitcara.Range-1) && (unitcara.ActionPoints-1)>=0)
                 {
                     nbrNodes++;
                     var p0 = path.vectorPath[Mathf.Max(i - 1, 0)];
@@ -472,7 +473,7 @@ namespace Pathfinding.Examples {
                     }
 
                     distanceAlongSegment -= segmentLength;
-                    if(nbrNodes == unit.GetComponent<UnitCara>().Mobility)
+                    if(nbrNodes == unitcara.Mobility)
                     {
                         nbrNodes = 0;
                         Player._onActiveUnit.ActionPoints--;
@@ -481,25 +482,12 @@ namespace Pathfinding.Examples {
                     }
                 }
             }
-<<<<<<< HEAD
-            //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
-            //{
-            int actionLeft = Player._onActiveUnit.ActionPoints;
-            for (int a = 0; a < actionLeft; a++)
-                {
-                    Debug.Log("AttackTaunt");
-                    Player._onActiveUnit.m_isInAnimation = true;
-                    yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
-                    AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
-
-                }
-            //}
-=======
-            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
+            
+            if (unit.GetComponent<UnitCara>().ActionPoints > 0)
             {
                 StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
             }
->>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
+            
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
 
@@ -525,27 +513,22 @@ namespace Pathfinding.Examples {
 
         public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-<<<<<<< HEAD
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
-=======
-            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
->>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
+            int actionLeft = Player._onActiveUnit.ActionPoints;
+
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
             {
-                Player._onActiveUnit.m_isInAnimation = true;
-                if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+                for (int i = 0; i < actionLeft; i++)
                 {
+                    Player._onActiveUnit.m_isInAnimation = true;
                     Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
                     Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
                     if (target != null)
                     {
                         target.OnTakingDamage(unit.Damage);
                     }
+                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                    Player._onActiveUnit.m_isInAnimation = false;
                 }
-<<<<<<< HEAD
-=======
-                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
->>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
-                Player._onActiveUnit.m_isInAnimation = false;
             }
         }
 
