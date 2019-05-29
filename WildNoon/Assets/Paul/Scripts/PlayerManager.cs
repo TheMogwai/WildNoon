@@ -28,6 +28,9 @@ public class PlayerManager : MonoBehaviour
     public Button[] SpellsButton;
     DescriptionPanel[] spellImage;
     Text[] spellDescription;
+    [Space]
+    [Header("Next Turn Button")]
+    public Button NextTurn;
     [Header("ActionPoints Layout")]
     public GameObject ActionPointsLayout;
     [Header("UnitsInGame Layout")]
@@ -187,6 +190,7 @@ public class PlayerManager : MonoBehaviour
         timeleft = new float[2];
         minutes = new float[2];
         seconds = new float[2];
+        isAtRopeTime = new bool[2] { false, false };
         for (int i = 0; i < timeleft.Length; i++)
         {
             timeleft[i] = m_time;
@@ -341,7 +345,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-
+    bool[] isAtRopeTime; 
     void TimeCount(int i)
     {
         timeleft[i] -= Time.deltaTime;
@@ -355,7 +359,11 @@ public class PlayerManager : MonoBehaviour
         if(minutes[i] <= 0 && seconds[i] <= 0)
         {
             minutes[i] = 0;
-            seconds[i] = ropeTime;
+            if (!isAtRopeTime[i])
+            {
+                seconds[i] = ropeTime;
+                isAtRopeTime[i] = true;
+            }
         }
     }
 
@@ -369,18 +377,42 @@ public class PlayerManager : MonoBehaviour
         {
             if (i == 0 || i == m_UnitsInGameCara.Length - 1)
             {
-                if (i == 0)
+                if (!m_UnitsInGameCara[i].IsTeam2)
                 {
-                    m_UnitsInGameCara[0].UnitWheelArt = m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork;
+                    if (i == 0)
+                    {
+                        m_UnitsInGameCara[0].UnitWheelArt = m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork;
+
+                    }
+                    else
+                    {
+                        m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsLastArtwork;
+                        Debug.Log("nop");
+
+                    }
                 }
                 else
                 {
-                    m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsLastArtwork;
+                    if (i == 0)
+                    {
+                        m_UnitsInGameCara[0].UnitWheelArt = m_UnitsInGameCara[0].unitStats.characterIsFirstArtwork2;
+                    }
+                    else
+                    {
+                        m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsLastArtwork2;
+                    }
                 }
             }
             else
             {
-                m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsNeitherArtwork;
+                if (!m_UnitsInGameCara[i].IsTeam2)
+                {
+                    m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsNeitherArtwork;
+                }
+                else
+                {
+                    m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsNeitherArtwork2;
+                }
             }
 
             m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
@@ -441,6 +473,13 @@ public class PlayerManager : MonoBehaviour
             OnPassiveEffectTrigger();
             _onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
             TeamDisplay();
+            for (int i = 0; i < 2; i++)
+            {
+                if (isAtRopeTime[i])
+                {
+                    seconds[i] = ropeTime;
+                }
+            }
             for (int i = 0, l = m_actionPointDisplay.Length; i < l; ++i)
             {
                 if (!m_actionPointDisplay[i].gameObject.activeSelf)
@@ -453,7 +492,19 @@ public class PlayerManager : MonoBehaviour
             {
 
                 TurnBasedManager.StartCoroutine(TurnBasedManager.MoveTowardTarget(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.SpellCaster));
-
+                for (int i = 0; i < 4; i++)
+                {
+                    SpellsButton[i].interactable = false;
+                }
+                NextTurn.interactable = false;
+            }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    SpellsButton[i].interactable = true;
+                }
+                NextTurn.interactable = true;
             }
             _onActiveUnit.Courage = _onActiveUnit.Courage / 10;
         }

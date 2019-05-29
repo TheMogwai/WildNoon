@@ -393,19 +393,20 @@ public class UnitCara : MonoBehaviour {
         }
 
         Player = FindObjectOfType<PlayerManager>();
-    }
-
-    public void Start()
-    {
         if (GetComponentInParent<Team_Check>() != null)
         {
-            gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            //gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
             isTeam2 = true;
         }
         else
         {
             isTeam2 = false;
         }
+    }
+
+    public void Start()
+    {
+        
     }
     private void Update()
     {
@@ -583,10 +584,6 @@ public class UnitCara : MonoBehaviour {
         {
             if(ArmorPoint - damage >= 0)
             {
-<<<<<<< HEAD
-                //Debug.Log("Attack");
-=======
->>>>>>> 56548762876b0ed643425bd0a6d9124666df222d
                 ArmorPoint -= damage;
             }
             else

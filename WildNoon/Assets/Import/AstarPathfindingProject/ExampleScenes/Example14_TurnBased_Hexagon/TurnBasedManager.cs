@@ -51,6 +51,7 @@ namespace Pathfinding.Examples {
 
         Ray ray;
         TurnBasedAI unitUnderMouse;
+        Astar3DButton nodeUnderMouse;
 
         int MoveRange;
         float unitMobility;
@@ -149,6 +150,19 @@ namespace Pathfinding.Examples {
             }
         }
 
+        public Astar3DButton NodeUnderMouse
+        {
+            get
+            {
+                return nodeUnderMouse;
+            }
+
+            set
+            {
+                nodeUnderMouse = value;
+            }
+        }
+
         #endregion
         public float nodes;
 
@@ -183,7 +197,7 @@ namespace Pathfinding.Examples {
             m_sM.Update();
             Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             UnitUnderMouse = GetByRay<TurnBasedAI>(Ray);
-
+            NodeUnderMouse = GetByRay<Astar3DButton>(Ray);
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -375,7 +389,7 @@ namespace Pathfinding.Examples {
             {
                 nbrDeZoneDeMouvement = player.OnActiveUnit1.ActionPoints;
             }*/
-            ChangeState(1);             //Respawn Nodes
+            ChangeState(0);             //Respawn Nodes
 
         }
         #endregion
@@ -482,30 +496,15 @@ namespace Pathfinding.Examples {
                     }
                 }
             }
-<<<<<<< HEAD:WildNoon/Assets/Import/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
             //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
             //{
-            int actionLeft = Player._onActiveUnit.ActionPoints;
-            for (int a = 0; a < actionLeft; a++)
-                {
-                    Debug.Log("AttackTaunt");
-                    Player._onActiveUnit.m_isInAnimation = true;
-                    yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
-                    AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
 
-                }
             if(unit.GetComponent<UnitCara>().ActionPoints > 0)
             {
                 StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
             }
-=======
             
-            if (unit.GetComponent<UnitCara>().ActionPoints > 0)
-            {
-                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
-            }
             
->>>>>>> 56548762876b0ed643425bd0a6d9124666df222d:WildNoon/Assets/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
 
@@ -531,32 +530,33 @@ namespace Pathfinding.Examples {
 
         public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-<<<<<<< HEAD:WildNoon/Assets/Import/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
             if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
-            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
-=======
-            int actionLeft = Player._onActiveUnit.ActionPoints;
-
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
->>>>>>> 56548762876b0ed643425bd0a6d9124666df222d:WildNoon/Assets/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
             {
-                for (int i = 0; i < actionLeft; i++)
+                int actionLeft = Player._onActiveUnit.ActionPoints;
+
+                if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
                 {
-                    Player._onActiveUnit.m_isInAnimation = true;
-                    Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
-                    Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
-                    if (target != null)
+                    for (int i = 0; i < actionLeft; i++)
                     {
-                        target.OnTakingDamage(unit.Damage);
+                        Player._onActiveUnit.m_isInAnimation = true;
+                        Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+                        Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+                        if (target != null)
+                        {
+                            target.OnTakingDamage(unit.Damage);
+                        }
+                        yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                        Player._onActiveUnit.m_isInAnimation = false;
                     }
-                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
-                    Player._onActiveUnit.m_isInAnimation = false;
                 }
-<<<<<<< HEAD:WildNoon/Assets/Import/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
-                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
-                Player._onActiveUnit.m_isInAnimation = false;
-=======
->>>>>>> 56548762876b0ed643425bd0a6d9124666df222d:WildNoon/Assets/AstarPathfindingProject/ExampleScenes/Example14_TurnBased_Hexagon/TurnBasedManager.cs
+                else
+                {
+                    Player.OnTurnPassed();
+                }
+            }
+            else
+            {
+                Player.OnTurnPassed();
             }
         }
 

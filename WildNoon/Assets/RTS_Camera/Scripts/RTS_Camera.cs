@@ -293,7 +293,7 @@ namespace RTS_Cam
         public void FollowTarget()
         {
             Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + targetOffset;
-            Quaternion targetRot = new Quaternion(0.4226183f, 0, 0, 0.9063079f);
+            Quaternion targetRot = new Quaternion(0.2988362f, -0.6408564f, 0.2988362f, 0.6408564f);
             m_Transform.position = Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
             m_Transform.rotation = Quaternion.RotateTowards(m_Transform.rotation, targetRot, Time.deltaTime * followingSpeed * 5f);
             if(m_Transform.rotation == targetRot && m_Transform.position == targetPos)
