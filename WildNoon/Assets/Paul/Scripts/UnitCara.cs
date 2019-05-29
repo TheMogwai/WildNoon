@@ -583,10 +583,7 @@ public class UnitCara : MonoBehaviour {
         {
             if(ArmorPoint - damage >= 0)
             {
-<<<<<<< HEAD
                 //Debug.Log("Attack");
-=======
->>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
                 ArmorPoint -= damage;
             }
             else
