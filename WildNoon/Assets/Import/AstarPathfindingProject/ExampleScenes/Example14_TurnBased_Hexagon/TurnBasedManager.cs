@@ -496,13 +496,6 @@ namespace Pathfinding.Examples {
                     }
                 }
             }
-            //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
-            //{
-
-            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
-            {
-                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
-            }
             
             
 
@@ -530,9 +523,7 @@ namespace Pathfinding.Examples {
 
         public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
-            {
-                int actionLeft = Player._onActiveUnit.ActionPoints;
+            int actionLeft = Player._onActiveUnit.ActionPoints;
 
                 if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
                 {
