@@ -451,8 +451,7 @@ namespace Pathfinding.Examples {
             float distanceAlongSegment = 0;
             for (int i = 0; i < path.vectorPath.Count - 1; i++)
             {
-                UnitCara unitCara = unit.GetComponent<UnitCara>();
-                if (i < (path.vectorPath.Count-1)-(unitCara.Range-1) && (unitCara.ActionPoints-1)>=0)
+                if (i < (path.vectorPath.Count-1)-(unit.GetComponent<UnitCara>().Range-1) && (unit.GetComponent<UnitCara>().ActionPoints-1)>=0)
                 {
                     nbrNodes++;
                     var p0 = path.vectorPath[Mathf.Max(i - 1, 0)];
@@ -473,19 +472,34 @@ namespace Pathfinding.Examples {
                     }
 
                     distanceAlongSegment -= segmentLength;
-                    if(nbrNodes == unitCara.Mobility)
+                    if(nbrNodes == unit.GetComponent<UnitCara>().Mobility)
                     {
                         nbrNodes = 0;
-                        unitCara.ActionPoints--;
-                        player.ActionPointsDisplay(unitCara.ActionPoints);                           //Call PlayerManager Action Display Method
+                        Player._onActiveUnit.ActionPoints--;
+                        player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);                           //Call PlayerManager Action Display Method
 
                     }
                 }
             }
-            if(unit.GetComponent<UnitCara>().ActionPoints >= 0)
+<<<<<<< HEAD
+            //if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost >= 0)
+            //{
+            int actionLeft = Player._onActiveUnit.ActionPoints;
+            for (int a = 0; a < actionLeft; a++)
+                {
+                    Debug.Log("AttackTaunt");
+                    Player._onActiveUnit.m_isInAnimation = true;
+                    yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+                    AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>());
+
+                }
+            //}
+=======
+            if(unit.GetComponent<UnitCara>().ActionPoints > 0)
             {
-                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>(), unit.GetComponent<UnitCara>().ActionPoints));
+                StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
             }
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
 
             //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
 
@@ -509,9 +523,13 @@ namespace Pathfinding.Examples {
 
         #endregion
 
-        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target, int actions)
+        public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-            for (int i = 0; i <= actions; i++)
+<<<<<<< HEAD
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints >= 0)
+=======
+            for (int i = 0; i <= unit.GetComponent<UnitCara>().ActionPoints; i++)
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
             {
                 Player._onActiveUnit.m_isInAnimation = true;
                 if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
@@ -523,7 +541,10 @@ namespace Pathfinding.Examples {
                         target.OnTakingDamage(unit.Damage);
                     }
                 }
+<<<<<<< HEAD
+=======
                 yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+>>>>>>> da0a58e81f4057520771f6a0efe70df0f94f7273
                 Player._onActiveUnit.m_isInAnimation = false;
             }
         }
@@ -536,7 +557,7 @@ namespace Pathfinding.Examples {
                 Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
                 Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
 
-                yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
                 Player._onActiveUnit.m_isInAnimation = false;
                 if(target != null)
                 {
@@ -549,7 +570,7 @@ namespace Pathfinding.Examples {
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
             Player._onActiveUnit.m_isInAnimation = true;
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de tp
             Player._onActiveUnit.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
@@ -560,7 +581,7 @@ namespace Pathfinding.Examples {
         {
             Player._onActiveUnit.m_isInAnimation = true;
 
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 
             if (target.OnCheckIfCCWorks())
@@ -577,7 +598,7 @@ namespace Pathfinding.Examples {
             m_target = target;
             Player._onActiveUnit.m_isInAnimation = true;
 
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 
             for (int i = 0, l = target.Count; i < l; ++i)
@@ -694,7 +715,7 @@ namespace Pathfinding.Examples {
             }
             else
             {
-                Debug.LogError("Appel Paul, il saura pourquoi ca bug");
+                //Debug.LogError("Appel Paul, il saura pourquoi ca bug");
             }
 
             path.traversalProvider = unit.traversalProvider;
