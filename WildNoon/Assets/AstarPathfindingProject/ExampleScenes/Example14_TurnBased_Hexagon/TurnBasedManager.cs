@@ -483,7 +483,7 @@ namespace Pathfinding.Examples {
                 }
             }
             
-            if (unit.GetComponent<UnitCara>().ActionPoints > 0)
+            if (unit.GetComponent<UnitCara>().ActionPoints >= 0)
             {
                 StartCoroutine(AutoAttackTaunt(unit.GetComponent<UnitCara>(), target.GetComponent<UnitCara>()));
             }
@@ -529,6 +529,11 @@ namespace Pathfinding.Examples {
                     yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
                     Player._onActiveUnit.m_isInAnimation = false;
                 }
+                Player.OnTurnPassed();
+            }
+            else
+            {
+                Player.OnTurnPassed();
             }
         }
 

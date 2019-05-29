@@ -23,11 +23,17 @@ public class PlayerManager : MonoBehaviour
     TurnBasedManager m_turnBasedManager;
     [Header("UnitCara Exsisting")]
     public UnitCara[] allUnits;
+    /*[Space]
+    [Header("Canvas")]
+    public GameObject Canvas;*/
     [Space]
     [Header("Spells Button Array")]
     public Button[] SpellsButton;
     DescriptionPanel[] spellImage;
     Text[] spellDescription;
+    [Space]
+    [Header("Spells Button Array")]
+    public Button NextTurn;
     [Header("ActionPoints Layout")]
     public GameObject ActionPointsLayout;
     [Header("UnitsInGame Layout")]
@@ -53,6 +59,7 @@ public class PlayerManager : MonoBehaviour
     public Image m_armor;
     [Space]
     [Header("Team State")]
+    public GameObject m_isTeamParent;
     public Image[] m_teamArtWork;
     public Image[] m_teamHealth;
     public Image[] m_teamArmor;
@@ -153,6 +160,29 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        /*SpellsButton = new Button[4];
+        m_teamArtWork = new Image[4];
+        m_teamHealth = new Image[4];
+        m_teamArmor = new Image[4];
+        for (int i = 0; i < SpellsButton.Length; i++)
+        {
+            SpellsButton[i] = Canvas.GetComponentInChildren<IsSpellButton>().gameObject.GetComponent<Button>();
+        }
+        ActionPointsLayout = Canvas.GetComponentInChildren<IsActionPointLayout>().gameObject;
+        UnitsInGameLayout = Canvas.GetComponentInChildren<IsUnitInWheelDisplay>().gameObject;
+        m_actionPointsCosts = Canvas.GetComponentInChildren<IsCostDisplay>().gameObject.GetComponent<Text>();
+        m_TimerParent = Canvas.GetComponentInChildren<IsTimerParent>().gameObject;
+        m_isTeamParent = Canvas.GetComponentInChildren<IsTeamParent>().gameObject;
+
+        for (int i = 0; i < 4; i++)
+        {
+            m_teamArtWork[i] = m_isTeamParent.GetComponentInChildren<IsTeamArtWork>().gameObject.GetComponent<Image>();
+            m_teamHealth[i] = m_isTeamParent.GetComponentInChildren<IsTeamHealth>().gameObject.GetComponent<Image>();
+            m_teamArmor[i] = m_isTeamParent.GetComponentInChildren<IsTeamArmor>().gameObject.GetComponent<Image>();
+
+        }*/
+
+
         TurnBasedManager = FindObjectOfType<TurnBasedManager>();
         m_actionPointDisplay = new Image[6];
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
@@ -230,7 +260,6 @@ public class PlayerManager : MonoBehaviour
         {
 
             Vector3 mousePosition = Input.mousePosition;
-            Debug.Log(mousePosition);
 
             if (mousePosition.x < (Screen.width- (m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width/2)* m_actionPointsCosts.gameObject.transform.localScale.x))
             {
@@ -453,6 +482,19 @@ public class PlayerManager : MonoBehaviour
             {
 
                 TurnBasedManager.StartCoroutine(TurnBasedManager.MoveTowardTarget(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.SpellCaster));
+                for (int i = 0, l=SpellsButton.Length; i < l; ++i)
+                {
+                    SpellsButton[i].interactable = false;
+                }
+                NextTurn.interactable = false;
+            }
+            else
+            {
+                for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+                {
+                    SpellsButton[i].interactable = true;
+                }
+                NextTurn.interactable = true;
 
             }
             _onActiveUnit.Courage = _onActiveUnit.Courage / 10;

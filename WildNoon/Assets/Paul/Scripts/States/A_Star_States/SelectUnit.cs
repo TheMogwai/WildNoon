@@ -33,7 +33,7 @@ public class SelectUnit : IState
         {
             if (m_TurnBaseManager.Player != null)
             {
-                if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player._onActiveUnit.GetComponent<TurnBasedAI>())
+                if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player._onActiveUnit.GetComponent<TurnBasedAI>() && !m_TurnBaseManager.Player._onActiveUnit._isTaunt)
                 {
                     m_TurnBaseManager.ChangeState(1);
                 }
