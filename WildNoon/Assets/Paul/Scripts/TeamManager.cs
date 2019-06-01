@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-// Pour créé un nouveau character : Copier/Coller un bouton dans "Characters Parent", bien penser à indiquer au button et a l'event trigger du bouton quel est la place du nouveau character dans la liste des characters (rappel : le premier = 0, le second = 1...)
-// Créer ensuite un nouveau scriptable object, y référencer les stats souhaitées, cela fait, penser à référencer le scriptable object dans le script "Unit Stats Button" sur le nouveau bouton créé
-// Pour finir placez le model 3d sur la scène, placez ensuite une nouvelle caméra de la façon souhaitée, créez une nouvelle "render Texture" que vous appliquez à la nouvelle caméra, référencer cette texture dans "l'albedo" d'un nouveau material. Et enfin référencez ce material dans une nouvelle case du tableau "cameraRendererMaterial" que vous aurez créé (Attention à ce la place que prend votre material correspond à la place du nouveau character dans la liste des characters.
+//  Pour créer un nouveau character : Copier/Coller un bouton dans "Characters Parent", bien penser à indiquer au button et a l'event trigger du bouton quel est la place du nouveau character dans 
+// la liste des characters (rappel : le premier = 0, le second = 1...)
+//  Créer ensuite un nouveau scriptable object, y référencer les stats souhaitées, cela fait, penser à référencer le scriptable object dans le script "Unit Stats Button" sur le nouveau bouton créé
+//  Pour finir placez le model 3d sur la scène, placez ensuite une nouvelle caméra de la façon souhaitée, créez une nouvelle "render Texture" que vous appliquez à la nouvelle caméra, référencer 
+// cette texture dans "l'albedo" d'un nouveau material. Et enfin référencez ce material dans une nouvelle case du tableau "cameraRendererMaterial" que vous aurez créé (Attention à ce la place 
+// que prend votre material correspond à la place du nouveau character dans la liste des characters.
 
 public class TeamManager : MonoBehaviour
 {
@@ -232,7 +235,7 @@ public class TeamManager : MonoBehaviour
                 {
                     if (m_countCharaTeam_2 < SlotsTeam_2.Length)
                     {
-                        SlotsTeam_2[m_countCharaTeam_2].color = Color.red;                              //Pour afficher le fait que le perso a été choisi
+                        SlotsTeam_2[m_countCharaTeam_2].color = Color.blue;                              //Pour afficher le fait que le perso a été choisi
                         m_Team_2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
 
                         m_unit_Spawer.GetComponent<Unit_Spawer>().Team2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
