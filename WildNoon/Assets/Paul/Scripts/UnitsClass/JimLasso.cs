@@ -44,8 +44,16 @@ public class JimLasso : UnitCara
         else
         {
             StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target, 0));
+            
+        }
+    }
+
+    public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target, int damage)
+    {
+        if (!target.m_isInAnimation && unit.ActionPoints > 0)
+        {
             target.JimPassifEffect = true;
-            if(OnSpotted == null)
+            if (OnSpotted == null)
             {
                 OnSpotted = target;
             }
@@ -54,13 +62,6 @@ public class JimLasso : UnitCara
                 OnSpotted.JimPassifEffect = false;
                 OnSpotted = target;
             }
-        }
-    }
-
-    public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target, int damage)
-    {
-        if (!target.m_isInAnimation && unit.ActionPoints > 0)
-        {
             unit.m_isInAnimation = true;
             unit.ActionPoints = unit.ActionPoints - unit.AutoAttackCost;
             Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
