@@ -32,7 +32,7 @@ namespace Pathfinding.Examples
         {
             // Make sure the door starts out blocked
             //blocker.BlockAtCurrentPosition();
-            Debug.Log(Player.OnActiveUnit1);
+            Debug.Log(Player._onActiveUnit);
             //animator.CrossFade("close", 0.2f);
         }
 
@@ -56,11 +56,11 @@ namespace Pathfinding.Examples
 
         public IEnumerator TpToMine(/*, GraphNode node*/)
         {
-            Player.OnActiveUnit1.m_isInAnimation = true;
+            Player._onActiveUnit.m_isInAnimation = true;
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
-            Player.OnActiveUnit1.m_isInAnimation = false;
-            Player.OnActiveUnit1.transform.position = linkedMine.position;
-            Player.OnActiveUnit1.GetComponent<TurnBasedAI>().blocker.BlockAtCurrentPosition();
+            Player._onActiveUnit.m_isInAnimation = false;
+            Player._onActiveUnit.transform.position = linkedMine.position;
+            Player._onActiveUnit.GetComponent<TurnBasedAI>().blocker.BlockAtCurrentPosition();
             Player.TurnBasedManager.ChangeState(0);
 
 
@@ -92,7 +92,7 @@ namespace Pathfinding.Examples
 
         public void Open()
         {
-            if (Player.OnActiveUnit1.ActionPoints >= tpCost)
+            if (Player._onActiveUnit.ActionPoints >= tpCost)
             {
                 // Stop WaitAndClose if it is running
                 StopCoroutine(WaitAndClose());
@@ -102,8 +102,8 @@ namespace Pathfinding.Examples
                 open = true;
                 StartCoroutine(TpToMine());
                 Player.TurnBasedManager.ChangeState(1);
-                Player.OnActiveUnit1.ActionPoints -= tpCost;
-
+                Player._onActiveUnit.ActionPoints -= tpCost;
+                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
                 // Unblock the door node so that units can traverse it again
                 blocker.Unblock();
             }

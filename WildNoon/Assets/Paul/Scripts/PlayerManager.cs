@@ -247,6 +247,7 @@ public class PlayerManager : MonoBehaviour
         ResetArray();
         _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
+        TurnCount = turnCountMax;
         InitiateWheelDisplay();
         for (int i = 0; i < UnitsInGameCara.Length; i++)
         {
@@ -256,7 +257,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        TurnCount = turnCountMax;
         TeamDisplay();
 
     }
@@ -720,6 +720,7 @@ public class PlayerManager : MonoBehaviour
                 if (m_UnitsInGameCara[i].GetComponent<UnitCara>() != null)
                 {
                     m_UnitsInGameCara[i].HasPlayed = false;
+                    Debug.Log("nop");
                     m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage * 10;
                     //m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].unitStats.m_courage;
                     //m_UnitsInGameCara[i].Courage -= i;
