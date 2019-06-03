@@ -53,7 +53,7 @@ public class Jacky_TpRange : IState
         }
         else if (button != null && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (m_TurnBaseManager.Player.OnActiveUnit1.ActionPoints > 0)
+            if (m_TurnBaseManager.Player._onActiveUnit.ActionPoints > 0)
             {
                 m_TurnBaseManager.Player.OnCoolDownspell();
                 m_TurnBaseManager.Player.OnCoolDownDisplay(1);

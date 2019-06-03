@@ -33,7 +33,7 @@ public class SelectUnit : IState
         {
             if (m_TurnBaseManager.Player != null)
             {
-                if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<TurnBasedAI>())
+                if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player._onActiveUnit.GetComponent<TurnBasedAI>() && !m_TurnBaseManager.Player._onActiveUnit._isTaunt)
                 {
                     m_TurnBaseManager.ChangeState(1);
                 }
@@ -47,7 +47,7 @@ public class SelectUnit : IState
         {
             if (m_TurnBaseManager.UnitUnderMouse != null)
             {
-                if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
+                if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player._onActiveUnit.GetComponent<UnitCara>().IsTeam2)
                 {
                     GetOutOfState();
                 }

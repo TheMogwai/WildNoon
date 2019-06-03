@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3328610}
   - component: {fileID: 2328610}
   - component: {fileID: 9528610}
+  - component: {fileID: 2676898671507151910}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -97,3 +98,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &2676898671507151910
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128610}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0018234, y: 0.7116716, z: 1.2488586}
+  m_Center: {x: -0.00000023841858, y: 0.3564114, z: 0}

@@ -11,16 +11,15 @@ public class Spells : ScriptableObject {
     [Space]
     public Sprite artwork;
     [Space]
+    public int m_spellDamage;
+    public int m_spellRange;
+    [Space]
     public int m_courageBonus;
     public int m_heatlhBonus;
     public int m_armorBonus;
     public int m_damageBonus;
     public int m_rangeBonus;
     public int m_mobilityBonus;
-    [Space]
-    public int m_spellDamage;
-    public int m_spellRange;
-    public int m_spellAOE;
     [Space]
     public int m_courageMalus;
     public int m_heatlhMalus;
@@ -29,6 +28,7 @@ public class Spells : ScriptableObject {
     public int m_rangeMalus;
     public int m_mobilityMalus;
     [Space]
+    public int m_turnDebuffLasting;
     [TextArea(1, 20)]
     public string spell_Description;
 

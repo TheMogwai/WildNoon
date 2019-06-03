@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 477126}
   - component: {fileID: 3303492}
   - component: {fileID: 2392440}
+  - component: {fileID: 6748562661754237283}
   m_Layer: 0
   m_Name: fort_tower
   m_TagString: Untagged
@@ -109,6 +110,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6748562661754237283
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192232}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.4596653, y: 5.4679503, z: 4.3523636}
+  m_Center: {x: 0.012403607, y: 2.6933677, z: 0.01714766}
 --- !u!1 &198924
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,12 +30,20 @@ public class SelectTarget : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            GetOutOfState();
-        }
+            if(m_TurnBaseManager.UnitUnderMouse ==null && m_TurnBaseManager.NodeUnderMouse == null)
+            {
+                GetOutOfState();
+            }
+            else
+            {
 
-		m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
+            }
+        }
+        m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
+
+
         /*if (m_TurnBaseManager.UnitUnderMouse != null)
         {
             if (m_TurnBaseManager.UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != m_TurnBaseManager.Player.OnActiveUnit1.GetComponent<UnitCara>().IsTeam2)
