@@ -61,6 +61,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Team State")]
     //public GameObject m_isTeamParent;
     public Image[] m_teamArtWork;
+    public Sprite m_UnitDead;
     public Image[] m_teamHealth;
     public Image[] m_teamArmor;
     UnitCara[] m_team1;
@@ -296,7 +297,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 else
                 {
-                    m_teamArtWork[i].sprite = null;
+                    m_teamArtWork[i].sprite = m_UnitDead;
                     m_teamHealth[i].sprite = null;
                     m_teamArmor[i].sprite = null;
                 }
@@ -315,7 +316,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 else
                 {
-                    m_teamArtWork[i].sprite = null;
+                    m_teamArtWork[i].sprite = m_UnitDead;
                     m_teamHealth[i].sprite = null;
                     m_teamArmor[i].sprite = null;
                 }
@@ -565,7 +566,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void OnEffectCheck()
+    public void OnEffectCheck()
     {
         if (_onActiveUnit._isTaunt)
         {

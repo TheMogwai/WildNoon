@@ -37,42 +37,41 @@ public class JimLasso : UnitCara
 
     public override void AutoAttack(UnitCara target)
     {
-        if (target.JimPassifEffect)
+        if(!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
         {
-            StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target, Player._onActiveUnit.unitStats.firstSpell.m_damageBonus));
-        }
-        else
-        {
-            StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target, 0));
-            
+            if (target.JimPassifEffect)
+            {
+                StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target, Player._onActiveUnit.unitStats.firstSpell.m_damageBonus));
+            }
+            else
+            {
+                target.JimPassifEffect = true;
+                if (OnSpotted == null)
+                {
+                    OnSpotted = target;
+                }
+                else
+                {
+                    OnSpotted.JimPassifEffect = false;
+                    OnSpotted = target;
+                }
+                StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target, 0));
+            }
         }
     }
 
     public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target, int damage)
     {
-        if (!target.m_isInAnimation && unit.ActionPoints > 0)
-        {
-            target.JimPassifEffect = true;
-            if (OnSpotted == null)
-            {
-                OnSpotted = target;
-            }
-            else
-            {
-                OnSpotted.JimPassifEffect = false;
-                OnSpotted = target;
-            }
-            unit.m_isInAnimation = true;
-            unit.ActionPoints = unit.ActionPoints - unit.AutoAttackCost;
-            Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+        unit.m_isInAnimation = true;
+        unit.ActionPoints = unit.ActionPoints - unit.AutoAttackCost;
+        Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
 
-            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
-            unit.m_isInAnimation = false;
-            if (target != null)
-            {
-                int damageBonus = unit.Damage + damage;
-                target.OnTakingDamage(damageBonus);
-            }
+        yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+        unit.m_isInAnimation = false;
+        if (target != null)
+        {
+            int damageBonus = unit.Damage + damage;
+            target.OnTakingDamage(damageBonus);
         }
     }
 }
