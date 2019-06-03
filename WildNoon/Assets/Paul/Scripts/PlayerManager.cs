@@ -242,6 +242,8 @@ public class PlayerManager : MonoBehaviour
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
+        m_team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();
+        m_team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
         ResetArray();
         _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
@@ -255,7 +257,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         TurnCount = turnCountMax;
-
         TeamDisplay();
 
     }
@@ -282,25 +283,42 @@ public class PlayerManager : MonoBehaviour
 
     void TeamDisplay()
     {
-        m_team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();        
-        m_team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
+        
         if (!_onActiveUnit.IsTeam2)
         {
-            for (int i = 0, l = m_team1.Length; i < l; ++i)
+            for (int i = 0, l = 4; i < l; ++i)
             {
-                m_teamArtWork[i].sprite = m_team1[i].unitStats.characterArtwork;
-                m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_heatlh, m_team1[i].LifePoint);
-                m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_armor, m_team1[i].ArmorPoint);
+                if(m_team1[i] != null)
+                {
+                    m_teamArtWork[i].sprite = m_team1[i].unitStats.characterArtwork;
+                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_heatlh, m_team1[i].LifePoint);
+                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_armor, m_team1[i].ArmorPoint);
+                }
+                else
+                {
+                    m_teamArtWork[i].sprite = null;
+                    m_teamHealth[i].sprite = null;
+                    m_teamArmor[i].sprite = null;
+                }
             }
             playerTurnTopLeft.GetComponent<Image>().sprite = player1;
         }
         else
         {
-            for (int i = 0, l = m_team2.Length; i < l; ++i)
+            for (int i = 0, l = 4; i < l; ++i)
             {
-                m_teamArtWork[i].sprite = m_team2[i].unitStats.characterArtwork;
-                m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_heatlh, m_team2[i].LifePoint);
-                m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_armor, m_team2[i].ArmorPoint);
+                if (m_team2[i] != null)
+                {
+                    m_teamArtWork[i].sprite = m_team2[i].unitStats.characterArtwork;
+                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_heatlh, m_team2[i].LifePoint);
+                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_armor, m_team2[i].ArmorPoint);
+                }
+                else
+                {
+                    m_teamArtWork[i].sprite = null;
+                    m_teamHealth[i].sprite = null;
+                    m_teamArmor[i].sprite = null;
+                }
             }
             playerTurnTopLeft.GetComponent<Image>().sprite = player2;
         }
