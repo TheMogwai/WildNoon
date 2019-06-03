@@ -5,14 +5,15 @@ using Pathfinding;
 using Pathfinding.Examples;
 using UnityEngine.EventSystems;
 
-public class Jacky_SlowRange : IState
+public class Jim_Lasso : IState
 {
     Vector3 _heading;
     float distanceToPlayer;
     float range;
+    UnitCara target;
 
     TurnBasedManager m_TurnBaseManager;
-    public Jacky_SlowRange(TurnBasedManager turnBaseManager)
+    public Jim_Lasso(TurnBasedManager turnBaseManager)
     {
         m_TurnBaseManager = turnBaseManager;
     }
@@ -20,8 +21,25 @@ public class Jacky_SlowRange : IState
 
     public void Enter()
     {
-        m_TurnBaseManager.OnShowRange();
-        range = m_TurnBaseManager.Player._onActiveUnit.OnUsedSpell1.m_spellRange * m_TurnBaseManager.nodes;
+        if(target != null)
+        {
+            if (target.IsStunByLasso)
+            {
+                m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.Lasso(m_TurnBaseManager.Selected, target));
+                Debug.Log("Le tire et je pousse!");
+                GetOutOfState();
+            }
+            else
+            {
+                m_TurnBaseManager.OnShowRange();
+                range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
+            }
+        }
+        else
+        {
+            m_TurnBaseManager.OnShowRange();
+            range = m_TurnBaseManager.Player._onActiveUnit.OnUsedSpell1.m_spellRange * m_TurnBaseManager.nodes;
+        }
     }
 
 
@@ -35,10 +53,12 @@ public class Jacky_SlowRange : IState
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (m_TurnBaseManager.UnitUnderMouse == null)
+            if (m_TurnBaseManager.UnitUnderMouse == null && m_TurnBaseManager.NodeUnderMouse == null)
             {
                 GetOutOfState();
-                Debug.Log("Isleavingstate");
+            }
+            else
+            {
 
             }
         }
@@ -54,7 +74,6 @@ public class Jacky_SlowRange : IState
     {
         m_TurnBaseManager.ChangeState(0);
     }
-
     public void HandleButtonUnderRaySlowRange(Ray ray)
     {
         var unit = m_TurnBaseManager.GetByRay<UnitCara>(ray);
@@ -74,11 +93,11 @@ public class Jacky_SlowRange : IState
                 {
                     if(distanceToPlayer < range)
                     {
-                        Debug.Log("ClickTarget");
-                        m_TurnBaseManager.Player.OnCoolDownspell();
-                        m_TurnBaseManager.Player.OnCoolDownDisplay(2);
-                        m_TurnBaseManager.ChangeState(0);
-                        m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.SlowAttack(m_TurnBaseManager.Selected, unit));
+                        
+                        target = unit;
+                        GetOutOfState();
+                        m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.Lasso(m_TurnBaseManager.Selected, unit));
+                        m_TurnBaseManager.Player._onActiveUnit.HasUsedLasso = true;
                     }
                 }
             }

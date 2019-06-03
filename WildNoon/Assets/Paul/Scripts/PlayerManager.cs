@@ -59,12 +59,19 @@ public class PlayerManager : MonoBehaviour
     public Image m_armor;
     [Space]
     [Header("Team State")]
-    public GameObject m_isTeamParent;
+    //public GameObject m_isTeamParent;
     public Image[] m_teamArtWork;
     public Image[] m_teamHealth;
     public Image[] m_teamArmor;
     UnitCara[] m_team1;
     UnitCara[] m_team2;
+    [Space]
+    [Header("Player's Turn")]
+    public GameObject playerTurnMiddle;
+    public GameObject playerTurnTopLeft;
+    [Space]
+    public Sprite player1;
+    public Sprite player2;
 
     Image[] m_actionPointDisplay;
 
@@ -275,8 +282,8 @@ public class PlayerManager : MonoBehaviour
 
     void TeamDisplay()
     {
-        m_team1 = GetComponent<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();        
-        m_team2 = GetComponent<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
+        m_team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();        
+        m_team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
         if (!_onActiveUnit.IsTeam2)
         {
             for (int i = 0, l = m_team1.Length; i < l; ++i)
@@ -285,6 +292,7 @@ public class PlayerManager : MonoBehaviour
                 m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_heatlh, m_team1[i].LifePoint);
                 m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_armor, m_team1[i].ArmorPoint);
             }
+            playerTurnTopLeft.GetComponent<Image>().sprite = player1;
         }
         else
         {
@@ -294,7 +302,28 @@ public class PlayerManager : MonoBehaviour
                 m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_heatlh, m_team2[i].LifePoint);
                 m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_armor, m_team2[i].ArmorPoint);
             }
+            playerTurnTopLeft.GetComponent<Image>().sprite = player2;
         }
+        StartCoroutine(ShowWhoseTurn(_onActiveUnit.IsTeam2));
+    }
+
+    IEnumerator ShowWhoseTurn(bool IsTeam2)
+    {
+        if (!IsTeam2)
+        {
+            playerTurnMiddle.SetActive(true);
+            playerTurnMiddle.GetComponent<Image>().sprite = player1;
+            yield return new WaitForSeconds(1f);
+            playerTurnMiddle.SetActive(false);
+        }
+        else
+        {
+            playerTurnMiddle.SetActive(true);
+            playerTurnMiddle.GetComponent<Image>().sprite = player2;
+            yield return new WaitForSeconds(1f);
+            playerTurnMiddle.SetActive(false);
+        }
+        StopCoroutine(ShowWhoseTurn(false));
     }
 
     #region Time Manager
@@ -413,7 +442,6 @@ public class PlayerManager : MonoBehaviour
                     else
                     {
                         m_UnitsInGameCara[i].UnitWheelArt = m_UnitsInGameCara[i].unitStats.characterIsLastArtwork;
-                        Debug.Log("nop");
 
                     }
                 }
@@ -514,11 +542,19 @@ public class PlayerManager : MonoBehaviour
                 }
             }
 
-            if (_onActiveUnit._isTaunt)
-            {
+            OnEffectCheck();
+            _onActiveUnit.Courage = _onActiveUnit.Courage / 10;
+        }
+    }
 
+    void OnEffectCheck()
+    {
+        if (_onActiveUnit._isTaunt)
+        {
+            if (_onActiveUnit.SpellCaster != null)
+            {
                 TurnBasedManager.StartCoroutine(TurnBasedManager.MoveTowardTarget(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.SpellCaster));
-                for (int i = 0, l=SpellsButton.Length; i < l; ++i)
+                for (int i = 0, l = SpellsButton.Length; i < l; ++i)
                 {
                     SpellsButton[i].interactable = false;
                 }
@@ -526,22 +562,24 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0, l = SpellsButton.Length; i < l; ++i)
-                {
-                    SpellsButton[i].interactable = true;
-                }
-                NextTurn.interactable = true;
-
+                _onActiveUnit.TimerTaunt = 0;
+                _onActiveUnit._isTaunt = false;
             }
-            else
+        }else if (_onActiveUnit.IsStun1)
+        {
+            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    SpellsButton[i].interactable = true;
-                }
-                NextTurn.interactable = true;
+                SpellsButton[i].interactable = false;
             }
-            _onActiveUnit.Courage = _onActiveUnit.Courage / 10;
+            NextTurn.interactable = true;
+        }
+        else
+        {
+            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+            {
+                SpellsButton[i].interactable = true;
+            }
+            NextTurn.interactable = true;
         }
     }
 
@@ -587,13 +625,17 @@ public class PlayerManager : MonoBehaviour
         {
             OnUsedSpell = SpellNbr;
             TurnBasedManager.ChangeState(6); 
+        }else if (_onActiveUnit.unitStats == allUnits[1].unitStats && SpellNbr == 3)
+        {
+            OnUsedSpell = SpellNbr;
+            TurnBasedManager.ChangeState(10);
         }
         spellImage[SpellNbr].gameObject.SetActive(true);
         spellDescription[SpellNbr].text = _onActiveUnit.Spells1[SpellNbr].spell_Description;
     }
     public void OnLeaveHover(int SpellNbr)
     {
-        if (_onActiveUnit.unitStats == allUnits[0].unitStats && SpellNbr == 3)
+        if ((_onActiveUnit.unitStats == allUnits[0].unitStats || _onActiveUnit.unitStats == allUnits[1].unitStats) && SpellNbr == 3)
         {
             TurnBasedManager.ChangeState(0);
         }
@@ -669,12 +711,26 @@ public class PlayerManager : MonoBehaviour
                         m_UnitsInGameCara[i].ReduceDebuff();
                     }
                     m_UnitsInGameCara[i].ReduceTaunt();
+                    m_UnitsInGameCara[i].ReduceStun();
                     m_UnitsInGameCara[i].ActionPoints = 6;
                 }
             }
             //Debug.Log("Next Turn");
             ResetArray();
             TurnCount = turnCountMax;
+        }
+        for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
+        {
+            if (m_UnitsInGameCara[i].GetComponent<UnitCara>() != null)
+            {
+                m_UnitsInGameCara[i].IsStunByLasso = false;
+            }
+        }
+        if (_onActiveUnit.HasUsedLasso)
+        {
+            _onActiveUnit.CoolDownMethod(1);
+            OnCoolDownDisplay(1);
+            _onActiveUnit.HasUsedLasso = false;
         }
     }
     #endregion

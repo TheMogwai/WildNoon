@@ -177,6 +177,10 @@ namespace Pathfinding.Examples {
             new Jacky_TpRange(this),                // Numéro 5
             new Jacky_TauntRange(this),             // Numéro 6
             new Jacky_TauntBeingUsed(this),         // Numéro 7
+            new Jim_PoingAmericain(this),           // Numéro 8
+            new Jim_Lasso(this),                    // Numéro 9
+            new Jim_GrandLassoRange(this),          // Numéro 10
+            new Jim_GrandLassoBeingUsed(this),      // Numéro 11
 		});
 
 
@@ -245,6 +249,11 @@ namespace Pathfinding.Examples {
             GeneratePossibleRange(Selected, player._onActiveUnit.Spells1[player.OnUsedSpell].m_spellRange);
         }
 
+        /*public void ShowSpellRange(Astar3DButton nodeTargeted)
+        {
+            GeneratePossibleSpellRange(nodeTargeted, player._onActiveUnit.Spells1[player.OnUsedSpell].m_rangeBonus);
+        }*/
+
         #region Player Clique Sur Un Node
         public void HandleButtonUnderRay (Ray ray) {
 			var button = GetByRay<Astar3DButton>(ray);
@@ -305,8 +314,10 @@ namespace Pathfinding.Examples {
 
         public void AutoAttack(UnitCara target)
         {
-            StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target));
+            Player._onActiveUnit.AutoAttack(target);
         }
+
+        
 
         #region Move Unit
         public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
@@ -394,7 +405,7 @@ namespace Pathfinding.Examples {
         }
         #endregion
 
-        #region TauntMovement
+        #region TauntMethods
 
         public IEnumerator MoveTowardTarget(TurnBasedAI unit, TurnBasedAI target)
         {
@@ -498,52 +509,40 @@ namespace Pathfinding.Examples {
             }
             
             
-
-            //unit.transform.position = path.vectorPath[path.vectorPath.Count - 1];
-
-            nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
-
-            //Debug.Log("NodesParcouru " + nbrNodesParcourus);
-            mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
-
-
-            /*if (player.OnActiveUnit1.ActionPoints >= 2)
+            if(Player._onActiveUnit.ActionPoints > 0)
             {
-                nbrDeZoneDeMouvement = 2;
+                StartCoroutine(AutoAttackTaunt(Player._onActiveUnit, target.GetComponent<UnitCara>()));
             }
             else
             {
-                nbrDeZoneDeMouvement = player.OnActiveUnit1.ActionPoints;
-            }*/
-            //ChangeState(1);             //Respawn Nodes
+                Player.OnTurnPassed();
+            }
+
+            nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
+
+            mobiLeft = (unitMobility - nbrNodesParcourus) * 2.5f;
 
         }
 
-        #endregion
-
         public IEnumerator AutoAttackTaunt(UnitCara unit, UnitCara target)
         {
-            int actionLeft = Player._onActiveUnit.ActionPoints;
+            int actionLeft = unit.ActionPoints;
 
-                if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+            if (!target.m_isInAnimation && unit.ActionPoints > 0)
+            {
+                for (int i = 0; i < actionLeft; i++)
                 {
-                    for (int i = 0; i < actionLeft; i++)
+                    unit.m_isInAnimation = true;
+                    unit.ActionPoints = unit.ActionPoints - unit.AutoAttackCost;
+                    Player.ActionPointsDisplay(unit.ActionPoints);
+                    if (target != null)
                     {
-                        Player._onActiveUnit.m_isInAnimation = true;
-                        Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
-                        Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
-                        if (target != null)
-                        {
-                            target.OnTakingDamage(unit.Damage);
-                        }
-                        yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
-                        Player._onActiveUnit.m_isInAnimation = false;
+                        target.OnTakingDamage(unit.Damage);
                     }
+                    yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
+                    unit.m_isInAnimation = false;
                 }
-                else
-                {
-                    Player.OnTurnPassed();
-                }
+                Player.OnTurnPassed();
             }
             else
             {
@@ -551,23 +550,9 @@ namespace Pathfinding.Examples {
             }
         }
 
-        public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target)
-        {
-            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
-            {
-                Player._onActiveUnit.m_isInAnimation = true;
-                Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
-                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+        #endregion
 
-                yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
-                Player._onActiveUnit.m_isInAnimation = false;
-                if(target != null)
-                {
-                    target.OnTakingDamage(unit.Damage);
-                }
-            }
-
-        }
+        #region JackySpellsMethods
 
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
@@ -615,6 +600,167 @@ namespace Pathfinding.Examples {
                 }
             }
         }
+
+        #endregion
+
+        #region Lasso Methods
+        public IEnumerator MoveTowardLasso(TurnBasedAI unit, TurnBasedAI target)
+        {
+
+            
+            target.blocker.Unblock();
+
+            NNInfo nnInfo = AstarPath.active.GetNearest(target.transform.position, NNConstraint.None);
+
+            var path = ABPath.Construct(unit.transform.position, nnInfo.position);
+
+            path.traversalProvider = unit.traversalProvider;
+
+            AstarPath.StartPath(path);
+
+            yield return StartCoroutine(path.WaitForPath());  // le path error vient d'ici
+            if (path.error)
+            {
+
+                Debug.Log("Path failed:\n" + path.errorLog);
+                GeneratePossibleMoves(Selected);
+                yield break;
+            }
+
+
+            unit.targetNode = path.path[path.path.Count - 1];
+
+
+            yield return StartCoroutine(MoveAlongLassoPath(unit, path, movementSpeed, target));
+
+
+            unit.blocker.BlockAtCurrentPosition();
+
+        }
+
+        IEnumerator MoveAlongLassoPath(TurnBasedAI unit, ABPath path, float speed, TurnBasedAI target)
+        {
+            if (path.error || path.vectorPath.Count == 0)
+                throw new System.ArgumentException("Cannot follow an empty path");
+
+            float distanceAlongSegment = 0;
+            for (int i = 0; i < path.vectorPath.Count - 1; i++)
+            {
+                Debug.Log(path.vectorPath.Count - 1);
+                if( i < 2 && path.vectorPath.Count-1 != i+1)
+                {
+                    var p0 = path.vectorPath[Mathf.Max(i - 1, 0)];
+                    var p1 = path.vectorPath[i];
+                    var p2 = path.vectorPath[i + 1];
+                    var p3 = path.vectorPath[Mathf.Min(i + 2, path.vectorPath.Count - 1)];
+
+                    var segmentLength = Vector3.Distance(p1, p2);
+
+                    while (distanceAlongSegment < segmentLength)
+                    {
+                        var interpolatedPoint = AstarSplines.CatmullRom(p0, p1, p2, p3, distanceAlongSegment / segmentLength);
+                        unit.transform.position = interpolatedPoint;
+                        yield return null;
+                        distanceAlongSegment += Time.deltaTime * speed;
+                    }
+                    distanceAlongSegment -= segmentLength;
+                }
+            }
+        }
+        #endregion
+
+        #region JimSpellsMethods
+        public IEnumerator Lasso(TurnBasedAI unit, UnitCara target)
+        {
+            if(Player._onActiveUnit.ActionPoints - Player._onActiveUnit.OnUsedSpell1.cost >= 0)
+            {
+                Player._onActiveUnit.m_isInAnimation = true;
+
+                yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+                Player._onActiveUnit.m_isInAnimation = false;
+                if (!target.IsStunByLasso)
+                {
+                    if (target.OnCheckIfCCWorks())
+                    {
+                        target.IsStunByLasso = true;
+                        target.GetComponent<TurnBasedAI>().StartCoroutine(MoveTowardLasso(target.GetComponent<TurnBasedAI>(), unit));
+                    }
+                    if (target.JimPassifEffect)
+                    {
+                        target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage + unit.GetComponent<UnitCara>().unitStats.firstSpell.m_damageBonus);
+                    }
+                    else
+                    {
+                        target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
+                    }
+                }
+                else
+                {
+                    target.GetComponent<TurnBasedAI>().StartCoroutine(MoveTowardLasso(target.GetComponent<TurnBasedAI>(), unit));
+                    if (target.JimPassifEffect)
+                    {
+                        target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage + unit.GetComponent<UnitCara>().unitStats.firstSpell.m_damageBonus);
+                    }
+                    else
+                    {
+                        target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
+                    }
+                }
+                Player._onActiveUnit.ActionPoints -= Player._onActiveUnit.OnUsedSpell1.cost;
+                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+            }
+            Player._onActiveUnit.m_isInAnimation = false;
+        }
+
+        public IEnumerator PoingAmericain(TurnBasedAI unit, UnitCara target)
+        {
+            Player._onActiveUnit.m_isInAnimation = true;
+
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+            Player._onActiveUnit.m_isInAnimation = false;
+
+
+            float spellDamage = target.unitStats.m_heatlh * (unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage / 100f);
+            if (target.JimPassifEffect)
+            {
+                target.OnTakingDamage((int)spellDamage + unit.GetComponent<UnitCara>().unitStats.firstSpell.m_damageBonus);
+            }
+            else
+            {
+                target.OnTakingDamage((int)spellDamage);
+            }
+
+        }
+
+        List<UnitCara> m_Lassotarget;
+        public IEnumerator GrandLassoAttack(TurnBasedAI unit, List<UnitCara> target)
+        {
+            m_Lassotarget = target;
+            Player._onActiveUnit.m_isInAnimation = true;
+
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+            Player._onActiveUnit.m_isInAnimation = false;
+
+            for (int i = 0, l = target.Count; i < l; ++i)
+            {
+                if (target[i] != null)
+                {
+                    if (target[i].OnCheckIfCCWorks())
+                    {
+                        target[i].IsStun(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting);
+                    }
+                    if (target[i].JimPassifEffect)
+                    {
+                        target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage + unit.GetComponent<UnitCara>().unitStats.firstSpell.m_damageBonus);
+                    }
+                    else
+                    {
+                        target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
+                    }
+                }
+            }
+        }
+        #endregion
 
         public void DestroyPossibleMoves () {
             foreach (var go in possibleMoves) {
@@ -745,6 +891,41 @@ namespace Pathfinding.Examples {
             }
         }
 
+        /*public void GeneratePossibleSpellRange(Astar3DButton targetNode, int range)
+        {
+            Debug.Log(targetNode);
+
+            var path = ConstantPath.Construct(targetNode.transform.position, (range * 3) * 1000 + 1); ;
+            if (range < 5)
+            {
+                path = ConstantPath.Construct(targetNode.transform.position, (range * 3) * 1000 + 1);
+            }
+            else if (range < 7)
+            {
+                path = ConstantPath.Construct(targetNode.transform.position, (range * 3 - 1) * 1000 + 1);
+            }
+            else if (range < 9)
+            {
+                path = ConstantPath.Construct(targetNode.transform.position, (range * 3 - 2) * 1000 + 1);
+            }
+            else if (range < 11)
+            {
+                path = ConstantPath.Construct(targetNode.transform.position, (range * 3 - 3) * 1000 + 1);
+            }
+            foreach (var node in path.allNodes)
+            {
+                if (node != path.startNode)
+                {
+                    // Create a new node prefab to indicate a node that can be reached
+                    // NOTE: If you are going to use this in a real game, you might want to
+                    // use an object pool to avoid instantiating new GameObjects all the time
+                    var go = GameObject.Instantiate(m_movementNode, (Vector3)node.position, Quaternion.identity) as GameObject;
+                    possibleMoves.Add(go);
+
+                    go.GetComponent<Astar3DButton>().node = node;
+                }
+            }
+        }*/
     }
 }
 #region mobiLeft and ActionPoints Maths

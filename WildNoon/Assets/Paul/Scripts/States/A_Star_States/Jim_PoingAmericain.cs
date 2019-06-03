@@ -5,14 +5,14 @@ using Pathfinding;
 using Pathfinding.Examples;
 using UnityEngine.EventSystems;
 
-public class Jacky_SlowRange : IState
+public class Jim_PoingAmericain : IState
 {
     Vector3 _heading;
     float distanceToPlayer;
     float range;
 
     TurnBasedManager m_TurnBaseManager;
-    public Jacky_SlowRange(TurnBasedManager turnBaseManager)
+    public Jim_PoingAmericain(TurnBasedManager turnBaseManager)
     {
         m_TurnBaseManager = turnBaseManager;
     }
@@ -21,7 +21,7 @@ public class Jacky_SlowRange : IState
     public void Enter()
     {
         m_TurnBaseManager.OnShowRange();
-        range = m_TurnBaseManager.Player._onActiveUnit.OnUsedSpell1.m_spellRange * m_TurnBaseManager.nodes;
+        range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
     }
 
 
@@ -35,10 +35,12 @@ public class Jacky_SlowRange : IState
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (m_TurnBaseManager.UnitUnderMouse == null)
+            if (m_TurnBaseManager.UnitUnderMouse == null && m_TurnBaseManager.NodeUnderMouse == null)
             {
                 GetOutOfState();
-                Debug.Log("Isleavingstate");
+            }
+            else
+            {
 
             }
         }
@@ -74,11 +76,10 @@ public class Jacky_SlowRange : IState
                 {
                     if(distanceToPlayer < range)
                     {
-                        Debug.Log("ClickTarget");
                         m_TurnBaseManager.Player.OnCoolDownspell();
                         m_TurnBaseManager.Player.OnCoolDownDisplay(2);
                         m_TurnBaseManager.ChangeState(0);
-                        m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.SlowAttack(m_TurnBaseManager.Selected, unit));
+                        m_TurnBaseManager.StartCoroutine(m_TurnBaseManager.PoingAmericain(m_TurnBaseManager.Selected, unit));
                     }
                 }
             }

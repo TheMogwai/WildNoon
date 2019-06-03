@@ -54,6 +54,10 @@ public class UnitCara : MonoBehaviour {
     Spells OnUsedSpell;
     int OnNbrSpell;
 
+    bool _jimPassifEffect;
+    bool _isStunByLasso;
+    bool _hasUsedLasso;
+
     #region Get Set
     public bool HasPlayed
     {
@@ -366,6 +370,58 @@ public class UnitCara : MonoBehaviour {
             _timeToShowLifeBar = value;
         }
     }
+
+    public bool JimPassifEffect
+    {
+        get
+        {
+            return _jimPassifEffect;
+        }
+
+        set
+        {
+            _jimPassifEffect = value;
+        }
+    }
+
+    public bool IsStunByLasso
+    {
+        get
+        {
+            return _isStunByLasso;
+        }
+
+        set
+        {
+            _isStunByLasso = value;
+        }
+    }
+
+    public bool HasUsedLasso
+    {
+        get
+        {
+            return _hasUsedLasso;
+        }
+
+        set
+        {
+            _hasUsedLasso = value;
+        }
+    }
+
+    public bool IsStun1
+    {
+        get
+        {
+            return _isStun;
+        }
+
+        set
+        {
+            _isStun = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -412,9 +468,15 @@ public class UnitCara : MonoBehaviour {
     {
         m_canvas.transform.LookAt(Camera.main.transform);
         ShowingLifeBar();
+
+        m_vfx[2].SetActive(_jimPassifEffect);                   //Fx Indiquant que Jim fera plus de dégat à cette cible
+        m_vfx[0].SetActive(_isStunByLasso);                     //Fx Indiquant que la cible est stun par le lasso
+        m_vfx[1].SetActive(_isStun);                            //Fx Indiquant que la cible est stun
+
+
     }
 
-    
+
 
 
     void ShowingLifeBar()
@@ -460,6 +522,12 @@ public class UnitCara : MonoBehaviour {
     {
         
     }
+
+    public virtual void AutoAttack(UnitCara target)
+    {
+    }
+
+
 
     #region Debuff Methods
 
@@ -525,6 +593,27 @@ public class UnitCara : MonoBehaviour {
         {
             _isTaunt = false;
             m_vfx[nbrFxActif].SetActive(m_IsDebuffed);
+        }
+    }
+
+    bool _isStun;
+    int timerStun;
+
+    public void IsStun(int nbrOfTurnDebuffed)
+    {
+        _isStun = true;
+        timerStun = nbrOfTurnDebuffed;
+    }
+
+    public void ReduceStun()
+    {
+        if (_isStun && timerStun - 1 > 0)
+        {
+            timerStun--;
+        }
+        else
+        {
+            _isStun = false;
         }
     }
 

@@ -38,4 +38,26 @@ public class JackyTheKid : UnitCara
             ArmorPoint = unitStats.m_armor;
         }
     }
+
+    public override void AutoAttack(UnitCara target)
+    {
+        StartCoroutine(AutoAttackTimer(Player._onActiveUnit, target));
+    }
+
+    public IEnumerator AutoAttackTimer(UnitCara unit, UnitCara target)
+    {
+        if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0)
+        {
+            Player._onActiveUnit.m_isInAnimation = true;
+            Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
+            Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+
+            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+            Player._onActiveUnit.m_isInAnimation = false;
+            if (target != null)
+            {
+                target.OnTakingDamage(unit.Damage);
+            }
+        }
+    }
 }
