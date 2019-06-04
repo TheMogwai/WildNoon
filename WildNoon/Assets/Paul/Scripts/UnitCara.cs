@@ -500,6 +500,14 @@ public class UnitCara : MonoBehaviour {
         if(Selected != null)
         {
             Selected.SetActive(b);
+            if (!isTeam2)
+            {
+                Selected.GetComponent<Material>().color = Color.blue;
+            }
+            else
+            {
+                Selected.GetComponent<Material>().color = Color.red;
+            }
         }
     }
 
@@ -743,6 +751,14 @@ public class UnitCara : MonoBehaviour {
         }
         Destroy(Player.m_UnitsInGameDisplay[nbrInTheList].gameObject);
         GetComponent<TurnBasedAI>().blocker.Unblock();
+        if (!isTeam2)
+        {
+            Player.CheckTeamStatus(Player.Team1);
+        }
+        else
+        {
+            Player.CheckTeamStatus(Player.Team2);
+        }
         Destroy(gameObject);
         m_isInAnimation = false;
 

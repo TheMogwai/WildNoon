@@ -1,0 +1,938 @@
+fileFormatVersion: 2
+guid: 76f9c72ed1a026245893ab5d2cf2448b
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature_low
+    100002: Armature_low 1
+    100004: Arriere_low
+    100006: Arriere_low 1
+    100008: Balle_low
+    100010: Balle_low 1
+    100012: Barillet_low
+    100014: Barillet_low 1
+    100016: Bottes_low
+    100018: Boucle1_low
+    100020: Boucle2_low
+    100022: Boutons_low
+    100024: Canon_low
+    100026: Canon_low 1
+    100028: Ceinture1_low
+    100030: Ceinture2_low
+    100032: Chapeau_low
+    100034: Chemise_low
+    100036: Cheveux_low
+    100038: Chien_low
+    100040: Chien_low 1
+    100042: controller_Bassin
+    100044: Crosse_low
+    100046: Crosse_low 1
+    100048: Dents_Bas_low
+    100050: Dents_Haut_low
+    100052: Detente1_low
+    100054: Detente1_low 1
+    100056: Detente2_low
+    100058: Detente2_low 1
+    100060: Etui_low
+    100062: Gants_low
+    100064: Jacky_low
+    100066: Jacky_the_Kid_low
+    100068: Jeans_low
+    100070: joint_Bassin
+    100072: joint_Chapeau
+    100074: joint_Coude_left
+    100076: joint_Coude_right
+    100078: joint_Doigt1_left
+    100080: joint_Doigt1_right
+    100082: joint_Doigt2_left
+    100084: joint_Doigt2_right
+    100086: joint_Doigts1_left
+    100088: joint_Doigts1_right
+    100090: joint_Doigts2_left
+    100092: joint_Doigts2_right
+    100094: joint_Epaule_left
+    100096: joint_Epaule_right
+    100098: joint_Etui1
+    100100: joint_Etui2
+    100102: joint_Genou_left
+    100104: joint_Genou_right
+    100106: joint_Hanche_left
+    100108: joint_Hanche_right
+    100110: joint_Machoire
+    100112: joint_Nuque
+    100114: joint_PeaceMaker_Main
+    100116: joint_Pied_left
+    100118: joint_Pied_right
+    100120: joint_Plume1
+    100122: joint_Plume2
+    100124: joint_Poignet_left
+    100126: joint_Poignet_right
+    100128: joint_Pouce_left
+    100130: joint_Pouce_right
+    100132: joint_Talon_left
+    100134: joint_Talon_right
+    100136: joint_Tete
+    100138: joint_Torse
+    100140: joint_Ventre
+    100142: Langue_low
+    100144: Ourlets_low
+    100146: PeaceMaker_Etui_low
+    100148: PeaceMaker_low
+    100150: PeaceMaker_Main_low
+    100152: Pilosite_low
+    100154: Plume_low
+    100156: Sangle_Arriere_low
+    100158: Tete_low
+    100160: //RootNode
+    100162: Veste_low
+    100164: Yeux_low
+    400000: Armature_low
+    400002: Armature_low 1
+    400004: Arriere_low
+    400006: Arriere_low 1
+    400008: Balle_low
+    400010: Balle_low 1
+    400012: Barillet_low
+    400014: Barillet_low 1
+    400016: Bottes_low
+    400018: Boucle1_low
+    400020: Boucle2_low
+    400022: Boutons_low
+    400024: Canon_low
+    400026: Canon_low 1
+    400028: Ceinture1_low
+    400030: Ceinture2_low
+    400032: Chapeau_low
+    400034: Chemise_low
+    400036: Cheveux_low
+    400038: Chien_low
+    400040: Chien_low 1
+    400042: controller_Bassin
+    400044: Crosse_low
+    400046: Crosse_low 1
+    400048: Dents_Bas_low
+    400050: Dents_Haut_low
+    400052: Detente1_low
+    400054: Detente1_low 1
+    400056: Detente2_low
+    400058: Detente2_low 1
+    400060: Etui_low
+    400062: Gants_low
+    400064: Jacky_low
+    400066: Jacky_the_Kid_low
+    400068: Jeans_low
+    400070: joint_Bassin
+    400072: joint_Chapeau
+    400074: joint_Coude_left
+    400076: joint_Coude_right
+    400078: joint_Doigt1_left
+    400080: joint_Doigt1_right
+    400082: joint_Doigt2_left
+    400084: joint_Doigt2_right
+    400086: joint_Doigts1_left
+    400088: joint_Doigts1_right
+    400090: joint_Doigts2_left
+    400092: joint_Doigts2_right
+    400094: joint_Epaule_left
+    400096: joint_Epaule_right
+    400098: joint_Etui1
+    400100: joint_Etui2
+    400102: joint_Genou_left
+    400104: joint_Genou_right
+    400106: joint_Hanche_left
+    400108: joint_Hanche_right
+    400110: joint_Machoire
+    400112: joint_Nuque
+    400114: joint_PeaceMaker_Main
+    400116: joint_Pied_left
+    400118: joint_Pied_right
+    400120: joint_Plume1
+    400122: joint_Plume2
+    400124: joint_Poignet_left
+    400126: joint_Poignet_right
+    400128: joint_Pouce_left
+    400130: joint_Pouce_right
+    400132: joint_Talon_left
+    400134: joint_Talon_right
+    400136: joint_Tete
+    400138: joint_Torse
+    400140: joint_Ventre
+    400142: Langue_low
+    400144: Ourlets_low
+    400146: PeaceMaker_Etui_low
+    400148: PeaceMaker_low
+    400150: PeaceMaker_Main_low
+    400152: Pilosite_low
+    400154: Plume_low
+    400156: Sangle_Arriere_low
+    400158: Tete_low
+    400160: //RootNode
+    400162: Veste_low
+    400164: Yeux_low
+    2100000: Jacky
+    4300000: Tete_low
+    4300002: Cheveux_low
+    4300004: Pilosite_low
+    4300006: Veste_low
+    4300008: Ourlets_low
+    4300010: Gants_low
+    4300012: Chemise_low
+    4300014: Boutons_low
+    4300016: Ceinture1_low
+    4300018: Ceinture2_low
+    4300020: Boucle1_low
+    4300022: Boucle2_low
+    4300024: Jeans_low
+    4300026: Bottes_low
+    4300028: Sangle_Arriere_low
+    4300030: Chapeau_low
+    4300032: Plume_low
+    4300034: Langue_low
+    4300036: Yeux_low
+    4300038: Dents_Haut_low
+    4300040: Dents_Bas_low
+    4300042: Etui_low
+    4300044: Armature_low
+    4300046: Canon_low
+    4300048: Crosse_low
+    4300050: Arriere_low
+    4300052: Chien_low
+    4300054: Detente1_low
+    4300056: Detente2_low
+    4300058: Barillet_low
+    4300060: Balle_low
+    4300062: Armature_low
+    4300064: Canon_low
+    4300066: Crosse_low
+    4300068: Arriere_low
+    4300070: Chien_low
+    4300072: Detente1_low
+    4300074: Detente2_low
+    4300076: Barillet_low
+    4300078: Balle_low
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Armature_low
+    13700002: Armature_low 1
+    13700004: Arriere_low
+    13700006: Arriere_low 1
+    13700008: Balle_low
+    13700010: Balle_low 1
+    13700012: Barillet_low
+    13700014: Barillet_low 1
+    13700016: Bottes_low
+    13700018: Boucle1_low
+    13700020: Boucle2_low
+    13700022: Boutons_low
+    13700024: Canon_low
+    13700026: Canon_low 1
+    13700028: Ceinture1_low
+    13700030: Ceinture2_low
+    13700032: Chapeau_low
+    13700034: Chemise_low
+    13700036: Cheveux_low
+    13700038: Chien_low
+    13700040: Chien_low 1
+    13700042: Crosse_low
+    13700044: Crosse_low 1
+    13700046: Dents_Bas_low
+    13700048: Dents_Haut_low
+    13700050: Detente1_low
+    13700052: Detente1_low 1
+    13700054: Detente2_low
+    13700056: Detente2_low 1
+    13700058: Etui_low
+    13700060: Gants_low
+    13700062: Jeans_low
+    13700064: Langue_low
+    13700066: Ourlets_low
+    13700068: Pilosite_low
+    13700070: Plume_low
+    13700072: Sangle_Arriere_low
+    13700074: Tete_low
+    13700076: Veste_low
+    13700078: Yeux_low
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
+      improve retargeting quality.\n\t'joint_Torse' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'joint_Chapeau' has translation
+      animation that will be discarded.\n\t'joint_Chapeau' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'joint_Epaule_left' has
+      translation animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human:
+    - boneName: joint_Bassin
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Hanche_left
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Hanche_right
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Genou_left
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Genou_right
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Talon_left
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Talon_right
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Ventre
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Nuque
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Tete
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Epaule_left
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Epaule_right
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Coude_left
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Coude_right
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Poignet_left
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Poignet_right
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Doigts1_left
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Doigt1_right
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Pied_left
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Pied_right
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Plume1
+      humanName: LeftEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: joint_Machoire
+      humanName: RightEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Tir(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Jacky_the_Kid_low
+      parentName: Tir(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.01, y: 0.01, z: 0.01}
+    - name: Jacky_low
+      parentName: Jacky_the_Kid_low
+      position: {x: -0, y: 1.6554343, z: 0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Tete_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cheveux_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Pilosite_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Veste_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ourlets_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Gants_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chemise_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boutons_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ceinture1_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ceinture2_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boucle1_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boucle2_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Jeans_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bottes_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Sangle_Arriere_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chapeau_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Plume_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Langue_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Yeux_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Dents_Haut_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Dents_Bas_low
+      parentName: Jacky_low
+      position: {x: -0, y: -1.6554343, z: -0.28157502}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_Etui_low
+      parentName: Jacky_the_Kid_low
+      position: {x: 0.17067367, y: 0.8333007, z: -0.06759973}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Etui_low
+      parentName: PeaceMaker_Etui_low
+      position: {x: -0.17067367, y: -0.8333007, z: 0.06759973}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_low
+      parentName: PeaceMaker_Etui_low
+      position: {x: -0.17067367, y: -0.8333007, z: 0.06759973}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Canon_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Crosse_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arriere_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chien_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente1_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente2_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Barillet_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Balle_low 1
+      parentName: PeaceMaker_low
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PeaceMaker_Main_low
+      parentName: Jacky_the_Kid_low
+      position: {x: -0.734402, y: 0.75997436, z: -0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Canon_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Crosse_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arriere_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Chien_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente1_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Detente2_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Barillet_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Balle_low
+      parentName: PeaceMaker_Main_low
+      position: {x: 0.734402, y: -0.75997436, z: 0.049538318}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: controller_Bassin
+      parentName: Tir(Clone)
+      position: {x: -2.4651903e-34, y: 0.010516081, z: -0.0007096029}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.01, y: 0.01, z: 0.01}
+    - name: joint_Bassin
+      parentName: Tir(Clone)
+      position: {x: -2.4651903e-34, y: 0.010516081, z: -0.0007096029}
+      rotation: {x: 0, y: 0, z: 1.110223e-16, w: 1}
+      scale: {x: 0.01, y: 0.01, z: 0.01}
+    - name: joint_Ventre
+      parentName: joint_Bassin
+      position: {x: -2.8107802e-17, y: 0.15783632, z: 0.027365804}
+      rotation: {x: 0, y: -0, z: -1.110223e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Torse
+      parentName: joint_Ventre
+      position: {x: -4.8572257e-17, y: 0.15772462, z: 0.004174445}
+      rotation: {x: -0.024189778, y: 0.001157166, z: -0.0004222289, w: 0.9997067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Nuque
+      parentName: joint_Torse
+      position: {x: -4.0722634e-16, y: 0.16391861, z: -0.03000215}
+      rotation: {x: 0, y: -0, z: -0.000000006994283, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Tete
+      parentName: joint_Nuque
+      position: {x: 3.3631951e-16, y: 0.1222353, z: 0.0408226}
+      rotation: {x: 0, y: 0, z: 0.000000031421237, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Machoire
+      parentName: joint_Tete
+      position: {x: -7.611099e-17, y: 0.013653398, z: 0.025575606}
+      rotation: {x: -0.13793926, y: -0.0000000012224951, z: 0.000000008777842, w: 0.9904407}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Chapeau
+      parentName: joint_Tete
+      position: {x: -0.0012157835, y: 0.1273973, z: 0.029510314}
+      rotation: {x: 0, y: -0, z: -0.0000000070201307, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Plume1
+      parentName: joint_Chapeau
+      position: {x: -0.08408275, y: 0.010309815, z: 0.006105083}
+      rotation: {x: -6.977548e-17, y: 1.0940022e-23, z: 0.00000004976597, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Plume2
+      parentName: joint_Plume1
+      position: {x: 0.011263892, y: 0.08996415, z: -0.026640363}
+      rotation: {x: 0, y: -0, z: -0.0000000024278672, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Epaule_left
+      parentName: joint_Torse
+      position: {x: -0.14630601, y: 0.071391344, z: -0.03154025}
+      rotation: {x: 0.22829169, y: 0.38875696, z: 0.17308575, w: 0.87566674}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Coude_left
+      parentName: joint_Epaule_left
+      position: {x: -0.15211238, y: -0.21003687, z: -0.008986779}
+      rotation: {x: -0.14509466, y: 0.05346591, z: 0.00015747467, w: 0.98797214}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Poignet_left
+      parentName: joint_Coude_left
+      position: {x: -0.20044118, y: -0.29460305, z: -0.009705938}
+      rotation: {x: 0.2392596, y: 0.24674687, z: 0.019517232, w: 0.938877}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_PeaceMaker_Main
+      parentName: joint_Poignet_left
+      position: {x: -0.19363289, y: -0.09589804, z: 0.034591846}
+      rotation: {x: -2.1547995e-10, y: 1.6887107e-10, z: -6.10009e-11, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigt1_left
+      parentName: joint_Poignet_left
+      position: {x: -0.105780184, y: -0.08615166, z: 0.0018619448}
+      rotation: {x: -0.11035868, y: 0.19409807, z: 0.2881493, w: 0.93119115}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigt2_left
+      parentName: joint_Doigt1_left
+      position: {x: -0.0510177, y: -0.019780993, z: -0.0015656799}
+      rotation: {x: -0.07512166, y: 0.19500875, z: -0.015042515, w: 0.9778047}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Pouce_left
+      parentName: joint_Poignet_left
+      position: {x: -0.08135092, y: -0.006444931, z: 0.0043239966}
+      rotation: {x: 0.17318828, y: 0.068428, z: 0.51644754, w: 0.8358262}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigts1_left
+      parentName: joint_Poignet_left
+      position: {x: -0.07529324, y: -0.116084814, z: 0.00087653846}
+      rotation: {x: -0.1744793, y: 0.11600655, z: 0.00012351765, w: 0.9778034}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigts2_left
+      parentName: joint_Doigts1_left
+      position: {x: -0.022344112, y: -0.041704834, z: 0.0007541552}
+      rotation: {x: -0.1744793, y: 0.11600655, z: 0.00012351765, w: 0.9778034}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Epaule_right
+      parentName: joint_Torse
+      position: {x: 0.14568976, y: 0.07139099, z: -0.031540256}
+      rotation: {x: 0.22829169, y: -0.38875696, z: -0.17308575, w: 0.87566674}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Coude_right
+      parentName: joint_Epaule_right
+      position: {x: 0.152112, y: -0.21003997, z: -0.008986801}
+      rotation: {x: -0.14471309, y: -0.053488865, z: -6.9919937e-10, w: 0.98802686}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Poignet_right
+      parentName: joint_Coude_right
+      position: {x: 0.200441, y: -0.2946, z: -0.009705901}
+      rotation: {x: 0.2392596, y: -0.24674688, z: -0.019517228, w: 0.938877}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigt1_right
+      parentName: joint_Poignet_right
+      position: {x: 0.10578096, y: -0.086151004, z: 0.0018619001}
+      rotation: {x: -0.11036113, y: -0.19409695, z: -0.28815168, w: 0.9311904}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigt2_right
+      parentName: joint_Doigt1_right
+      position: {x: 0.051017046, y: -0.019780993, z: -0.001565598}
+      rotation: {x: -0.075123236, y: -0.1950102, z: 0.015045777, w: 0.9778043}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigts1_right
+      parentName: joint_Poignet_right
+      position: {x: 0.07529396, y: -0.11608404, z: 0.0008765012}
+      rotation: {x: -0.17447597, y: -0.116004206, z: -0.000120339006, w: 0.9778043}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Doigts2_right
+      parentName: joint_Doigts1_right
+      position: {x: 0.022344053, y: -0.041705012, z: 0.0007541999}
+      rotation: {x: -0.17447597, y: -0.116004206, z: -0.000120336976, w: 0.9778043}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Pouce_right
+      parentName: joint_Poignet_right
+      position: {x: 0.08135098, y: -0.0064450502, z: 0.0043239966}
+      rotation: {x: 0.17318743, y: -0.068428166, z: -0.5164473, w: 0.83582646}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Hanche_left
+      parentName: joint_Bassin
+      position: {x: -0.057439864, y: -0.054380417, z: 0}
+      rotation: {x: -0.04939022, y: 0.0000000041294648, z: -0.000000083506926, w: 0.9987796}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Genou_left
+      parentName: joint_Hanche_left
+      position: {x: -0.08916737, y: -0.3992801, z: 0.003831681}
+      rotation: {x: 0.0726794, y: -5.6084976e-12, z: -7.6963574e-11, w: 0.9973554}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Talon_left
+      parentName: joint_Genou_left
+      position: {x: -0.07735318, y: -0.55394405, z: -0.024112932}
+      rotation: {x: -0.024005761, y: -9.561609e-10, z: 0.000000039818996, w: 0.9997119}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Pied_left
+      parentName: joint_Talon_left
+      position: {x: 0.00527893, y: -0.012413155, z: 0.1680196}
+      rotation: {x: 0, y: 0, z: 0.000000004324354, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Hanche_right
+      parentName: joint_Bassin
+      position: {x: 0.0574399, y: -0.05438006, z: -0.000000007450581}
+      rotation: {x: -0.048752025, y: 7.372609e-10, z: -0.0000000034969636, w: 0.99881095}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Genou_right
+      parentName: joint_Hanche_right
+      position: {x: 0.089167096, y: -0.39929357, z: 0.0038304192}
+      rotation: {x: 0.0726794, y: -0.000000008961922, z: 0.000000104102334, w: 0.9973554}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Talon_right
+      parentName: joint_Genou_right
+      position: {x: 0.077353, y: -0.55394405, z: -0.024107639}
+      rotation: {x: -0.024005761, y: -9.561609e-10, z: 0.000000039818996, w: 0.9997119}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Pied_right
+      parentName: joint_Talon_right
+      position: {x: -0.0052790046, y: -0.012413099, z: 0.16801961}
+      rotation: {x: 0, y: 0, z: 0.000000004324354, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Etui1
+      parentName: joint_Hanche_right
+      position: {x: 0.072628595, y: 0.013732791, z: 1.0408341e-17}
+      rotation: {x: -0.0000000036174057, y: -5.2171234e-10, z: 6.810165e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: joint_Etui2
+      parentName: joint_Etui1
+      position: {x: 0.03734924, y: -0.107616484, z: 1.0408341e-17}
+      rotation: {x: 4.8020237e-17, y: 5.3563806e-17, z: -9.0910646e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 3
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
