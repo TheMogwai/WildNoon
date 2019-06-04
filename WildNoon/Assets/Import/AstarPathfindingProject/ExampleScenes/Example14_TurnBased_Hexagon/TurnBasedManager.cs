@@ -409,60 +409,67 @@ namespace Pathfinding.Examples {
 
         public IEnumerator MoveTowardTarget(TurnBasedAI unit, TurnBasedAI target)
         {
-
-            //NNInfo nn = AstarPath.active.GetNearest(transform.position, NNConstraint.Default);
-            //if (nn.node != null)
-            //{
-            //    Debug.Log("Found closest node at " + (Vector3)(nn.node.position) + " the closest point on the node was " + nn.clampedPosition);
-            //}
-            //else
-            //{
-            //    Debug.Log("No close node found, maybe adjust A* Inspector -> Settings -> Max Nearest Node Distance");
-            //}
-
-            //
-            target.blocker.Unblock();
-
-            NNInfo nnInfo = AstarPath.active.GetNearest(target.transform.position, NNConstraint.None);
-            //Debug.LogFormat("{0} - {1}", target.targetNode.position, nnInfo.position);
-
-            IsMoving = true;
-            var path = ABPath.Construct(unit.transform.position, nnInfo.position);
-
-            path.traversalProvider = unit.traversalProvider;
-
-            // Schedule the path for calculation
-            AstarPath.StartPath(path);
-
-            // Wait for the path calculation to complete
-            yield return StartCoroutine(path.WaitForPath());  // le path error vient d'ici
-            //Debug.Log(path.error);
-            if (path.error)
+            if (!unit.GetComponent<UnitCara>().JimPassifEffect)
             {
-                // Not obvious what to do here, but show the possible moves again
-                // and let the player choose another target node
-                // Likely a node was blocked between the possible moves being
-                // generated and the player choosing which node to move to
-                Debug.Log("Path failed:\n" + path.errorLog);
-                //state = State.SelectTarget;
-                GeneratePossibleMoves(Selected);
-                yield break;
+                //NNInfo nn = AstarPath.active.GetNearest(transform.position, NNConstraint.Default);
+                //if (nn.node != null)
+                //{
+                //    Debug.Log("Found closest node at " + (Vector3)(nn.node.position) + " the closest point on the node was " + nn.clampedPosition);
+                //}
+                //else
+                //{
+                //    Debug.Log("No close node found, maybe adjust A* Inspector -> Settings -> Max Nearest Node Distance");
+                //}
+
+                //
+                target.blocker.Unblock();
+
+                NNInfo nnInfo = AstarPath.active.GetNearest(target.transform.position, NNConstraint.None);
+                //Debug.LogFormat("{0} - {1}", target.targetNode.position, nnInfo.position);
+
+                IsMoving = true;
+                var path = ABPath.Construct(unit.transform.position, nnInfo.position);
+
+                path.traversalProvider = unit.traversalProvider;
+
+                // Schedule the path for calculation
+                AstarPath.StartPath(path);
+
+                // Wait for the path calculation to complete
+                yield return StartCoroutine(path.WaitForPath());  // le path error vient d'ici
+                //Debug.Log(path.error);
+                if (path.error)
+                {
+                    // Not obvious what to do here, but show the possible moves again
+                    // and let the player choose another target node
+                    // Likely a node was blocked between the possible moves being
+                    // generated and the player choosing which node to move to
+                    Debug.Log("Path failed:\n" + path.errorLog);
+                    //state = State.SelectTarget;
+                    GeneratePossibleMoves(Selected);
+                    yield break;
+                }
+
+                // Set the target node so other scripts know which
+                // node is the end point in the path
+                unit.targetNode = path.path[path.path.Count - 1];
+
+
+                yield return StartCoroutine(MoveAlongTauntPath(unit, path, movementSpeed, target));
+
+                //target.blocker.Unblock();
+
+                unit.blocker.BlockAtCurrentPosition();
+
+                // Select a new unit to move
+                IsMoving = false;
+                //state = State.SelectUnit;
             }
-
-            // Set the target node so other scripts know which
-            // node is the end point in the path
-            unit.targetNode = path.path[path.path.Count - 1];
-
-
-            yield return StartCoroutine(MoveAlongTauntPath(unit, path, movementSpeed, target));
-
-            //target.blocker.Unblock();
-
-            unit.blocker.BlockAtCurrentPosition();
-
-            // Select a new unit to move
-            IsMoving = false;
-            //state = State.SelectUnit;
+            else
+            {
+                unit.GetComponent<UnitCara>()._isTaunt = false;
+                Player.OnEffectCheck();
+            }
         }
         int nbrNodes = 0;
 

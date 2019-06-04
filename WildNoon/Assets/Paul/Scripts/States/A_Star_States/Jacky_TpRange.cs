@@ -27,9 +27,12 @@ public class Jacky_TpRange : IState
     {
         HandleButtonUnderRayTPRange(m_TurnBaseManager.Ray);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            GetOutOfState();
+            if (m_TurnBaseManager.UnitUnderMouse == null)
+            {
+                GetOutOfState();
+            }
         }
     }
 

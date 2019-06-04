@@ -29,9 +29,9 @@ public class SelectUnit : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.IsStun1 && !m_TurnBaseManager.Player._onActiveUnit._isTaunt)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.IsStun1 && !m_TurnBaseManager.Player._onActiveUnit._isTaunt && !m_TurnBaseManager.Player.IsDisabled)
         {
-            if (m_TurnBaseManager.Player != null)
+            if (m_TurnBaseManager.Player != null && m_TurnBaseManager.Player._onActiveUnit != null)
             {
                 if (m_TurnBaseManager.UnitUnderMouse == m_TurnBaseManager.Player._onActiveUnit.GetComponent<TurnBasedAI>() && !m_TurnBaseManager.Player._onActiveUnit._isTaunt)
                 {

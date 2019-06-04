@@ -469,9 +469,9 @@ public class UnitCara : MonoBehaviour {
         m_canvas.transform.LookAt(Camera.main.transform);
         ShowingLifeBar();
 
-        m_vfx[2].SetActive(_jimPassifEffect);                   //Fx Indiquant que Jim fera plus de dégat à cette cible
         m_vfx[0].SetActive(_isStunByLasso);                     //Fx Indiquant que la cible est stun par le lasso
-        m_vfx[1].SetActive(_isStun);                            //Fx Indiquant que la cible est stun
+        m_vfx[2].SetActive(_jimPassifEffect);                   //Fx Indiquant que Jim fera plus de dégat à cette cible
+        m_vfx[3].SetActive(_isStun);                            //Fx Indiquant que la cible est stun
 
 
     }

@@ -57,10 +57,12 @@ public class PlayerManager : MonoBehaviour
     [Header("Unit State")]
     public Image m_health;
     public Image m_armor;
+    public Image m_activeUnitState;
     [Space]
     [Header("Team State")]
     //public GameObject m_isTeamParent;
     public Image[] m_teamArtWork;
+    public Sprite m_UnitDead;
     public Image[] m_teamHealth;
     public Image[] m_teamArmor;
     UnitCara[] m_team1;
@@ -72,6 +74,13 @@ public class PlayerManager : MonoBehaviour
     [Space]
     public Sprite player1;
     public Sprite player2;
+    [Space]
+    [Header("Train Event")]
+    public int[] _turnOfEvent;
+    public int[] _turnEndOfEvent;
+    public AudioSource _EventAudio;
+    public Animator _EventAnimator;
+
 
     Image[] m_actionPointDisplay;
 
@@ -79,6 +88,8 @@ public class PlayerManager : MonoBehaviour
 
     int turnCount;
     int turnCountMax;
+
+    int _tableTurnCount = -1;
 
     int m_onUsedSpell;
 
@@ -162,7 +173,33 @@ public class PlayerManager : MonoBehaviour
             UnitsInGameDisplay = value;
         }
     }
-    #endregion 
+
+    public int TableTurnCount
+    {
+        get
+        {
+            return _tableTurnCount;
+        }
+
+        set
+        {
+            _tableTurnCount = value;
+        }
+    }
+
+    public bool IsDisabled
+    {
+        get
+        {
+            return _isDisabled;
+        }
+
+        set
+        {
+            _isDisabled = value;
+        }
+    }
+    #endregion
 
 
     private void Awake()
@@ -270,9 +307,9 @@ public class PlayerManager : MonoBehaviour
 
             Vector3 mousePosition = Input.mousePosition;
 
-            if (mousePosition.x < (Screen.width- (m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width/2)* m_actionPointsCosts.gameObject.transform.localScale.x))
+            if (mousePosition.x < (Screen.width - (m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width / 2) * m_actionPointsCosts.gameObject.transform.localScale.x))
             {
-                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x+((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x )/ 3), mousePosition.y, mousePosition.z);
+                m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x + ((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x) / 3), mousePosition.y, mousePosition.z);
             }
             else
             {
@@ -296,7 +333,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 else
                 {
-                    m_teamArtWork[i].sprite = null;
+                    m_teamArtWork[i].sprite = m_UnitDead;
                     m_teamHealth[i].sprite = null;
                     m_teamArmor[i].sprite = null;
                 }
@@ -315,7 +352,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 else
                 {
-                    m_teamArtWork[i].sprite = null;
+                    m_teamArtWork[i].sprite = m_UnitDead;
                     m_teamHealth[i].sprite = null;
                     m_teamArmor[i].sprite = null;
                 }
@@ -565,7 +602,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void OnEffectCheck()
+    public void OnEffectCheck()
     {
         if (_onActiveUnit._isTaunt)
         {
@@ -593,11 +630,11 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+            /*for (int i = 0, l = SpellsButton.Length; i < l; ++i)
             {
                 SpellsButton[i].interactable = true;
             }
-            NextTurn.interactable = true;
+            NextTurn.interactable = true;*/
         }
     }
 
@@ -648,15 +685,16 @@ public class PlayerManager : MonoBehaviour
             OnUsedSpell = SpellNbr;
             TurnBasedManager.ChangeState(10);
         }
+        TurnBasedManager.GeneratePossibleRange(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.Spells1[SpellNbr].m_spellRange);
         spellImage[SpellNbr].gameObject.SetActive(true);
         spellDescription[SpellNbr].text = _onActiveUnit.Spells1[SpellNbr].spell_Description;
     }
     public void OnLeaveHover(int SpellNbr)
     {
-        if ((_onActiveUnit.unitStats == allUnits[0].unitStats || _onActiveUnit.unitStats == allUnits[1].unitStats) && SpellNbr == 3)
+        /*if ((_onActiveUnit.unitStats == allUnits[0].unitStats || _onActiveUnit.unitStats == allUnits[1].unitStats) && SpellNbr == 3)
         {
-            TurnBasedManager.ChangeState(0);
-        }
+        }*/
+        TurnBasedManager.ChangeState(0);
         spellImage[SpellNbr].gameObject.SetActive(false);
 
     }
@@ -702,6 +740,7 @@ public class PlayerManager : MonoBehaviour
 
         m_armor.fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
         m_health.fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_heatlh, _onActiveUnit.LifePoint);
+        m_activeUnitState.sprite = _onActiveUnit.unitStats.characterArtwork;
     }
 
     void OnPositionCamera()
@@ -720,7 +759,6 @@ public class PlayerManager : MonoBehaviour
                 if (m_UnitsInGameCara[i].GetComponent<UnitCara>() != null)
                 {
                     m_UnitsInGameCara[i].HasPlayed = false;
-                    Debug.Log("nop");
                     m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].Courage * 10;
                     //m_UnitsInGameCara[i].Courage = m_UnitsInGameCara[i].unitStats.m_courage;
                     //m_UnitsInGameCara[i].Courage -= i;
@@ -737,6 +775,8 @@ public class PlayerManager : MonoBehaviour
             //Debug.Log("Next Turn");
             ResetArray();
             TurnCount = turnCountMax;
+            TableTurnCount++;
+            TrainEventTrigger(TableTurnCount);
         }
         for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
         {
@@ -752,6 +792,74 @@ public class PlayerManager : MonoBehaviour
             _onActiveUnit.HasUsedLasso = false;
         }
     }
+    #endregion
+
+    #region EventManager
+    
+    //Penser à mettre le script "animationfunctionCalling" sur le mesh du train (avec son animator et son trigger)
+
+    void TrainEventTrigger(int turn)
+    {
+        for (int i = 0 , l = _turnOfEvent.Length; i < l; ++i)
+        {
+            if(turn == _turnOfEvent[i] - 1 || turn == _turnEndOfEvent[i] - 1)
+            {
+                if(_EventAudio!= null)
+                {
+                    _EventAudio.Play();
+                }
+                break;
+
+            }
+            else if (turn == _turnOfEvent[i])
+            {
+                _EventAnimator.SetTrigger("On");
+                OnPlayerIsDisabled(true);
+                break;
+
+            }
+            /*else if (turn == _turnEndOfEvent[i] - 1)
+            {
+                if (_EventAudio != null)
+                {
+                    _EventAudio.Play();
+                }
+                break;
+
+            }*/
+            else if (turn == _turnEndOfEvent[i])
+            {
+                _EventAnimator.SetTrigger("Off");
+                OnPlayerIsDisabled(true);
+                break;
+
+            }
+        }
+    }
+    bool _isDisabled;
+    public void OnPlayerIsDisabled(bool on)
+    {
+        if (on)
+        {
+            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+            {
+                SpellsButton[i].interactable = false;
+            }
+            NextTurn.interactable = false;
+            IsDisabled = true;
+        }
+        else
+        {
+            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+            {
+                SpellsButton[i].interactable = true;
+            }
+            NextTurn.interactable = true;
+            IsDisabled = false;
+
+        }
+    }
+
     #endregion
 
     GameObject GetMax()

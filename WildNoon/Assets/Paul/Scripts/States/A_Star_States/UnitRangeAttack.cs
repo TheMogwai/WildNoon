@@ -28,7 +28,7 @@ public class UnitRangeAttack : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !m_TurnBaseManager.Player._onActiveUnit.m_isInAnimation && m_TurnBaseManager.UnitUnderMouse != null && !m_TurnBaseManager.Player._onActiveUnit.IsStun1 && !m_TurnBaseManager.Player._onActiveUnit._isTaunt && !m_TurnBaseManager.Player.IsDisabled)
         {
             var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player._onActiveUnit.gameObject.transform.position;
             _heading = heading;
