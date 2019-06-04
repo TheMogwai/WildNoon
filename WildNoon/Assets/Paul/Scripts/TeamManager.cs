@@ -293,8 +293,10 @@ public class TeamManager : MonoBehaviour
 
     public void OnMouseTrigger(int nbrInTheList)
     {
-
-        charaNbrInTheList = nbrInTheList;
+        if (!m_characterPressed)
+        {
+            charaNbrInTheList = nbrInTheList;
+        }
 
         #region Camera Texture
 

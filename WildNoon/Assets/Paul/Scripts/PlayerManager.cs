@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using RTS_Cam;
 using Pathfinding.Examples;
 
@@ -68,6 +69,12 @@ public class PlayerManager : MonoBehaviour
     UnitCara[] m_team1;
     UnitCara[] m_team2;
     [Space]
+    [Header("Menu Pause")]
+    public GameObject m_menu;
+    [Space]
+    [Header("Menu Win")]
+    public GameObject m_ecranVictoire;
+    public Text m_victoryDescription;
     [Header("Player's Turn")]
     public GameObject playerTurnMiddle;
     public GameObject playerTurnTopLeft;
@@ -199,6 +206,32 @@ public class PlayerManager : MonoBehaviour
             _isDisabled = value;
         }
     }
+
+    public UnitCara[] Team1
+    {
+        get
+        {
+            return m_team1;
+        }
+
+        set
+        {
+            m_team1 = value;
+        }
+    }
+
+    public UnitCara[] Team2
+    {
+        get
+        {
+            return m_team2;
+        }
+
+        set
+        {
+            m_team2 = value;
+        }
+    }
     #endregion
 
 
@@ -276,11 +309,21 @@ public class PlayerManager : MonoBehaviour
         #endregion
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Continue()
+    {
+        m_menu.SetActive(false);
+    }
+
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
-        m_team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();
-        m_team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
+        Team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();
+        Team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
         ResetArray();
         _onActiveUnit = GetMax().GetComponent<UnitCara>();
         OnTurnPassed();
@@ -316,6 +359,45 @@ public class PlayerManager : MonoBehaviour
                 m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x - ((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x) / 3), mousePosition.y, mousePosition.z);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !m_menu.activeSelf)
+        {
+            m_menu.SetActive(true);
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && m_menu.activeSelf)
+        {
+            m_menu.SetActive(false);
+        }
+        IsDisabled = m_menu.activeSelf;
+        
+        
+    }
+
+    public void CheckTeamStatus(UnitCara[] team)
+    {
+        for (int a = 0; a < team.Length; a++)
+        {
+            if (team[a] != null)
+            {
+                break;
+            }
+            else if (team[0] == null && team[1] == null && team[2] == null && team[3] == null)
+            {
+                Debug.Log("aie");
+                m_ecranVictoire.SetActive(true);
+                
+                if (!_onActiveUnit.IsTeam2)
+                {
+                    string teamColor = "bleu";
+                    m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
+                }
+                else
+                {
+                    string teamColor = "rouge";
+                    m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
+                }
+            }
+        }
     }
 
     void TeamDisplay()
@@ -325,11 +407,11 @@ public class PlayerManager : MonoBehaviour
         {
             for (int i = 0, l = 4; i < l; ++i)
             {
-                if(m_team1[i] != null)
+                if(Team1[i] != null)
                 {
-                    m_teamArtWork[i].sprite = m_team1[i].unitStats.characterArtwork;
-                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_heatlh, m_team1[i].LifePoint);
-                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team1[i].unitStats.m_armor, m_team1[i].ArmorPoint);
+                    m_teamArtWork[i].sprite = Team1[i].unitStats.characterArtwork;
+                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, Team1[i].unitStats.m_heatlh, Team1[i].LifePoint);
+                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, Team1[i].unitStats.m_armor, Team1[i].ArmorPoint);
                 }
                 else
                 {
@@ -344,11 +426,11 @@ public class PlayerManager : MonoBehaviour
         {
             for (int i = 0, l = 4; i < l; ++i)
             {
-                if (m_team2[i] != null)
+                if (Team2[i] != null)
                 {
-                    m_teamArtWork[i].sprite = m_team2[i].unitStats.characterArtwork;
-                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_heatlh, m_team2[i].LifePoint);
-                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, m_team2[i].unitStats.m_armor, m_team2[i].ArmorPoint);
+                    m_teamArtWork[i].sprite = Team2[i].unitStats.characterArtwork;
+                    m_teamHealth[i].fillAmount = Mathf.InverseLerp(0, Team2[i].unitStats.m_heatlh, Team2[i].LifePoint);
+                    m_teamArmor[i].fillAmount = Mathf.InverseLerp(0, Team2[i].unitStats.m_armor, Team2[i].ArmorPoint);
                 }
                 else
                 {
@@ -458,21 +540,24 @@ public class PlayerManager : MonoBehaviour
     bool[] isAtRopeTime; 
     void TimeCount(int i)
     {
-        timeleft[i] -= Time.deltaTime;
-        minutes[i] = Mathf.Floor(timeleft[i] / 60f);
-        seconds[i] = timeleft[i] % 60;
-        if (seconds[i] > 59)
+        if (!IsDisabled)
         {
-            seconds[i] = 59;
-        }
-
-        if(minutes[i] <= 0 && seconds[i] <= 0)
-        {
-            minutes[i] = 0;
-            if (!isAtRopeTime[i])
+            timeleft[i] -= Time.deltaTime;
+            minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+            seconds[i] = timeleft[i] % 60;
+            if (seconds[i] > 59)
             {
-                seconds[i] = ropeTime;
-                isAtRopeTime[i] = true;
+                seconds[i] = 59;
+            }
+
+            if(minutes[i] <= 0 && seconds[i] <= 0)
+            {
+                minutes[i] = 0;
+                if (!isAtRopeTime[i])
+                {
+                    seconds[i] = ropeTime;
+                    isAtRopeTime[i] = true;
+                }
             }
         }
     }
@@ -628,13 +713,13 @@ public class PlayerManager : MonoBehaviour
             }
             NextTurn.interactable = true;
         }
-        else
+        else if(!_onActiveUnit._isTaunt && !_onActiveUnit.IsStun1 && !IsDisabled)
         {
-            /*for (int i = 0, l = SpellsButton.Length; i < l; ++i)
+            for (int i = 0, l = SpellsButton.Length; i < l; ++i)
             {
                 SpellsButton[i].interactable = true;
             }
-            NextTurn.interactable = true;*/
+            NextTurn.interactable = true;
         }
     }
 
@@ -694,8 +779,11 @@ public class PlayerManager : MonoBehaviour
         /*if ((_onActiveUnit.unitStats == allUnits[0].unitStats || _onActiveUnit.unitStats == allUnits[1].unitStats) && SpellNbr == 3)
         {
         }*/
-        TurnBasedManager.ChangeState(0);
-        spellImage[SpellNbr].gameObject.SetActive(false);
+        if(TurnBasedManager.m_sM.CurrentStateIndex == 0 || TurnBasedManager.m_sM.CurrentStateIndex == 6 || TurnBasedManager.m_sM.CurrentStateIndex == 10 || TurnBasedManager.m_sM.CurrentStateIndex == 1)
+        {
+            TurnBasedManager.ChangeState(0);
+        }
+            spellImage[SpellNbr].gameObject.SetActive(false);
 
     }
     #endregion
