@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using RTS_Cam;
 using Pathfinding.Examples;
 
@@ -68,6 +69,8 @@ public class PlayerManager : MonoBehaviour
     UnitCara[] m_team1;
     UnitCara[] m_team2;
     [Space]
+    [Header("Menu Pause")]
+    public GameObject m_menu;
     [Header("Player's Turn")]
     public GameObject playerTurnMiddle;
     public GameObject playerTurnTopLeft;
@@ -276,6 +279,16 @@ public class PlayerManager : MonoBehaviour
         #endregion
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Continue()
+    {
+        m_menu.SetActive(false);
+    }
+
     public void Start()
     {
         cam = Camera.main.GetComponent<RTS_Camera>();
@@ -316,6 +329,17 @@ public class PlayerManager : MonoBehaviour
                 m_actionPointsCosts.gameObject.transform.position = new Vector3(mousePosition.x - ((m_actionPointsCosts.gameObject.GetComponent<RectTransform>().rect.width * m_actionPointsCosts.gameObject.transform.localScale.x) / 3), mousePosition.y, mousePosition.z);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !m_menu.activeSelf)
+        {
+            m_menu.SetActive(true);
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && m_menu.activeSelf)
+        {
+            m_menu.SetActive(false);
+        }
+        IsDisabled = m_menu.activeSelf;
+
     }
 
     void TeamDisplay()
@@ -458,21 +482,24 @@ public class PlayerManager : MonoBehaviour
     bool[] isAtRopeTime; 
     void TimeCount(int i)
     {
-        timeleft[i] -= Time.deltaTime;
-        minutes[i] = Mathf.Floor(timeleft[i] / 60f);
-        seconds[i] = timeleft[i] % 60;
-        if (seconds[i] > 59)
+        if (!IsDisabled)
         {
-            seconds[i] = 59;
-        }
-
-        if(minutes[i] <= 0 && seconds[i] <= 0)
-        {
-            minutes[i] = 0;
-            if (!isAtRopeTime[i])
+            timeleft[i] -= Time.deltaTime;
+            minutes[i] = Mathf.Floor(timeleft[i] / 60f);
+            seconds[i] = timeleft[i] % 60;
+            if (seconds[i] > 59)
             {
-                seconds[i] = ropeTime;
-                isAtRopeTime[i] = true;
+                seconds[i] = 59;
+            }
+
+            if(minutes[i] <= 0 && seconds[i] <= 0)
+            {
+                minutes[i] = 0;
+                if (!isAtRopeTime[i])
+                {
+                    seconds[i] = ropeTime;
+                    isAtRopeTime[i] = true;
+                }
             }
         }
     }
@@ -694,8 +721,11 @@ public class PlayerManager : MonoBehaviour
         /*if ((_onActiveUnit.unitStats == allUnits[0].unitStats || _onActiveUnit.unitStats == allUnits[1].unitStats) && SpellNbr == 3)
         {
         }*/
-        TurnBasedManager.ChangeState(0);
-        spellImage[SpellNbr].gameObject.SetActive(false);
+        if(TurnBasedManager.m_sM.CurrentStateIndex == 0 || TurnBasedManager.m_sM.CurrentStateIndex == 6 || TurnBasedManager.m_sM.CurrentStateIndex == 10 || TurnBasedManager.m_sM.CurrentStateIndex == 1)
+        {
+            TurnBasedManager.ChangeState(0);
+        }
+            spellImage[SpellNbr].gameObject.SetActive(false);
 
     }
     #endregion
