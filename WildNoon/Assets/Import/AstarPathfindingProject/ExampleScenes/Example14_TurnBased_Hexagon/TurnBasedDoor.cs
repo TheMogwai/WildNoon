@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using RTS_Cam;
 
 namespace Pathfinding.Examples
 {
@@ -59,9 +60,10 @@ namespace Pathfinding.Examples
             Player._onActiveUnit.m_isInAnimation = true;
             yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
             Player._onActiveUnit.m_isInAnimation = false;
+            Player.Cam.targetFollow = Player._onActiveUnit.gameObject.transform;
             Player._onActiveUnit.transform.position = linkedMine.position;
             Player._onActiveUnit.GetComponent<TurnBasedAI>().blocker.BlockAtCurrentPosition();
-            Player.TurnBasedManager.ChangeState(0);
+            Player.TurnBasedManager.ChangeState(1);
 
 
         }
@@ -101,7 +103,7 @@ namespace Pathfinding.Examples
                 //animator.CrossFade("open", 0.2f);
                 open = true;
                 StartCoroutine(TpToMine());
-                Player.TurnBasedManager.ChangeState(1);
+                Player.TurnBasedManager.ChangeState(0);
                 Player._onActiveUnit.ActionPoints -= tpCost;
                 Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
                 // Unblock the door node so that units can traverse it again

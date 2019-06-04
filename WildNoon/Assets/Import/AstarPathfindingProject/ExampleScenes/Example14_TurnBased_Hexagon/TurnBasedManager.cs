@@ -214,10 +214,20 @@ namespace Pathfinding.Examples {
 			}
 
 
-            if (UnitUnderMouse != null && UnitUnderMouse.GetComponent<UnitCara>().IsTeam2 != Player._onActiveUnit.IsTeam2)
+            if (UnitUnderMouse != null)
             {
-                UnitUnderMouse.GetComponent<UnitCara>().LifebarOn = true;
-                UnitUnderMouse.GetComponent<UnitCara>().TimeToShowLifeBar = UnitUnderMouse.GetComponent<UnitCara>().m_timeShowingLifeBar;
+                UnitCara unit = UnitUnderMouse.GetComponent<UnitCara>();
+                Player._unitUnderMouseStats.SetActive(true);
+                Player._statsSlider[0].fillAmount = Mathf.InverseLerp(0, unit.unitStats.m_heatlh, unit.LifePoint);
+                Player._statsSlider[1].fillAmount = Mathf.InverseLerp(0, unit.unitStats.m_armor, unit.ArmorPoint);
+                Player.HealthValueDisplay.text = string.Format("{0}/{1}", unit.LifePoint, unit.unitStats.m_heatlh);
+                Player.ArmorValueDisplay.text = string.Format("{0}/{1}", unit.ArmorPoint, unit.unitStats.m_armor);
+                /*UnitUnderMouse.GetComponent<UnitCara>().LifebarOn = true;
+                UnitUnderMouse.GetComponent<UnitCara>().TimeToShowLifeBar = UnitUnderMouse.GetComponent<UnitCara>().m_timeShowingLifeBar;*/
+            }
+            else
+            {
+                Player._unitUnderMouseStats.SetActive(false);
             }
         }
 
@@ -583,6 +593,10 @@ namespace Pathfinding.Examples {
                 target.Mobility -= unit.GetComponent<UnitCara>().OnUsedSpell1.m_mobilityMalus;
                 target.IsDebuffed(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting, 0);
             }
+            else
+            {
+                target.StartCoroutine(target.ResistanceFadeOut());
+            }
             target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
 
         }
@@ -602,6 +616,10 @@ namespace Pathfinding.Examples {
                     if (target[i].OnCheckIfCCWorks())
                     {
                         target[i].IsTaunt(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting, 1, unit);
+                    }
+                    else
+                    {
+                        target[i].StartCoroutine(target[i].ResistanceFadeOut());
                     }
                     target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
                 }
@@ -692,6 +710,11 @@ namespace Pathfinding.Examples {
                         target.IsStunByLasso = true;
                         target.GetComponent<TurnBasedAI>().StartCoroutine(MoveTowardLasso(target.GetComponent<TurnBasedAI>(), unit));
                     }
+                    else
+                    {
+                        target.StartCoroutine(target.ResistanceFadeOut());
+
+                    }
                     if (target.JimPassifEffect)
                     {
                         target.OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage + unit.GetComponent<UnitCara>().unitStats.firstSpell.m_damageBonus);
@@ -755,6 +778,10 @@ namespace Pathfinding.Examples {
                     if (target[i].OnCheckIfCCWorks())
                     {
                         target[i].IsStun(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting);
+                    }
+                    else
+                    {
+                        target[i].StartCoroutine(target[i].ResistanceFadeOut());
                     }
                     if (target[i].JimPassifEffect)
                     {

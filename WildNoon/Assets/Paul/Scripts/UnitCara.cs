@@ -14,12 +14,18 @@ public class UnitCara : MonoBehaviour {
     public Characters unitStats;
     [Space]
     [Header("LifeBar Var")]
-    public GameObject ArmorBar;
-    public GameObject LifeBar;
+    //public GameObject ArmorBar;
+    //public GameObject LifeBar;
     public GameObject m_canvas;
-    public float m_timeShowingLifeBar;
-    float _timeToShowLifeBar;
-    bool lifebarOn;
+    public GameObject m_resistance;
+    public GameObject m_damageDisplay;
+    public Color newColor;
+    public Color InitialColor;
+    public Transform InitialPosition;
+    float fadeTime = 1f;
+    //public float m_timeShowingLifeBar;
+    //float _timeToShowLifeBar;
+    //bool lifebarOn;
     [Space]
     [Header("Selection Nodes")]
 
@@ -345,7 +351,7 @@ public class UnitCara : MonoBehaviour {
         }
     }
 
-    public bool LifebarOn
+    /*public bool LifebarOn
     {
         get
         {
@@ -369,7 +375,7 @@ public class UnitCara : MonoBehaviour {
         {
             _timeToShowLifeBar = value;
         }
-    }
+    }*/
 
     public bool JimPassifEffect
     {
@@ -458,16 +464,17 @@ public class UnitCara : MonoBehaviour {
         {
             isTeam2 = false;
         }
+
+        //InitialPosition = m_damageDisplay.transform;
     }
 
     public void Start()
     {
-        
     }
     private void Update()
     {
         m_canvas.transform.LookAt(Camera.main.transform);
-        ShowingLifeBar();
+        //ShowingLifeBar();
 
         m_vfx[0].SetActive(_isStunByLasso);                     //Fx Indiquant que la cible est stun par le lasso
         m_vfx[2].SetActive(_jimPassifEffect);                   //Fx Indiquant que Jim fera plus de dégat à cette cible
@@ -479,7 +486,7 @@ public class UnitCara : MonoBehaviour {
 
 
 
-    void ShowingLifeBar()
+    /*void ShowingLifeBar()
     {
         if (LifebarOn && TimeToShowLifeBar > 0)
         {
@@ -493,7 +500,7 @@ public class UnitCara : MonoBehaviour {
             m_canvas.gameObject.SetActive(false);
             TimeToShowLifeBar = m_timeShowingLifeBar;
         }
-    }
+    }*/
 
     public void ActivateSelectedGameObject(bool b)
     {
@@ -502,11 +509,11 @@ public class UnitCara : MonoBehaviour {
             Selected.SetActive(b);
             if (!isTeam2)
             {
-                Selected.GetComponent<Material>().color = Color.blue;
+                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
             }
             else
             {
-                Selected.GetComponent<Material>().color = Color.red;
+                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
             }
         }
     }
@@ -671,11 +678,11 @@ public class UnitCara : MonoBehaviour {
 
     public void OnTakingDamage(int damage)
     {
-        if (!m_canvas.gameObject.activeSelf)
+        /*if (!m_canvas.gameObject.activeSelf)
         {
             LifebarOn = true;
             TimeToShowLifeBar = m_timeShowingLifeBar;
-        }
+        }*/
 
         if ((LifePoint + ArmorPoint)-damage > 0)
         {
@@ -701,10 +708,47 @@ public class UnitCara : MonoBehaviour {
             LifePoint = 0;
             OnUnitDead();
         }
-        ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint);
-        LifeBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_heatlh, LifePoint);
+        StartCoroutine(DamageFadeOut(damage));
+        /*ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint);
+        LifeBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_heatlh, LifePoint);*/
     }
-
+    IEnumerator DamageFadeOut(int damage)
+    {
+        m_damageDisplay.SetActive(true);
+        m_damageDisplay.GetComponent<Text>().text = string.Format("{0} dégâts", damage);
+        m_damageDisplay.GetComponent<Text>().color = InitialColor;
+        m_damageDisplay.transform.position = InitialPosition.position;
+        var alpha = m_damageDisplay.GetComponent<Text>().color;
+        var pos = m_damageDisplay.transform.position;
+        alpha = InitialColor;
+        while (alpha.a > 0)
+        {
+            alpha = Color.Lerp(alpha, newColor, fadeTime * Time.deltaTime);
+            pos.y = Mathf.Lerp(m_damageDisplay.transform.position.y, m_damageDisplay.transform.position.y + 0.5f, fadeTime * Time.deltaTime);
+            m_damageDisplay.GetComponent<Text>().color = alpha;
+            m_damageDisplay.transform.position = pos;
+            yield return null;
+        }
+        m_damageDisplay.SetActive(false);
+    }
+    public IEnumerator ResistanceFadeOut()
+    {
+        m_resistance.SetActive(true);
+        m_resistance.GetComponent<Text>().color = InitialColor;
+        m_resistance.transform.position = m_canvas.transform.position;
+        var alpha = m_resistance.GetComponent<Text>().color;
+        var pos = m_resistance.transform.position;
+        alpha = InitialColor;
+        while (alpha.a > 0)
+        {
+            alpha = Color.Lerp(alpha, newColor, fadeTime * Time.deltaTime);
+            pos.y = Mathf.Lerp(m_resistance.transform.position.y, m_resistance.transform.position.y + 0.1f, fadeTime * Time.deltaTime);
+            m_resistance.GetComponent<Text>().color = alpha;
+            m_resistance.transform.position = pos;
+            yield return null;
+        }
+        m_resistance.SetActive(false);
+    }
     void OnUnitDead()
     {
         player.TurnCount--;
