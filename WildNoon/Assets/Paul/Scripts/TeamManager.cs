@@ -34,6 +34,13 @@ public class TeamManager : MonoBehaviour
     public Image m_mobility;
     public Image m_heatlh;
     public Image m_armor;
+    [Header("Stats Display")]
+    public Text m_Tcourage;
+    public Text m_Tdamage;
+    public Text m_Trange;
+    public Text m_Tmobility;
+    public Text m_Theatlh;
+    public Text m_Tarmor;
     [Space]
     [Header("Stats Max")]
     public int m_courageMax;
@@ -84,6 +91,7 @@ public class TeamManager : MonoBehaviour
 
 
     Image[] StatsDisplay;
+    Text[] StatsValueDisplay;
     Image[] SpellArtDisplay;
     Text[] SpellDescription;
 
@@ -112,6 +120,7 @@ public class TeamManager : MonoBehaviour
         character = CharactersParents.GetComponentsInChildren<UnitStatsButtons>();
         m_unit_Spawer = FindObjectOfType<Unit_Spawer>().gameObject;
         StatsDisplay = new Image[6] { m_courage, m_heatlh, m_armor, m_damage, m_range, m_mobility };
+        StatsValueDisplay = new Text[6] { m_Tcourage, m_Theatlh, m_Tarmor, m_Tdamage, m_Trange, m_Tmobility };
         SpellArtDisplay = new Image[4] { m_spell_1, m_spell_2, m_spell_3, m_spell_4 };
         SpellDescription = new Text[4] { m_spell_1_Description, m_spell_2_Description, m_spell_3_Description, m_spell_4_Description};
 
@@ -143,6 +152,7 @@ public class TeamManager : MonoBehaviour
             {
 
                 StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, CharacterStatsMax[i], CharacterStats[i]);
+                StatsValueDisplay[i].text = string.Format("{0}", CharacterStats[i]);
             }
 
             #endregion

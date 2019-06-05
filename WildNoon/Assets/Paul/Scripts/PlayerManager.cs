@@ -24,9 +24,6 @@ public class PlayerManager : MonoBehaviour
     TurnBasedManager m_turnBasedManager;
     [Header("UnitCara Exsisting")]
     public UnitCara[] allUnits;
-    /*[Space]
-    [Header("Canvas")]
-    public GameObject Canvas;*/
     [Space]
     [Header("Spells Button Array")]
     public Button[] SpellsButton;
@@ -58,6 +55,8 @@ public class PlayerManager : MonoBehaviour
     [Header("Unit State")]
     public Image m_health;
     public Image m_armor;
+    public Text[] _statsValue;
+    public Text[] _statsMaxValue;
     public Image m_activeUnitState;
     [Space]
     [Header("Team State")]
@@ -66,6 +65,8 @@ public class PlayerManager : MonoBehaviour
     public Sprite m_UnitDead;
     public Image[] m_teamHealth;
     public Image[] m_teamArmor;
+    public Image[] StatsValueDisplay;
+    Text[] _statsTeamValue;
     UnitCara[] m_team1;
     UnitCara[] m_team2;
     [Space]
@@ -81,6 +82,12 @@ public class PlayerManager : MonoBehaviour
     [Space]
     public Sprite player1;
     public Sprite player2;
+    [Space]
+    [Header("Unit Under Mouse Stats")]
+    public GameObject _unitUnderMouseStats;
+    public Image[] _statsSlider;
+    Text _healthValueDisplay;
+    Text _armorValueDisplay;
     [Space]
     [Header("Train Event")]
     public int[] _turnOfEvent;
@@ -232,40 +239,58 @@ public class PlayerManager : MonoBehaviour
             m_team2 = value;
         }
     }
+
+    public Text HealthValueDisplay
+    {
+        get
+        {
+            return _healthValueDisplay;
+        }
+
+        set
+        {
+            _healthValueDisplay = value;
+        }
+    }
+
+    public Text ArmorValueDisplay
+    {
+        get
+        {
+            return _armorValueDisplay;
+        }
+
+        set
+        {
+            _armorValueDisplay = value;
+        }
+    }
+
+    public RTS_Camera Cam
+    {
+        get
+        {
+            return cam;
+        }
+
+        set
+        {
+            cam = value;
+        }
+    }
     #endregion
 
 
     private void Awake()
     {
-        /*SpellsButton = new Button[4];
-        m_teamArtWork = new Image[4];
-        m_teamHealth = new Image[4];
-        m_teamArmor = new Image[4];
-        for (int i = 0; i < SpellsButton.Length; i++)
-        {
-            SpellsButton[i] = Canvas.GetComponentInChildren<IsSpellButton>().gameObject.GetComponent<Button>();
-        }
-        ActionPointsLayout = Canvas.GetComponentInChildren<IsActionPointLayout>().gameObject;
-        UnitsInGameLayout = Canvas.GetComponentInChildren<IsUnitInWheelDisplay>().gameObject;
-        m_actionPointsCosts = Canvas.GetComponentInChildren<IsCostDisplay>().gameObject.GetComponent<Text>();
-        m_TimerParent = Canvas.GetComponentInChildren<IsTimerParent>().gameObject;
-        m_isTeamParent = Canvas.GetComponentInChildren<IsTeamParent>().gameObject;
-
-        for (int i = 0; i < 4; i++)
-        {
-            m_teamArtWork[i] = m_isTeamParent.GetComponentInChildren<IsTeamArtWork>().gameObject.GetComponent<Image>();
-            m_teamHealth[i] = m_isTeamParent.GetComponentInChildren<IsTeamHealth>().gameObject.GetComponent<Image>();
-            m_teamArmor[i] = m_isTeamParent.GetComponentInChildren<IsTeamArmor>().gameObject.GetComponent<Image>();
-
-        }*/
-
 
         TurnBasedManager = FindObjectOfType<TurnBasedManager>();
         m_actionPointDisplay = new Image[6];
         m_actionPointDisplay = ActionPointsLayout.GetComponentsInChildren<Image>();
         m_actionPointsCosts.gameObject.SetActive(false);
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
-
+        HealthValueDisplay = _statsSlider[0].GetComponentInChildren<Text>();
+        ArmorValueDisplay = _statsSlider[1].GetComponentInChildren<Text>();
 
         #region Spell Description Var
         spellImage = new DescriptionPanel[SpellsButton.Length];
@@ -309,6 +334,7 @@ public class PlayerManager : MonoBehaviour
         #endregion
     }
 
+    #region pause Menu
     public void Quit()
     {
         Application.Quit();
@@ -318,10 +344,11 @@ public class PlayerManager : MonoBehaviour
     {
         m_menu.SetActive(false);
     }
+    #endregion
 
     public void Start()
     {
-        cam = Camera.main.GetComponent<RTS_Camera>();
+        Cam = Camera.main.GetComponent<RTS_Camera>();
         Team1 = FindObjectOfType<InGameSpawner>().m_Team_1_Root.GetComponentsInChildren<UnitCara>();
         Team2 = FindObjectOfType<InGameSpawner>().m_Team_2_Root.GetComponentsInChildren<UnitCara>();
         ResetArray();
@@ -329,13 +356,13 @@ public class PlayerManager : MonoBehaviour
         OnTurnPassed();
         TurnCount = turnCountMax;
         InitiateWheelDisplay();
-        for (int i = 0; i < UnitsInGameCara.Length; i++)
+        /*for (int i = 0; i < UnitsInGameCara.Length; i++)
         {
             if (UnitsInGameCara[i].m_canvas.gameObject.activeSelf)
             {
                 UnitsInGameCara[i].m_canvas.gameObject.SetActive(false);
             }
-        }
+        }*/
 
         TeamDisplay();
 
@@ -444,6 +471,43 @@ public class PlayerManager : MonoBehaviour
         StartCoroutine(ShowWhoseTurn(_onActiveUnit.IsTeam2));
     }
 
+    public void OnPointerOnArmor(int nbrInTheTeam)
+    {
+        StatsValueDisplay[nbrInTheTeam].gameObject.SetActive(true);
+        StatsValueDisplay[nbrInTheTeam].gameObject.SetActive(true);
+        _statsTeamValue = new Text[2];
+        _statsTeamValue = StatsValueDisplay[nbrInTheTeam].gameObject.GetComponentsInChildren<Text>();
+        if (!_onActiveUnit.IsTeam2)
+        {
+            if (Team1[nbrInTheTeam] != null)
+                _statsTeamValue[0].text = string.Format("{0}", Team1[nbrInTheTeam].ArmorPoint);
+                _statsTeamValue[1].text = string.Format("{0}", Team1[nbrInTheTeam].unitStats.m_armor);
+        }
+        else
+        {
+            if (Team2[nbrInTheTeam] != null)
+                _statsTeamValue[0].text = string.Format("{0}", Team2[nbrInTheTeam].ArmorPoint);
+                _statsTeamValue[1].text = string.Format("{0}", Team2[nbrInTheTeam].unitStats.m_armor);
+        }
+    }
+    public void OnPointerOnHealth(int nbrInTheTeam)
+    {
+        StatsValueDisplay[nbrInTheTeam].gameObject.SetActive(true);
+        _statsTeamValue = new Text[2];
+        _statsTeamValue = StatsValueDisplay[nbrInTheTeam].gameObject.GetComponentsInChildren<Text>();
+        if (!_onActiveUnit.IsTeam2)
+        {
+            if(Team1[nbrInTheTeam] != null)
+                _statsTeamValue[0].text = string.Format("{0}", Team1[nbrInTheTeam].LifePoint);
+                _statsTeamValue[1].text = string.Format("{0}", Team1[nbrInTheTeam].unitStats.m_heatlh);
+        }
+        else
+        {
+            if (Team2[nbrInTheTeam] != null)
+                _statsTeamValue[0].text = string.Format("{0}", Team2[nbrInTheTeam].LifePoint);
+                _statsTeamValue[1].text = string.Format("{0}", Team2[nbrInTheTeam].unitStats.m_heatlh);
+        }
+    }
     IEnumerator ShowWhoseTurn(bool IsTeam2)
     {
         if (!IsTeam2)
@@ -665,7 +729,7 @@ public class PlayerManager : MonoBehaviour
             TurnBasedManager.ChangeState(0);
             TurnBasedManager.OnSetMouvement();
             OnPassiveEffectTrigger();
-            _onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
+            //_onActiveUnit.ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
             TeamDisplay();
             for (int i = 0; i < 2; i++)
             {
@@ -825,7 +889,10 @@ public class PlayerManager : MonoBehaviour
                 SpellsButton[i].GetComponentInChildren<Text>().text = "Spell " + i;
             }
         }
-
+        _statsValue[0].text = string.Format("{0}", _onActiveUnit.LifePoint);
+        _statsValue[1].text = string.Format("{0}", _onActiveUnit.ArmorPoint);
+        _statsMaxValue[0].text = string.Format("{0}", _onActiveUnit.unitStats.m_heatlh);
+        _statsMaxValue[1].text = string.Format("{0}", _onActiveUnit.unitStats.m_armor);
         m_armor.fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_armor, _onActiveUnit.ArmorPoint);
         m_health.fillAmount = Mathf.InverseLerp(0, _onActiveUnit.unitStats.m_heatlh, _onActiveUnit.LifePoint);
         m_activeUnitState.sprite = _onActiveUnit.unitStats.characterArtwork;
@@ -833,7 +900,7 @@ public class PlayerManager : MonoBehaviour
 
     void OnPositionCamera()
     {
-        cam.targetFollow = _onActiveUnit.gameObject.transform;
+        Cam.targetFollow = _onActiveUnit.gameObject.transform;
     }
     #endregion
 
