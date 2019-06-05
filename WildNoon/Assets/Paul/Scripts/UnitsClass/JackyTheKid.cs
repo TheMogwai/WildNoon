@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class JackyTheKid : UnitCara
 {
+
     public override void OnUsingSpell(Spells Spell, int i)
     {
         base.OnUsingSpell(Spell, i);
@@ -52,7 +53,7 @@ public class JackyTheKid : UnitCara
             Player._onActiveUnit.ActionPoints = Player._onActiveUnit.ActionPoints - Player._onActiveUnit.AutoAttackCost;
             Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
 
-            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+            yield return new WaitForSeconds(1.75f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
             if (target != null)
             {

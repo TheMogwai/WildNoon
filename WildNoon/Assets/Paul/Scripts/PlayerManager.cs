@@ -758,6 +758,11 @@ public class PlayerManager : MonoBehaviour
             if (_onActiveUnit.SpellCaster != null)
             {
                 TurnBasedManager.StartCoroutine(TurnBasedManager.MoveTowardTarget(_onActiveUnit.GetComponent<TurnBasedAI>(), _onActiveUnit.SpellCaster));
+                if (TurnBasedManager.Player._onActiveUnit.Unit_Animator != null)
+                {
+                    TurnBasedManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Move");
+                    TurnBasedManager.Player._onActiveUnit.Unit_mesh.transform.LookAt(_onActiveUnit.SpellCaster.transform.position);
+                }
                 for (int i = 0, l = SpellsButton.Length; i < l; ++i)
                 {
                     SpellsButton[i].interactable = false;
