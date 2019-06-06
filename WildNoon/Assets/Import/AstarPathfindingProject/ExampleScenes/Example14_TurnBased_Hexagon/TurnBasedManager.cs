@@ -499,6 +499,14 @@ namespace Pathfinding.Examples {
                 {
                     Player._onActiveUnit.Unit_Animator.SetTrigger("MoveOff");
                 }
+                if(Player._onActiveUnit.ActionPoints > 0)
+                {
+                    StartCoroutine(AutoAttackTaunt(Player._onActiveUnit, target.GetComponent<UnitCara>()));
+                }
+                else
+                {
+                    Player.OnTurnPassed();
+                }
                 //state = State.SelectUnit;
             }
             else
@@ -552,14 +560,6 @@ namespace Pathfinding.Examples {
             }
             
             
-            if(Player._onActiveUnit.ActionPoints > 0)
-            {
-                StartCoroutine(AutoAttackTaunt(Player._onActiveUnit, target.GetComponent<UnitCara>()));
-            }
-            else
-            {
-                Player.OnTurnPassed();
-            }
 
             nbrNodesParcourus += path.vectorPath.Count - 1;         //Nbr de Nodes Parcouru
 
@@ -657,7 +657,10 @@ namespace Pathfinding.Examples {
                     {
                         target[i].StartCoroutine(target[i].ResistanceFadeOut());
                     }
-                    target[i].Unit_mesh.transform.LookAt(unit.transform.position);
+                    if(target[i].Unit_mesh != null)
+                    {
+                        target[i].Unit_mesh.transform.LookAt(unit.transform.position);
+                    }
                     target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
                 }
             }
