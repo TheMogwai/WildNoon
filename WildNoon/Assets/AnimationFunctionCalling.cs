@@ -6,13 +6,14 @@ using Pathfinding;
 public class AnimationFunctionCalling : MonoBehaviour
 {
     PlayerManager Player;
-    SingleNodeBlocker blocker;
+    public GameObject blockerParent;
+    SingleNodeBlocker[] blocker;
 
     int i =0;
     private void Awake()
     {
         Player = FindObjectOfType<PlayerManager>();
-        blocker = GetComponent<SingleNodeBlocker>();
+        blocker = blockerParent.GetComponentsInChildren<SingleNodeBlocker>();
 
     }
 
@@ -21,12 +22,18 @@ public class AnimationFunctionCalling : MonoBehaviour
         Player.OnPlayerIsDisabled(false);
         if(i == 0)
         {
-            blocker.BlockAtCurrentPosition();
+            for (int i = 0, l = blocker.Length; i < l; ++i)
+            {
+                blocker[i].BlockAtCurrentPosition();
+            }
             i++;
         }
         else if(i == 1)
         {
-            blocker.Unblock();
+            for (int i = 0, l = blocker.Length; i < l; ++i)
+            {
+                blocker[i].Unblock();
+            }
             i = 0;
         }
     }
