@@ -30,16 +30,27 @@ public class UnitCara : MonoBehaviour {
     [Header("Selection Nodes")]
 
     public GameObject Selected;
-
+    GameObject unit_mesh;
     [Space]
     [Header("Fx Var")]
 
     public GameObject FxParents;
 
     public GameObject[] m_vfx;
+    public GameObject SmokeScreen;
+
+    [Space]
+    [Header("Animation Var")]
+
+    [Space]
+    [Header("Idle Var")]
+    public int _minTimeBeforeIdleBonus;
+    public int _maxTimeBeforeIdleBonus;
+
 
     int[] coolDownCount;
     PlayerManager player;
+    Animator unit_Animator;
 
 
     #region Unit Stats
@@ -428,6 +439,32 @@ public class UnitCara : MonoBehaviour {
             _isStun = value;
         }
     }
+
+    public Animator Unit_Animator
+    {
+        get
+        {
+            return unit_Animator;
+        }
+
+        set
+        {
+            unit_Animator = value;
+        }
+    }
+
+    public GameObject Unit_mesh
+    {
+        get
+        {
+            return unit_mesh;
+        }
+
+        set
+        {
+            unit_mesh = value;
+        }
+    }
     #endregion
     private void Awake()
     {
@@ -464,12 +501,20 @@ public class UnitCara : MonoBehaviour {
         {
             isTeam2 = false;
         }
-
+        Unit_Animator = GetComponentInChildren<Animator>();
+        if(Unit_Animator != null)
+        {
+            Unit_mesh = Unit_Animator.GetComponent<Transform>().gameObject;
+        }
         //InitialPosition = m_damageDisplay.transform;
     }
 
     public void Start()
     {
+        if(Unit_Animator != null)
+        {
+            StartCoroutine(ChangeIdle());
+        }
     }
     private void Update()
     {
@@ -480,10 +525,27 @@ public class UnitCara : MonoBehaviour {
         m_vfx[2].SetActive(_jimPassifEffect);                   //Fx Indiquant que Jim fera plus de dégat à cette cible
         m_vfx[3].SetActive(_isStun);                            //Fx Indiquant que la cible est stun
 
-
+        //ChangeIdle()
+        if(Unit_Animator != null)
+            Unit_Animator.SetBool("IsIdle", !IsInAnimation);
     }
 
-
+    IEnumerator ChangeIdle()
+    {
+        float randomTime = Random.Range(_minTimeBeforeIdleBonus, _maxTimeBeforeIdleBonus);
+        int randomAnim = Random.Range(0, 100);
+        yield return new WaitForSeconds(randomTime);
+        Unit_Animator.applyRootMotion = false;
+        if (randomAnim < 50)
+        {
+            Unit_Animator.SetTrigger("Idle1");
+        }
+        else
+        {
+            Unit_Animator.SetTrigger("Idle2");
+        }
+        StartCoroutine(ChangeIdle());
+    }
 
 
     /*void ShowingLifeBar()
@@ -708,6 +770,12 @@ public class UnitCara : MonoBehaviour {
             LifePoint = 0;
             OnUnitDead();
         }
+        if(Unit_Animator != null)
+        {
+            //Unit_Animator.applyRootMotion = true;
+            Unit_Animator.SetTrigger("Hit");
+        }
+
         StartCoroutine(DamageFadeOut(damage));
         /*ArmorBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_armor, ArmorPoint);
         LifeBar.GetComponent<Image>().fillAmount = Mathf.InverseLerp(0, unitStats.m_heatlh, LifePoint);*/

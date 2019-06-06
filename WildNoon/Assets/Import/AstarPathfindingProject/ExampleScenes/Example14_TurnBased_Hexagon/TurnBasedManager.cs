@@ -280,6 +280,12 @@ namespace Pathfinding.Examples {
                     //Debug.Log("Il ne reste que : " + player.OnActiveUnit1.ActionPoints + " points d'action");
                     ChangeState(3);
                     StartCoroutine(MoveToNode(Selected, button.node));
+                    GraphNode node = button.node;
+                    if (Player._onActiveUnit.Unit_Animator != null)
+                    {
+                        Player._onActiveUnit.Unit_Animator.SetTrigger("Move");
+                        Player._onActiveUnit.Unit_mesh.transform.LookAt((Vector3)node.position);
+                    }
                     //moveCost = button.OnClick();
                     player._onActiveUnit.ActionPoints -= button.OnClick();
                     player.ActionPointsDisplay(player._onActiveUnit.ActionPoints);                           //Call PlayerManager Action Display Method
@@ -324,10 +330,21 @@ namespace Pathfinding.Examples {
 
         public void AutoAttack(UnitCara target)
         {
-            Player._onActiveUnit.AutoAttack(target);
+            if (!target.m_isInAnimation && Player._onActiveUnit.ActionPoints > 0 && !Player.IsDisabled && !Player._onActiveUnit.m_isInAnimation)
+            {
+                if (Player._onActiveUnit.Unit_Animator != null)
+                {
+                    //Player._onActiveUnit.Unit_Animator.applyRootMotion = true;
+                    Vector3 gitano = new Vector3(5, 0, 0);
+                    /*Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position + gitano);
+                    Player._onActiveUnit.Unit_Animator.SetTrigger("Shoot");*/
+                }
+                    Player._onActiveUnit.AutoAttack(target);
+            }
+
         }
 
-        
+
 
         #region Move Unit
         public IEnumerator MoveToNode (TurnBasedAI unit, GraphNode node) {
@@ -364,11 +381,16 @@ namespace Pathfinding.Examples {
 
             // Select a new unit to move
             IsMoving = false;
-            //state = State.SelectUnit;
-		}
+            if(Player._onActiveUnit.Unit_Animator != null)
+            {
+                Player._onActiveUnit.Unit_Animator.SetTrigger("MoveOff");
+            }
 
-		/** Interpolates the unit along the path */
-		IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
+            //state = State.SelectUnit;
+        }
+
+        /** Interpolates the unit along the path */
+        IEnumerator MoveAlongPath (TurnBasedAI unit, ABPath path, float speed) {
 			if (path.error || path.vectorPath.Count == 0)
 				throw new System.ArgumentException("Cannot follow an empty path");
 
@@ -473,6 +495,10 @@ namespace Pathfinding.Examples {
 
                 // Select a new unit to move
                 IsMoving = false;
+                if (Player._onActiveUnit.Unit_Animator != null)
+                {
+                    Player._onActiveUnit.Unit_Animator.SetTrigger("MoveOff");
+                }
                 //state = State.SelectUnit;
             }
             else
@@ -554,6 +580,11 @@ namespace Pathfinding.Examples {
                     Player.ActionPointsDisplay(unit.ActionPoints);
                     if (target != null)
                     {
+                        if(unit.Unit_Animator != null && target.Unit_Animator != null)
+                        {
+                            //unit.Unit_Animator.SetTrigger("Shoot");
+                            //unit.Unit_mesh.transform.LookAt(target.transform.position);
+                        }
                         target.OnTakingDamage(unit.Damage);
                     }
                     yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
@@ -574,7 +605,10 @@ namespace Pathfinding.Examples {
         public IEnumerator TpToNode(TurnBasedAI unit, GraphNode node)
         {
             Player._onActiveUnit.m_isInAnimation = true;
+            Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Tp");
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de tp
+            Quaternion gitan = new Quaternion(0.7071071f, 0f, 0f, 0.7071065f);
+            Level.AddFX(unit.GetComponent<UnitCara>().SmokeScreen, unit.transform.position, gitan);
             Player._onActiveUnit.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
@@ -585,9 +619,10 @@ namespace Pathfinding.Examples {
         {
             Player._onActiveUnit.m_isInAnimation = true;
 
-            yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+            Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
+            Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_SlowAttack");
+            yield return new WaitForSeconds(1f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
-
             if (target.OnCheckIfCCWorks())
             {
                 target.Mobility -= unit.GetComponent<UnitCara>().OnUsedSpell1.m_mobilityMalus;
@@ -609,6 +644,7 @@ namespace Pathfinding.Examples {
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 
+
             for (int i = 0, l = target.Count; i < l; ++i)
             {
                 if(target[i] != null)
@@ -621,6 +657,7 @@ namespace Pathfinding.Examples {
                     {
                         target[i].StartCoroutine(target[i].ResistanceFadeOut());
                     }
+                    target[i].Unit_mesh.transform.LookAt(unit.transform.position);
                     target[i].OnTakingDamage(unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage);
                 }
             }
@@ -703,6 +740,7 @@ namespace Pathfinding.Examples {
 
                 yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
                 Player._onActiveUnit.m_isInAnimation = false;
+                Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
                 if (!target.IsStunByLasso)
                 {
                     if (target.OnCheckIfCCWorks())
@@ -748,6 +786,7 @@ namespace Pathfinding.Examples {
 
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
+            Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
 
 
             float spellDamage = target.unitStats.m_heatlh * (unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage / 100f);
@@ -775,6 +814,7 @@ namespace Pathfinding.Examples {
             {
                 if (target[i] != null)
                 {
+                    target[i].Unit_mesh.transform.LookAt(unit.transform.position);
                     if (target[i].OnCheckIfCCWorks())
                     {
                         target[i].IsStun(unit.GetComponent<UnitCara>().OnUsedSpell1.m_turnDebuffLasting);

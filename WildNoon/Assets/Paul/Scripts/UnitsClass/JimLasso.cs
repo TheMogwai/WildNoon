@@ -66,7 +66,7 @@ public class JimLasso : UnitCara
         unit.ActionPoints = unit.ActionPoints - unit.AutoAttackCost;
         Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
 
-        yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
+        yield return new WaitForSeconds(1.7f);                                //Temps de l'anim de l'attaque
         unit.m_isInAnimation = false;
         if (target != null)
         {
