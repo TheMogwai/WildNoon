@@ -29,7 +29,7 @@ public class Level : MonoBehaviour
         {   // Si la variable m_deadFX est différente de null alors :
             // Création d'une copie en mémoire de ce préfab dans la hiérarchie :
             GameObject go = Instantiate(model, position, rotation);	// On instentie l'objet original (model) avec une position (position) et une rotation (Quaternion.identity)
-            //go.transform.SetParent(GetInstance().m_fxRoot);
+            go.transform.SetParent(GetInstance().m_fxRoot);
             return go.GetComponent<FX>();
         }
         return null;    // On instentie pas de nouveaux FX
