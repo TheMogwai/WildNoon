@@ -16,6 +16,7 @@ namespace Pathfinding.Examples
         PlayerManager player;
         TurnBasedManager m_TurnBaseManager;
         HexagonTrigger button;
+        AudioScript audioScript;
 
         public Transform linkedMine;
         public int tpCost = 2;
@@ -26,7 +27,7 @@ namespace Pathfinding.Examples
             //animator = GetComponent<Animator>();
             blocker = GetComponent<SingleNodeBlocker>();
             Player = FindObjectOfType<PlayerManager>();
-        
+            audioScript = GetComponent<AudioScript>();
         }
 
         void Start()
@@ -58,7 +59,8 @@ namespace Pathfinding.Examples
         public IEnumerator TpToMine(/*, GraphNode node*/)
         {
             Player._onActiveUnit.m_isInAnimation = true;
-            yield return new WaitForSeconds(1f);                                //Temps de l'anim de tp
+            audioScript.PlayAudio(0);
+            yield return new WaitForSeconds(0.75f);                                //Temps de l'anim de tp
             Player._onActiveUnit.m_isInAnimation = false;
             Player.Cam.targetFollow = Player._onActiveUnit.gameObject.transform;
             Player._onActiveUnit.transform.position = linkedMine.position;
