@@ -328,6 +328,8 @@ public class TeamManager : MonoBehaviour
         for (int i = 0, l= StatsDisplay.Length; i < l; ++i)
         {
             StatsDisplay[i].fillAmount = Mathf.InverseLerp(0, CharacterStatsMax[i], CharacterStats[i]);
+            StatsValueDisplay[i].text = string.Format("{0}", CharacterStats[i]);
+
         }
 
         #endregion
