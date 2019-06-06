@@ -33,14 +33,14 @@ public class Jacky_SlowRange : IState
     {
         HandleButtonUnderRaySlowRange(m_TurnBaseManager.Ray);
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            if (m_TurnBaseManager.UnitUnderMouse == null)
-            {
+            //if (m_TurnBaseManager.UnitUnderMouse == null)
+            //{
                 GetOutOfState();
                 Debug.Log("Isleavingstate");
 
-            }
+            //}
         }
     }
 

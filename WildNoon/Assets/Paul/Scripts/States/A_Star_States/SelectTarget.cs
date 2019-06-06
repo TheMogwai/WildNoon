@@ -30,16 +30,12 @@ public class SelectTarget : IState
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            if(m_TurnBaseManager.UnitUnderMouse ==null && m_TurnBaseManager.NodeUnderMouse == null)
-            {
+            //if(m_TurnBaseManager.UnitUnderMouse ==null && m_TurnBaseManager.NodeUnderMouse == null)
+            //{
                 GetOutOfState();
-            }
-            else
-            {
-
-            }
+            //}
         }
         m_TurnBaseManager.HandleButtonUnderRay(m_TurnBaseManager.Ray);
 

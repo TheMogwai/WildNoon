@@ -296,7 +296,7 @@ namespace RTS_Cam
             Quaternion targetRot = new Quaternion(0.2988362f, -0.6408564f, 0.2988362f, 0.6408564f);
             m_Transform.position = Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
             m_Transform.rotation = Quaternion.RotateTowards(m_Transform.rotation, targetRot, Time.deltaTime * followingSpeed * 5f);
-            if(m_Transform.rotation == targetRot && m_Transform.position == targetPos || (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Mouse2)))
+            if(m_Transform.rotation == targetRot && m_Transform.position == targetPos || (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Mouse2) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.E)))
             {
                 targetFollow = null;
             }
