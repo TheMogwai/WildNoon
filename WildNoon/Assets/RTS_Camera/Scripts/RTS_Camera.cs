@@ -300,6 +300,7 @@ namespace RTS_Cam
             {
                 targetFollow = null;
             }
+            
         }
 
         /// <summary>

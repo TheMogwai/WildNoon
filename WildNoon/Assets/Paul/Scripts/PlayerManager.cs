@@ -396,8 +396,11 @@ public class PlayerManager : MonoBehaviour
             m_menu.SetActive(false);
         }
         IsDisabled = m_menu.activeSelf;
-        
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Cam.targetFollow = _onActiveUnit.gameObject.transform;
+        }
+
     }
 
     public void CheckTeamStatus(UnitCara[] team)
