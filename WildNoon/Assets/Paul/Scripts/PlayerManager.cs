@@ -402,30 +402,32 @@ public class PlayerManager : MonoBehaviour
         }
 
     }
-
-    public void CheckTeamStatus(UnitCara[] team)
+    int nbrOfAliveUnitTeam1;
+    int nbrOfAliveUnitTeam2;
+    public void CheckTeamStatus(bool isteam1)
     {
-        for (int a = 0; a < team.Length; a++)
+
+        if (isteam1 && nbrOfAliveUnitTeam1 <= 4)
         {
-            if (team[a] != null)
+            nbrOfAliveUnitTeam1++;
+        }
+        else if (nbrOfAliveUnitTeam2 <= 4)
+        {
+            nbrOfAliveUnitTeam2++;
+        }
+
+        if (nbrOfAliveUnitTeam1 == 4 || nbrOfAliveUnitTeam2 == 4)
+        {
+            m_ecranVictoire.SetActive(true);
+            if (nbrOfAliveUnitTeam1 == 4) 
             {
-                break;
+                string teamColor = "rouge";
+                m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
             }
-            else if (team[0] == null && team[1] == null && team[2] == null && team[3] == null)
+            else if(nbrOfAliveUnitTeam2 == 4)
             {
-                Debug.Log("aie");
-                m_ecranVictoire.SetActive(true);
-                
-                if (!_onActiveUnit.IsTeam2)
-                {
-                    string teamColor = "bleu";
-                    m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
-                }
-                else
-                {
-                    string teamColor = "rouge";
-                    m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
-                }
+                string teamColor = "bleu";
+                m_victoryDescription.text = string.Format("L'équipe {0} a gagné !", teamColor);
             }
         }
     }
@@ -979,7 +981,6 @@ public class PlayerManager : MonoBehaviour
             }
             else if (turn == _turnOfEvent[i])
             {
-                Debug.Log("on");
                 _EventAnimator.SetTrigger("On");
                 OnPlayerIsDisabled(true);
                 break;
@@ -996,8 +997,6 @@ public class PlayerManager : MonoBehaviour
             }*/
             else if (turn == _turnEndOfEvent[i])
             {
-                Debug.Log("off");
-
                 _EventAnimator.SetTrigger("Off");
                 OnPlayerIsDisabled(true);
                 break;
