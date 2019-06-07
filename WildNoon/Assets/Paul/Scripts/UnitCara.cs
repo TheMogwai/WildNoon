@@ -30,6 +30,7 @@ public class UnitCara : MonoBehaviour {
     [Header("Selection Nodes")]
 
     public GameObject Selected;
+    public GameObject Arrow;
     public Material Blue;
     public Material Red;
     GameObject unit_mesh;
@@ -470,6 +471,11 @@ public class UnitCara : MonoBehaviour {
     #endregion
     private void Awake()
     {
+        if (Arrow.activeSelf)
+        {
+            Arrow.SetActive(false);
+        }
+
         LifePoint = unitStats.m_heatlh;
         ArmorPoint = unitStats.m_armor;
         Courage = unitStats.m_courage;
@@ -492,7 +498,7 @@ public class UnitCara : MonoBehaviour {
                 m_vfx[i].SetActive(false);
             }
         }
-
+        
         Player = FindObjectOfType<PlayerManager>();
         if (GetComponentInParent<Team_Check>() != null)
         {
@@ -516,6 +522,18 @@ public class UnitCara : MonoBehaviour {
         if(Unit_Animator != null)
         {
             StartCoroutine(ChangeIdle());
+        }
+        if (Selected != null)
+        {
+            
+            if (!isTeam2)
+            {
+                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
+            }
+            else
+            {
+                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            }
         }
     }
     private void Update()
@@ -568,18 +586,19 @@ public class UnitCara : MonoBehaviour {
 
     public void ActivateSelectedGameObject(bool b)
     {
-        if(Selected != null)
+        if (Selected != null)
         {
-            Selected.SetActive(b);
-            if (!isTeam2)
+            Arrow.SetActive(b);
+            if (Arrow.activeSelf)
             {
-                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
-                Selected.GetComponentInChildren<Animation>().gameObject.GetComponent<MeshRenderer>().material = Blue;
-            }
-            else
-            {
-                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-                Selected.GetComponentInChildren<Animation>().gameObject.GetComponent<MeshRenderer>().material = Red;
+                if (!isTeam2)
+                {
+                    Arrow.GetComponent<MeshRenderer>().material = Blue;
+                }
+                else
+                {
+                    Arrow.GetComponent<MeshRenderer>().material = Red;
+                }
             }
         }
     }

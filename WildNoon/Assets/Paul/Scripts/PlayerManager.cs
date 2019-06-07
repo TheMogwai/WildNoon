@@ -981,7 +981,6 @@ public class PlayerManager : MonoBehaviour
             }
             else if (turn == _turnOfEvent[i])
             {
-                Debug.Log("on");
                 _EventAnimator.SetTrigger("On");
                 OnPlayerIsDisabled(true);
                 break;
@@ -998,8 +997,6 @@ public class PlayerManager : MonoBehaviour
             }*/
             else if (turn == _turnEndOfEvent[i])
             {
-                Debug.Log("off");
-
                 _EventAnimator.SetTrigger("Off");
                 OnPlayerIsDisabled(true);
                 break;
