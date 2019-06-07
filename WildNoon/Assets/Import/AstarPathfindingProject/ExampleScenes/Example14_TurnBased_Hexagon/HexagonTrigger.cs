@@ -13,6 +13,19 @@ namespace Pathfinding.Examples
         //Animator anim;
         bool visible;
 
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+
+            set
+            {
+                visible = value;
+            }
+        }
+
         void Awake()
         {
             //anim = GetComponent<Animator>();
@@ -28,16 +41,17 @@ namespace Pathfinding.Examples
             if (unit != null && unit.targetNode == node)
             {
                 button.interactable = true;
-                visible = true;
+                Visible = true;
                 //anim.CrossFade("show", 0.1f);
             }
         }
 
         void OnTriggerExit(Collider coll)
         {
-            if (coll.GetComponentInParent<TurnBasedAI>() != null && visible)
+            if (coll.GetComponentInParent<TurnBasedAI>() != null && Visible)
             {
                 button.interactable = false;
+                Visible = false;
                 //anim.CrossFade("hide", 0.1f);
             }
         }

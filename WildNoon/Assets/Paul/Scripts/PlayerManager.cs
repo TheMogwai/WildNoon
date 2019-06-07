@@ -93,6 +93,7 @@ public class PlayerManager : MonoBehaviour
     public int[] _turnOfEvent;
     public int[] _turnEndOfEvent;
     public AudioSource _EventAudio;
+    public AudioSource _TrainAudio;
     public Animator _EventAnimator;
 
 
@@ -448,8 +449,8 @@ public class PlayerManager : MonoBehaviour
                 else
                 {
                     m_teamArtWork[i].sprite = m_UnitDead;
-                    m_teamHealth[i].sprite = null;
-                    m_teamArmor[i].sprite = null;
+                    m_teamHealth[i].fillAmount = 0;
+                    m_teamArmor[i].fillAmount = 0;
                 }
             }
             playerTurnTopLeft.GetComponent<Image>().sprite = player1;
@@ -982,6 +983,10 @@ public class PlayerManager : MonoBehaviour
             else if (turn == _turnOfEvent[i])
             {
                 _EventAnimator.SetTrigger("On");
+                if(_TrainAudio != null)
+                {
+                    _TrainAudio.Play();
+                }
                 OnPlayerIsDisabled(true);
                 break;
 
@@ -998,6 +1003,10 @@ public class PlayerManager : MonoBehaviour
             else if (turn == _turnEndOfEvent[i])
             {
                 _EventAnimator.SetTrigger("Off");
+                if (_TrainAudio != null)
+                {
+                    _TrainAudio.Play();
+                }
                 OnPlayerIsDisabled(true);
                 break;
 

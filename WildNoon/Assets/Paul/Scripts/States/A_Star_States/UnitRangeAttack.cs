@@ -19,6 +19,11 @@ public class UnitRangeAttack : IState
     {
         m_TurnBaseManager.OnUnitAttack();
         range = m_TurnBaseManager.Player._onActiveUnit.Range * m_TurnBaseManager.nodes;
+        if(m_TurnBaseManager.Player._onActiveUnit.Unit_Animator != null)
+        {
+            m_TurnBaseManager.Player._onActiveUnit.Unit_mesh.transform.LookAt(m_TurnBaseManager.UnitUnderMouse.transform.position);
+            m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
+        }
     }
 
 
@@ -51,6 +56,11 @@ public class UnitRangeAttack : IState
 
     public void Exit()
     {
+        if (m_TurnBaseManager.Player._onActiveUnit.Unit_Animator != null)
+        {
+            m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto3");
+        }
+
     }
     void GetOutOfState()
     {

@@ -29,7 +29,8 @@ public class JackyTheKid : UnitCara
 
     public override void OnUnitPassiveEffect()
     {
-        if(ArmorPoint + Spells1[0].m_armorBonus < unitStats.m_armor)
+        Unit_Animator.SetTrigger("Jacky_Passif");
+        if (ArmorPoint + Spells1[0].m_armorBonus < unitStats.m_armor)
         {
             ArmorPoint += Spells1[0].m_armorBonus;
         }

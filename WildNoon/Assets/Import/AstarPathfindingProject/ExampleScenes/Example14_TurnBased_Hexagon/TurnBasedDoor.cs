@@ -34,13 +34,12 @@ namespace Pathfinding.Examples
         {
             // Make sure the door starts out blocked
             //blocker.BlockAtCurrentPosition();
-            Debug.Log(Player._onActiveUnit);
             //animator.CrossFade("close", 0.2f);
         }
 
         public void Close()
         {
-            StartCoroutine(WaitAndClose());
+            //StartCoroutine(WaitAndClose());
         }
 
         public PlayerManager Player
@@ -70,10 +69,9 @@ namespace Pathfinding.Examples
 
         }
 
-        IEnumerator WaitAndClose()
+        /*IEnumerator WaitAndClose(List<SingleNodeBlocker> selector, GraphNode node)
         {
-            var selector = new List<SingleNodeBlocker>() { blocker };
-            var node = AstarPath.active.GetNearest(transform.position).node;
+            
 
             // Wait while there is another SingleNodeBlocker occupying the same node as the door
             // this is likely another unit which is standing on the door node, and then we cannot
@@ -89,40 +87,45 @@ namespace Pathfinding.Examples
                 yield return null;
             }
 
-            open = false;
+            //open = false;
             //animator.CrossFade("close", 0.2f);
-            blocker.BlockAtCurrentPosition();
-        }
+        }*/
 
         public void Open()
         {
+            var selector = new List<SingleNodeBlocker>() { blocker };
+            var node = AstarPath.active.GetNearest(transform.position).node;
             if (Player._onActiveUnit.ActionPoints >= tpCost)
             {
                 // Stop WaitAndClose if it is running
-                StopCoroutine(WaitAndClose());
+                //StopCoroutine(WaitAndClose(selector, node));
 
                 // Play the open door animation
                 //animator.CrossFade("open", 0.2f);
-                open = true;
-                StartCoroutine(TpToMine());
-                Player.TurnBasedManager.ChangeState(0);
-                Player._onActiveUnit.ActionPoints -= tpCost;
-                Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
-                // Unblock the door node so that units can traverse it again
-                blocker.Unblock();
+                //open = true;
+                if(blocker.manager.NodeContainsAnyExcept(node, selector) && !linkedMine.GetComponent<HexagonTrigger>().Visible)
+                {
+                    StartCoroutine(TpToMine());
+                    Player.TurnBasedManager.ChangeState(0);
+                    Player._onActiveUnit.ActionPoints -= tpCost;
+                    Player.ActionPointsDisplay(Player._onActiveUnit.ActionPoints);
+                    // Unblock the door node so that units can traverse it again
+                    blocker.Unblock();
+                }
             }
         }
 
         public void Toggle()
         {
-            if (open)
+            Open();
+
+           /* if (open)
             {
                 Close();
             }
             else
             {
-                Open();
-            }
+            }*/
         }
     }
 }

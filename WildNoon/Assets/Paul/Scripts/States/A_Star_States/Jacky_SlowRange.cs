@@ -38,7 +38,6 @@ public class Jacky_SlowRange : IState
             //if (m_TurnBaseManager.UnitUnderMouse == null)
             //{
                 GetOutOfState();
-                Debug.Log("Isleavingstate");
 
             //}
         }
@@ -74,7 +73,6 @@ public class Jacky_SlowRange : IState
                 {
                     if(distanceToPlayer < range)
                     {
-                        Debug.Log("ClickTarget");
                         m_TurnBaseManager.Player.OnCoolDownspell();
                         m_TurnBaseManager.Player.OnCoolDownDisplay(2);
                         m_TurnBaseManager.ChangeState(0);
