@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: b808ad3708b8cf841a73ef902affc0d3
+guid: 4129d8cdb8f7ba5469ab3818b98bb09e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Armature_low
-    100002: Armature_low 1
-    100004: Arriere_low
-    100006: Arriere_low 1
-    100008: //RootNode
+    100000: //RootNode
+    100002: Armature_low
+    100004: Armature_low 1
+    100006: Arriere_low
+    100008: Arriere_low 1
     100010: Balle_low
     100012: Balle_low 1
     100014: Barillet_low
@@ -86,11 +86,11 @@ ModelImporter:
     100160: Tete_low
     100162: Veste_low
     100164: Yeux_low
-    400000: Armature_low
-    400002: Armature_low 1
-    400004: Arriere_low
-    400006: Arriere_low 1
-    400008: //RootNode
+    400000: //RootNode
+    400002: Armature_low
+    400004: Armature_low 1
+    400006: Arriere_low
+    400008: Arriere_low 1
     400010: Balle_low
     400012: Balle_low 1
     400014: Barillet_low
@@ -210,7 +210,7 @@ ModelImporter:
     4300074: Detente2_low
     4300076: Barillet_low
     4300078: Balle_low
-    7400000: Auto2
+    7400000: Taunt
     9500000: //RootNode
     13700000: Armature_low
     13700002: Armature_low 1
@@ -269,13 +269,10 @@ ModelImporter:
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'joint_Torse' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'joint_Chapeau' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'joint_Epaule_left'
-      has translation animation that will be discarded.\n"
+      might lower retargeting quality:\n\t'joint_Torse' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
-    animationDoRetargetingWarnings: 0
+    animationDoRetargetingWarnings: 1
     importAnimatedCustomProperties: 0
     importConstraints: 0
     animationCompression: 3
@@ -287,7 +284,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Auto2
+      name: Taunt
       takeName: Take 001
       firstFrame: 1
       lastFrame: 36
@@ -530,13 +527,13 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Auto2(Clone)
+    - name: Anim_Taunt(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Jacky_the_Kid_low
-      parentName: Auto2(Clone)
+      parentName: Anim_Taunt(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.01, y: 0.01, z: 0.01}
@@ -761,12 +758,12 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: controller_Bassin
-      parentName: Auto2(Clone)
+      parentName: Anim_Taunt(Clone)
       position: {x: -2.4651903e-32, y: 1.0516081, z: -0.07096029}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 0.01, y: 0.01, z: 0.01}
     - name: joint_Bassin
-      parentName: Auto2(Clone)
+      parentName: Anim_Taunt(Clone)
       position: {x: -2.4651903e-32, y: 1.0516081, z: -0.07096029}
       rotation: {x: 0, y: 0, z: 1.110223e-16, w: 1}
       scale: {x: 0.01, y: 0.01, z: 0.01}
@@ -778,27 +775,27 @@ ModelImporter:
     - name: joint_Torse
       parentName: joint_Ventre
       position: {x: -4.8572257e-15, y: 15.772462, z: 0.41744447}
-      rotation: {x: -0.02369791, y: 0.1854071, z: -0.0048918827, w: 0.9823638}
+      rotation: {x: -0.024189778, y: 0.001157166, z: -0.0004222289, w: 0.9997067}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Nuque
       parentName: joint_Torse
-      position: {x: -3.7990444e-14, y: 16.391861, z: -3.000215}
-      rotation: {x: -0.090605885, y: 0.13938248, z: -0.042575702, w: 0.9851652}
+      position: {x: -4.0722634e-14, y: 16.391861, z: -3.000215}
+      rotation: {x: 0.032333877, y: -0.0015467553, z: 0.0005643888, w: 0.9994758}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Tete
       parentName: joint_Nuque
-      position: {x: 2.7755576e-14, y: 12.22353, z: 4.08226}
-      rotation: {x: 0.0031511206, y: -0.1837446, z: 0.0036396862, w: 0.98296225}
+      position: {x: 3.351269e-14, y: 12.22353, z: 4.08226}
+      rotation: {x: 0, y: 0, z: 0.000000031421237, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Machoire
       parentName: joint_Tete
-      position: {x: -1.3877788e-15, y: 1.3653398, z: 2.5575607}
+      position: {x: -7.605678e-15, y: 1.3653398, z: 2.5575607}
       rotation: {x: -0.13793926, y: -0.0000000012224951, z: 0.000000008777842, w: 0.9904407}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Chapeau
       parentName: joint_Tete
-      position: {x: 1.2490009e-14, y: 12.73973, z: 2.9510314}
-      rotation: {x: -0.0006656916, y: -0.15163006, z: -0.00621162, w: 0.98841757}
+      position: {x: 2.2334565e-15, y: 12.73973, z: 2.9510314}
+      rotation: {x: 0, y: -0, z: -0.0000000070201307, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Plume1
       parentName: joint_Chapeau
@@ -813,62 +810,62 @@ ModelImporter:
     - name: joint_Epaule_left
       parentName: joint_Torse
       position: {x: -14.630601, y: 7.1391344, z: -3.1540248}
-      rotation: {x: 0.10191164, y: 0.44989863, z: 0.2429235, w: 0.8533425}
+      rotation: {x: 0.22829169, y: 0.38875696, z: 0.17308575, w: 0.87566674}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Coude_left
       parentName: joint_Epaule_left
       position: {x: -15.211238, y: -21.003687, z: -0.8986778}
-      rotation: {x: -0.25304157, y: 0.17557457, z: -0.64483774, w: 0.6995197}
+      rotation: {x: -0.14509466, y: 0.05346591, z: 0.00015747467, w: 0.98797214}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Poignet_left
       parentName: joint_Coude_left
       position: {x: -20.044119, y: -29.460304, z: -0.9705938}
-      rotation: {x: 0.22692922, y: 0.095615424, z: 0.08766073, w: 0.9652339}
+      rotation: {x: 0.2392596, y: 0.24674687, z: 0.019517232, w: 0.938877}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_PeaceMaker_Main
       parentName: joint_Poignet_left
-      position: {x: -19.363289, y: -9.589804, z: 3.4591846}
-      rotation: {x: -2.1547995e-10, y: 1.6887107e-10, z: -6.100093e-11, w: 1}
+      position: {x: -19.71709, y: -10.06838, z: 3.4613934}
+      rotation: {x: -2.1547995e-10, y: 1.6887107e-10, z: -6.1000885e-11, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Doigt1_left
       parentName: joint_Poignet_left
       position: {x: -10.578018, y: -8.615166, z: 0.18619448}
-      rotation: {x: -0.09052233, y: 0.28794035, z: 0.022050448, w: 0.9531054}
+      rotation: {x: -0.14270668, y: 0.26581213, z: 0.20260394, w: 0.9316278}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Doigt2_left
       parentName: joint_Doigt1_left
       position: {x: -5.1017704, y: -1.9780993, z: -0.15656799}
-      rotation: {x: -0.1966191, y: 0.36974028, z: -0.11579539, w: 0.90068}
+      rotation: {x: -0.09492306, y: 0.2629989, z: -0.041758694, w: 0.9592067}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Pouce_left
       parentName: joint_Poignet_left
       position: {x: -8.135092, y: -0.6444931, z: 0.43239966}
-      rotation: {x: 0.31293365, y: -0.022423038, z: 0.28181353, w: 0.9067254}
+      rotation: {x: 0.31773004, y: 0.0776695, z: 0.5893642, w: 0.7386914}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Doigts1_left
       parentName: joint_Poignet_left
       position: {x: -7.5293245, y: -11.608481, z: 0.087653846}
-      rotation: {x: -0.48174244, y: 0.3304345, z: -0.03288373, w: 0.81095994}
+      rotation: {x: -0.22989236, y: 0.15995243, z: -0.03856573, w: 0.9592067}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Doigts2_left
       parentName: joint_Doigts1_left
       position: {x: -2.2344112, y: -4.1704836, z: 0.07541552}
-      rotation: {x: -0.49489993, y: 0.30922008, z: -0.042438105, w: 0.81095994}
+      rotation: {x: -0.22989236, y: 0.15995243, z: -0.03856573, w: 0.9592067}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Epaule_right
       parentName: joint_Torse
-      position: {x: 14.6246, y: 7.1390986, z: -3.1540256}
-      rotation: {x: -0.25301874, y: -0.65505564, z: 0.17746967, w: 0.68948394}
+      position: {x: 14.568975, y: 7.1390986, z: -3.1540256}
+      rotation: {x: 0.22829169, y: -0.38875696, z: -0.17308575, w: 0.87566674}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Coude_right
       parentName: joint_Epaule_right
       position: {x: 15.211201, y: -21.003998, z: -0.8986801}
-      rotation: {x: -0.27851194, y: -0.2587675, z: 0.022466147, w: 0.9246436}
+      rotation: {x: -0.14471309, y: -0.053488865, z: -6.9919937e-10, w: 0.98802686}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Poignet_right
       parentName: joint_Coude_right
       position: {x: 20.0441, y: -29.460001, z: -0.9705901}
-      rotation: {x: -0.48796552, y: 0.73641735, z: -0.4317532, w: -0.182122}
+      rotation: {x: 0.2392596, y: -0.24674688, z: -0.019517228, w: 0.938877}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Doigt1_right
       parentName: joint_Poignet_right
@@ -892,7 +889,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Pouce_right
       parentName: joint_Poignet_right
-      position: {x: 8.135098, y: -0.644505, z: 0.43239966}
+      position: {x: 7.877706, y: -1.4972005, z: 0.5031566}
       rotation: {x: 0.17318743, y: -0.068428166, z: -0.5164473, w: 0.83582646}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Hanche_left
@@ -938,11 +935,11 @@ ModelImporter:
     - name: joint_Etui1
       parentName: joint_Hanche_right
       position: {x: 7.2628593, y: 1.3732791, z: 1.0408341e-15}
-      rotation: {x: -0.0000000036174057, y: -5.2171234e-10, z: 6.810165e-10, w: 1}
+      rotation: {x: -0.0000000036174055, y: -5.2171234e-10, z: 6.810165e-10, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: joint_Etui2
       parentName: joint_Etui1
-      position: {x: 3.7349238, y: -10.761648, z: 1.7347235e-15}
+      position: {x: 3.7349238, y: -10.761648, z: 6.938894e-16}
       rotation: {x: 4.8020237e-17, y: 5.3563806e-17, z: -9.0910646e-10, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
@@ -953,7 +950,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    hasTranslationDoF: 0
+    hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
