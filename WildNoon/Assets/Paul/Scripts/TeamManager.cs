@@ -133,7 +133,8 @@ public class TeamManager : MonoBehaviour
 
             #region Camera Texture
 
-            CharacterModel.material = cameraRendererMaterial[0];
+            //CharacterModel.material = cameraRendererMaterial[0];
+            CharacterModel.sprite = character[0].stats.characterArtwork;
 
             #endregion
 
@@ -310,7 +311,8 @@ public class TeamManager : MonoBehaviour
 
         #region Camera Texture
 
-        CharacterModel.material = cameraRendererMaterial[nbrInTheList];
+        //CharacterModel.material = cameraRendererMaterial[nbrInTheList];
+        CharacterModel.sprite = character[nbrInTheList].stats.characterArtwork;
 
         #endregion
 
