@@ -30,6 +30,8 @@ public class UnitCara : MonoBehaviour {
     [Header("Selection Nodes")]
 
     public GameObject Selected;
+    public Material Blue;
+    public Material Red;
     GameObject unit_mesh;
     [Space]
     [Header("Fx Var")]
@@ -572,10 +574,12 @@ public class UnitCara : MonoBehaviour {
             if (!isTeam2)
             {
                 Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
+                Selected.GetComponentInChildren<Animation>().gameObject.GetComponent<MeshRenderer>().material = Blue;
             }
             else
             {
                 Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+                Selected.GetComponentInChildren<Animation>().gameObject.GetComponent<MeshRenderer>().material = Red;
             }
         }
     }
@@ -893,11 +897,11 @@ public class UnitCara : MonoBehaviour {
         GetComponent<TurnBasedAI>().blocker.Unblock();
         if (!isTeam2)
         {
-            Player.CheckTeamStatus(Player.Team1);
+            Player.CheckTeamStatus(true);
         }
         else
         {
-            Player.CheckTeamStatus(Player.Team2);
+            Player.CheckTeamStatus(false);
         }
         Destroy(gameObject);
         m_isInAnimation = false;
