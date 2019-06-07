@@ -396,8 +396,11 @@ public class PlayerManager : MonoBehaviour
             m_menu.SetActive(false);
         }
         IsDisabled = m_menu.activeSelf;
-        
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Cam.targetFollow = _onActiveUnit.gameObject.transform;
+        }
+
     }
 
     public void CheckTeamStatus(UnitCara[] team)
@@ -597,6 +600,8 @@ public class PlayerManager : MonoBehaviour
             if(timeleft[i] <= 0)
             {
                 timeleft[i] = ropeTime;
+                TurnBasedManager.IsMoving = false;
+                _onActiveUnit.m_isInAnimation = false;
                 OnTurnPassed();
             }
         }
@@ -936,6 +941,7 @@ public class PlayerManager : MonoBehaviour
             ResetArray();
             TurnCount = turnCountMax;
             TableTurnCount++;
+            Debug.Log(TableTurnCount);
             TrainEventTrigger(TableTurnCount);
         }
         for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
@@ -973,6 +979,7 @@ public class PlayerManager : MonoBehaviour
             }
             else if (turn == _turnOfEvent[i])
             {
+                Debug.Log("on");
                 _EventAnimator.SetTrigger("On");
                 OnPlayerIsDisabled(true);
                 break;
@@ -989,6 +996,8 @@ public class PlayerManager : MonoBehaviour
             }*/
             else if (turn == _turnEndOfEvent[i])
             {
+                Debug.Log("off");
+
                 _EventAnimator.SetTrigger("Off");
                 OnPlayerIsDisabled(true);
                 break;
