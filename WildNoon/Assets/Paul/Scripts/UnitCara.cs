@@ -49,7 +49,8 @@ public class UnitCara : MonoBehaviour {
     [Header("Idle Var")]
     public int _minTimeBeforeIdleBonus;
     public int _maxTimeBeforeIdleBonus;
-
+    public GameObject fullCover;
+    public GameObject halfCover;
 
     int[] coolDownCount;
     PlayerManager player;
@@ -856,7 +857,8 @@ public class UnitCara : MonoBehaviour {
     IEnumerator AniamtionDeath()
     {
         m_isInAnimation = true;
-        yield return new WaitForSeconds(1f);             //Temps de l'animation de la mort
+        unit_Animator.SetTrigger("Jacky_Mort");
+        yield return new WaitForSeconds(1.5f);             //Temps de l'animation de la mort
 
         if(Player.m_UnitsInGameDisplay[nbrInTheList].sprite == Player.m_UnitsInGameCara[nbrInTheList].unitStats.characterIsFirstArtwork)
         {

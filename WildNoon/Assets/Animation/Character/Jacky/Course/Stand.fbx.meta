@@ -269,16 +269,9 @@ ModelImporter:
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'joint_Ventre' has translation animation that
-      will be discarded.\n\t'joint_Torse' has translation animation that will be discarded.\n\t'joint_Torse'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'joint_Epaule_left'
-      has translation animation that will be discarded.\n\t'joint_Epaule_right' has
-      translation animation that will be discarded.\n\t'joint_Genou_left' has translation
-      animation that will be discarded.\n\t'joint_Talon_left' has translation animation
-      that will be discarded.\n\t'joint_Genou_right' has translation animation that
-      will be discarded.\n\t'joint_Talon_right' has translation animation that will
-      be discarded.\n"
+      might lower retargeting quality:\n\t'joint_Torse' has translation animation
+      that will be discarded.\n\t'joint_Torse' is inbetween humanoid transforms and
+      has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -958,7 +951,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    hasTranslationDoF: 0
+    hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}

@@ -1,0 +1,340 @@
+fileFormatVersion: 2
+guid: 6cda84b55383f9a4d85dc2769ef931b1
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature_low
+    100002: Armature_low 1
+    100004: Arriere_low
+    100006: Arriere_low 1
+    100008: //RootNode
+    100010: Balle_low
+    100012: Balle_low 1
+    100014: Barillet_low
+    100016: Barillet_low 1
+    100018: Bottes_low
+    100020: Boucle1_low
+    100022: Boucle2_low
+    100024: Boutons_low
+    100026: Canon_low
+    100028: Canon_low 1
+    100030: Ceinture1_low
+    100032: Ceinture2_low
+    100034: Chapeau_low
+    100036: Chemise_low
+    100038: Cheveux_low
+    100040: Chien_low
+    100042: Chien_low 1
+    100044: controller_Bassin
+    100046: Crosse_low
+    100048: Crosse_low 1
+    100050: Dents_Bas_low
+    100052: Dents_Haut_low
+    100054: Detente1_low
+    100056: Detente1_low 1
+    100058: Detente2_low
+    100060: Detente2_low 1
+    100062: Etui_low
+    100064: Gants_low
+    100066: Jacky_low
+    100068: Jacky_the_Kid_low
+    100070: Jeans_low
+    100072: joint_Bassin
+    100074: joint_Chapeau
+    100076: joint_Coude_left
+    100078: joint_Coude_right
+    100080: joint_Doigt1_left
+    100082: joint_Doigt1_right
+    100084: joint_Doigt2_left
+    100086: joint_Doigt2_right
+    100088: joint_Doigts1_left
+    100090: joint_Doigts1_right
+    100092: joint_Doigts2_left
+    100094: joint_Doigts2_right
+    100096: joint_Epaule_left
+    100098: joint_Epaule_right
+    100100: joint_Etui1
+    100102: joint_Etui2
+    100104: joint_Genou_left
+    100106: joint_Genou_right
+    100108: joint_Hanche_left
+    100110: joint_Hanche_right
+    100112: joint_Machoire
+    100114: joint_Nuque
+    100116: joint_PeaceMaker_Main
+    100118: joint_Pied_left
+    100120: joint_Pied_right
+    100122: joint_Plume1
+    100124: joint_Plume2
+    100126: joint_Poignet_left
+    100128: joint_Poignet_right
+    100130: joint_Pouce_left
+    100132: joint_Pouce_right
+    100134: joint_Talon_left
+    100136: joint_Talon_right
+    100138: joint_Tete
+    100140: joint_Torse
+    100142: joint_Ventre
+    100144: Langue_low
+    100146: Ourlets_low
+    100148: PeaceMaker_Etui_low
+    100150: PeaceMaker_low
+    100152: PeaceMaker_Main_low
+    100154: Pilosite_low
+    100156: Plume_low
+    100158: Sangle_Arriere_low
+    100160: Tete_low
+    100162: Veste_low
+    100164: Yeux_low
+    400000: Armature_low
+    400002: Armature_low 1
+    400004: Arriere_low
+    400006: Arriere_low 1
+    400008: //RootNode
+    400010: Balle_low
+    400012: Balle_low 1
+    400014: Barillet_low
+    400016: Barillet_low 1
+    400018: Bottes_low
+    400020: Boucle1_low
+    400022: Boucle2_low
+    400024: Boutons_low
+    400026: Canon_low
+    400028: Canon_low 1
+    400030: Ceinture1_low
+    400032: Ceinture2_low
+    400034: Chapeau_low
+    400036: Chemise_low
+    400038: Cheveux_low
+    400040: Chien_low
+    400042: Chien_low 1
+    400044: controller_Bassin
+    400046: Crosse_low
+    400048: Crosse_low 1
+    400050: Dents_Bas_low
+    400052: Dents_Haut_low
+    400054: Detente1_low
+    400056: Detente1_low 1
+    400058: Detente2_low
+    400060: Detente2_low 1
+    400062: Etui_low
+    400064: Gants_low
+    400066: Jacky_low
+    400068: Jacky_the_Kid_low
+    400070: Jeans_low
+    400072: joint_Bassin
+    400074: joint_Chapeau
+    400076: joint_Coude_left
+    400078: joint_Coude_right
+    400080: joint_Doigt1_left
+    400082: joint_Doigt1_right
+    400084: joint_Doigt2_left
+    400086: joint_Doigt2_right
+    400088: joint_Doigts1_left
+    400090: joint_Doigts1_right
+    400092: joint_Doigts2_left
+    400094: joint_Doigts2_right
+    400096: joint_Epaule_left
+    400098: joint_Epaule_right
+    400100: joint_Etui1
+    400102: joint_Etui2
+    400104: joint_Genou_left
+    400106: joint_Genou_right
+    400108: joint_Hanche_left
+    400110: joint_Hanche_right
+    400112: joint_Machoire
+    400114: joint_Nuque
+    400116: joint_PeaceMaker_Main
+    400118: joint_Pied_left
+    400120: joint_Pied_right
+    400122: joint_Plume1
+    400124: joint_Plume2
+    400126: joint_Poignet_left
+    400128: joint_Poignet_right
+    400130: joint_Pouce_left
+    400132: joint_Pouce_right
+    400134: joint_Talon_left
+    400136: joint_Talon_right
+    400138: joint_Tete
+    400140: joint_Torse
+    400142: joint_Ventre
+    400144: Langue_low
+    400146: Ourlets_low
+    400148: PeaceMaker_Etui_low
+    400150: PeaceMaker_low
+    400152: PeaceMaker_Main_low
+    400154: Pilosite_low
+    400156: Plume_low
+    400158: Sangle_Arriere_low
+    400160: Tete_low
+    400162: Veste_low
+    400164: Yeux_low
+    2100000: Jacky
+    4300000: Tete_low
+    4300002: Cheveux_low
+    4300004: Pilosite_low
+    4300006: Veste_low
+    4300008: Ourlets_low
+    4300010: Gants_low
+    4300012: Chemise_low
+    4300014: Boutons_low
+    4300016: Ceinture1_low
+    4300018: Ceinture2_low
+    4300020: Boucle1_low
+    4300022: Boucle2_low
+    4300024: Jeans_low
+    4300026: Bottes_low
+    4300028: Sangle_Arriere_low
+    4300030: Chapeau_low
+    4300032: Plume_low
+    4300034: Langue_low
+    4300036: Yeux_low
+    4300038: Dents_Haut_low
+    4300040: Dents_Bas_low
+    4300042: Etui_low
+    4300044: Armature_low
+    4300046: Canon_low
+    4300048: Crosse_low
+    4300050: Arriere_low
+    4300052: Chien_low
+    4300054: Detente1_low
+    4300056: Detente2_low
+    4300058: Barillet_low
+    4300060: Balle_low
+    4300062: Armature_low
+    4300064: Canon_low
+    4300066: Crosse_low
+    4300068: Arriere_low
+    4300070: Chien_low
+    4300072: Detente1_low
+    4300074: Detente2_low
+    4300076: Barillet_low
+    4300078: Balle_low
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Armature_low
+    13700002: Armature_low 1
+    13700004: Arriere_low
+    13700006: Arriere_low 1
+    13700008: Balle_low
+    13700010: Balle_low 1
+    13700012: Barillet_low
+    13700014: Barillet_low 1
+    13700016: Bottes_low
+    13700018: Boucle1_low
+    13700020: Boucle2_low
+    13700022: Boutons_low
+    13700024: Canon_low
+    13700026: Canon_low 1
+    13700028: Ceinture1_low
+    13700030: Ceinture2_low
+    13700032: Chapeau_low
+    13700034: Chemise_low
+    13700036: Cheveux_low
+    13700038: Chien_low
+    13700040: Chien_low 1
+    13700042: Crosse_low
+    13700044: Crosse_low 1
+    13700046: Dents_Bas_low
+    13700048: Dents_Haut_low
+    13700050: Detente1_low
+    13700052: Detente1_low 1
+    13700054: Detente2_low
+    13700056: Detente2_low 1
+    13700058: Etui_low
+    13700060: Gants_low
+    13700062: Jeans_low
+    13700064: Langue_low
+    13700066: Ourlets_low
+    13700068: Pilosite_low
+    13700070: Plume_low
+    13700072: Sangle_Arriere_low
+    13700074: Tete_low
+    13700076: Veste_low
+    13700078: Yeux_low
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
