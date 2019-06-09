@@ -609,6 +609,7 @@ namespace Pathfinding.Examples {
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de tp
             Quaternion gitan = new Quaternion(0.7071071f, 0f, 0f, 0.7071065f);
             Level.AddFX(unit.GetComponent<UnitCara>().SmokeScreen, unit.transform.position, gitan);
+            Level.AddFX(unit.GetComponent<UnitCara>().m_Audio[0], unit.transform.position, Quaternion.identity);
             Player._onActiveUnit.m_isInAnimation = false;
             unit.transform.position = (Vector3)node.position;
             unit.blocker.BlockAtCurrentPosition();
@@ -640,6 +641,7 @@ namespace Pathfinding.Examples {
         {
             m_target = target;
             Player._onActiveUnit.m_isInAnimation = true;
+            Level.AddFX(unit.GetComponent<UnitCara>().m_Audio[1], unit.transform.position, Quaternion.identity);
 
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;

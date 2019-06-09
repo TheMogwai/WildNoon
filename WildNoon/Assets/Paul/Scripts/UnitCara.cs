@@ -41,6 +41,7 @@ public class UnitCara : MonoBehaviour {
 
     public GameObject[] m_vfx;
     public GameObject SmokeScreen;
+    public GameObject[] m_Audio;
 
     [Space]
     [Header("Animation Var")]
