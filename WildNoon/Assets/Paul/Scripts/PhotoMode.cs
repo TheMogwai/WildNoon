@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RTS_Cam;
 
 public class PhotoMode : MonoBehaviour
 {
@@ -49,7 +50,20 @@ public class PhotoMode : MonoBehaviour
                 PhotoCam.transform.rotation = Quaternion.identity;
             }
 
-            if(Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Mouse2))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift))
+            {
+                PhotoCam.GetComponent<RTS_Camera>().scrollWheelZoomingSensitivity = -1;
+            }
+            else if (Input.GetKey(KeyCode.LeftControl))
+            {
+                PhotoCam.GetComponent<RTS_Camera>().scrollWheelZoomingSensitivity = -10;
+            }
+            else
+            {
+                PhotoCam.GetComponent<RTS_Camera>().scrollWheelZoomingSensitivity = -15;
+            }
+
+            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Mouse2))
             {
                 PhotoCam.transform.Rotate(Vector3.up, -MouseAxis.y * Time.deltaTime * -100, Space.World);
             }
