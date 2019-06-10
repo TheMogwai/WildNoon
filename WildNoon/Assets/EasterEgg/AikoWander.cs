@@ -6,6 +6,8 @@ public class AikoWander : MonoBehaviour
 {
 
     public GameObject[] waypoints;
+    [Range(0.5f, 20f)]
+    public float _maxWaitTimeAtWayPoint;
     float speed = 10f;
     int currentWaypoint;
     Vector3 _heading;
@@ -24,7 +26,7 @@ public class AikoWander : MonoBehaviour
 
     IEnumerator LookForWayPoints()
     {
-        float randomTimeOnWayPoint = Random.Range(0.5f, 2f);
+        float randomTimeOnWayPoint = Random.Range(0.5f, _maxWaitTimeAtWayPoint);
         int lookForNextWayPoint = Random.Range(0, waypoints.Length);
         while (lookForNextWayPoint == currentWaypoint)
         {
