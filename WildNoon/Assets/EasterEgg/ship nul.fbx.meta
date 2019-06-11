@@ -1,0 +1,162 @@
+fileFormatVersion: 2
+guid: 0d76bb9d32facd54c8c3774e9b55d3c8
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: barre
+    100002: cabestan
+    100004: cloche
+    100006: polySurface104
+    100008: polySurface105
+    100010: polySurface106
+    100012: polySurface107
+    100014: polySurface108
+    100016: polySurface122
+    100018: polySurface123
+    100020: porte
+    100022: poulies
+    100024: sails
+    100026: //RootNode
+    100028: trappe
+    400000: barre
+    400002: cabestan
+    400004: cloche
+    400006: polySurface104
+    400008: polySurface105
+    400010: polySurface106
+    400012: polySurface107
+    400014: polySurface108
+    400016: polySurface122
+    400018: polySurface123
+    400020: porte
+    400022: poulies
+    400024: sails
+    400026: //RootNode
+    400028: trappe
+    2100000: lambert1
+    2100002: Default_Material
+    2300000: barre
+    2300002: cabestan
+    2300004: cloche
+    2300006: polySurface104
+    2300008: polySurface105
+    2300010: polySurface106
+    2300012: polySurface107
+    2300014: polySurface108
+    2300016: polySurface122
+    2300018: polySurface123
+    2300020: porte
+    2300022: poulies
+    2300024: trappe
+    3300000: barre
+    3300002: cabestan
+    3300004: cloche
+    3300006: polySurface104
+    3300008: polySurface105
+    3300010: polySurface106
+    3300012: polySurface107
+    3300014: polySurface108
+    3300016: polySurface122
+    3300018: polySurface123
+    3300020: porte
+    3300022: poulies
+    3300024: trappe
+    4300000: trappe
+    4300002: barre
+    4300004: cabestan
+    4300006: cloche
+    4300008: porte
+    4300010: polySurface104
+    4300012: polySurface105
+    4300014: polySurface106
+    4300016: polySurface107
+    4300018: polySurface108
+    4300020: polySurface122
+    4300022: polySurface123
+    4300024: poulies
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 3
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
