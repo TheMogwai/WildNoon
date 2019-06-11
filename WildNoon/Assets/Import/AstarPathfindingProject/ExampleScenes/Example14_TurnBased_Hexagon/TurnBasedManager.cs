@@ -336,8 +336,8 @@ namespace Pathfinding.Examples {
                 {
                     //Player._onActiveUnit.Unit_Animator.applyRootMotion = true;
                     Vector3 gitano = new Vector3(10, 0, 0);
-                    Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
-                    Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position + gitano);
+                    Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto2");
+                    Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
                     //Player._onActiveUnit.Unit_Animator.SetTrigger("Shoot");
                 }
                 Player._onActiveUnit.AutoAttack(target);
