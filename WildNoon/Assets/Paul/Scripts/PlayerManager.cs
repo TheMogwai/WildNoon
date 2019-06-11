@@ -90,6 +90,9 @@ public class PlayerManager : MonoBehaviour
     Text _armorValueDisplay;
     [Space]
     [Header("Train Event")]
+    public GameObject Train_Sign;
+    public int nbrOfBlink;
+    public float blinkTempo;
     public int[] _turnOfEvent;
     public int[] _turnEndOfEvent;
     public AudioSource _EventAudio;
@@ -977,6 +980,11 @@ public class PlayerManager : MonoBehaviour
                 {
                     _EventAudio.Play();
                 }
+                if(turn == _turnOfEvent[i] - 1)
+                {
+
+                    StartCoroutine(Blinkingsign());
+                }
                 break;
 
             }
@@ -1013,6 +1021,18 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+    IEnumerator Blinkingsign()
+    {
+        for(int i =0; i< nbrOfBlink; ++i)
+        {
+            Train_Sign.SetActive(true);
+            yield return new WaitForSeconds(blinkTempo/2);
+            Train_Sign.SetActive(false);
+            yield return new WaitForSeconds(blinkTempo / 2);
+        }
+    }
+
+
     bool _isDisabled;
     public void OnPlayerIsDisabled(bool on)
     {

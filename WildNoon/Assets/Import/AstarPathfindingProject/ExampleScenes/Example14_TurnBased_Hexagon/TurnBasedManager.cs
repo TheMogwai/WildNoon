@@ -335,9 +335,10 @@ namespace Pathfinding.Examples {
                 if (Player._onActiveUnit.Unit_Animator != null)
                 {
                     //Player._onActiveUnit.Unit_Animator.applyRootMotion = true;
-                    Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto2");
-                    /*Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position + gitano);
-                    Player._onActiveUnit.Unit_Animator.SetTrigger("Shoot");*/
+                    Vector3 gitano = new Vector3(10, 0, 0);
+                    Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
+                    Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position + gitano);
+                    //Player._onActiveUnit.Unit_Animator.SetTrigger("Shoot");
                 }
                 Player._onActiveUnit.AutoAttack(target);
             }
@@ -642,7 +643,7 @@ namespace Pathfinding.Examples {
             m_target = target;
             Player._onActiveUnit.m_isInAnimation = true;
             Level.AddFX(unit.GetComponent<UnitCara>().m_Audio[1], unit.transform.position, Quaternion.identity);
-
+            Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Taunt");
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
 

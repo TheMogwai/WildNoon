@@ -22,7 +22,7 @@ public class UnitRangeAttack : IState
         if(m_TurnBaseManager.Player._onActiveUnit.Unit_Animator != null)
         {
             m_TurnBaseManager.Player._onActiveUnit.Unit_mesh.transform.LookAt(m_TurnBaseManager.UnitUnderMouse.transform.position);
-            m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
+            //m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
         }
     }
 
@@ -58,7 +58,7 @@ public class UnitRangeAttack : IState
     {
         if (m_TurnBaseManager.Player._onActiveUnit.Unit_Animator != null)
         {
-            m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto3");
+            //m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto3");
         }
 
     }
