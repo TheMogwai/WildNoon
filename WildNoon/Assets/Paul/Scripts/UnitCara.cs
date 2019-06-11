@@ -30,6 +30,8 @@ public class UnitCara : MonoBehaviour {
     [Header("Selection Nodes")]
 
     public GameObject Selected;
+    public Material BlueHexa;
+    public Material RedHexa;
     public GameObject Arrow;
     public Material Blue;
     public Material Red;
@@ -530,11 +532,11 @@ public class UnitCara : MonoBehaviour {
             
             if (!isTeam2)
             {
-                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
+                Selected.GetComponentInChildren<MeshRenderer>().material = BlueHexa;
             }
             else
             {
-                Selected.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+                Selected.GetComponentInChildren<MeshRenderer>().material = RedHexa;
             }
         }
     }

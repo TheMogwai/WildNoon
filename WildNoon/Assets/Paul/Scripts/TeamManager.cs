@@ -23,6 +23,10 @@ public class TeamManager : MonoBehaviour
     public Text m_characterName;
     public Text m_characterDescription;
 
+    [Header("Character Selected")]
+    public Sprite[] characterSpriteTeam1;
+    public Sprite[] characterSpriteTeam2;
+
     [Header("Art Display")]
     public Image CharacterModel;
     public Material[] cameraRendererMaterial;
@@ -225,7 +229,7 @@ public class TeamManager : MonoBehaviour
                 {
                     if (m_countCharaTeam_1 < SlotsTeam_1.Length)
                     {
-                        SlotsTeam_1[m_countCharaTeam_1].color = Color.red;                              //Pour afficher le fait que le perso a été choisi
+                        SlotsTeam_1[m_countCharaTeam_1].sprite = characterSpriteTeam1[charaNbrInTheList];                              //Pour afficher le fait que le perso a été choisi
                         m_Team_1[m_countCharaTeam_1] = character[charaNbrInTheList].gameObject;
 
                         m_unit_Spawer.GetComponent<Unit_Spawer>().Team1[m_countCharaTeam_1] = character[charaNbrInTheList].gameObject;
@@ -246,7 +250,7 @@ public class TeamManager : MonoBehaviour
                 {
                     if (m_countCharaTeam_2 < SlotsTeam_2.Length)
                     {
-                        SlotsTeam_2[m_countCharaTeam_2].color = Color.blue;                              //Pour afficher le fait que le perso a été choisi
+                        SlotsTeam_2[m_countCharaTeam_2].sprite = characterSpriteTeam2[charaNbrInTheList];                              //Pour afficher le fait que le perso a été choisi
                         m_Team_2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
 
                         m_unit_Spawer.GetComponent<Unit_Spawer>().Team2[m_countCharaTeam_2] = character[charaNbrInTheList].gameObject;
