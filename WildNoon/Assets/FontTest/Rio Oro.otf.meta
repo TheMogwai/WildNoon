@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: c6fe6b7d88b74364596160cb8c87d198
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Rio Oro
+  fontNames:
+  - Rio Oro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 9f8332f7aa35f5f41934103a8c5176b7, type: 3}
+  - {fileID: 12800000, guid: b6ff6d48d83b80e4f8c31ae51fa3541d, type: 3}
+  - {fileID: 12800000, guid: bbe3f4cfd95987d43a8dc51688e268a0, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

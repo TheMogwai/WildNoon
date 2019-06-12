@@ -14,7 +14,8 @@ public class AnimationFunctionCalling : MonoBehaviour
     {
         Player = FindObjectOfType<PlayerManager>();
         blocker = blockerParent.GetComponentsInChildren<SingleNodeBlocker>();
-
+        CountTeam1 = 0;
+        CountTeam2 = 0;
     }
 
     public void OnTrainAnimEnd()
@@ -36,26 +37,53 @@ public class AnimationFunctionCalling : MonoBehaviour
             }
             i = 0;
         }
+        
     }
-
-
+    int CountTeam1;
+    int CountTeam2;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             if(other.GetComponentInParent<UnitCara>() == Player._onActiveUnit)
             {
-                //StartCoroutine(gitaneri());
+                if (!other.GetComponentInParent<UnitCara>().IsTeam2)
+                {
+                    CountTeam1++;
+                    Debug.Log(CountTeam1);
+                }
+                else
+                {
+                    CountTeam2++;
+                }
+                if (CountTeam1 == 1 || CountTeam2 == 1)
+                {
+                    StartCoroutine(checkTimer(0f));
+                }
+                else if (CountTeam1 == 2 || CountTeam2 == 2)
+                {
+                    StartCoroutine(checkTimer(0.25f));
+                }
+                else if (CountTeam1 == 3 || CountTeam2 == 3)
+                {
+                    StartCoroutine(checkTimer(0.5f));
+                }
+                /*else if (CountTeam1 < 4 && CountTeam2 < 4)
+                {
+
+                    StartCoroutine(checkTimer(2.5f));
+
+                    //Player.OnTurnPassed();
+                }*/
             }
             other.GetComponentInParent<UnitCara>().OnTakingDamage(10000);
         }
     }
 
-    IEnumerator gitaneri()
+    IEnumerator checkTimer(float f)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(f);
         Player.OnTurnPassed();
 
     }
-
 }

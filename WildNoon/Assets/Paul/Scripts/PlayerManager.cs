@@ -952,7 +952,7 @@ public class PlayerManager : MonoBehaviour
             ResetArray();
             TurnCount = turnCountMax;
             TableTurnCount++;
-            Debug.Log(TableTurnCount);
+            //Debug.Log(TableTurnCount);
             TrainEventTrigger(TableTurnCount);
         }
         for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)

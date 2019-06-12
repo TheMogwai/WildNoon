@@ -859,12 +859,12 @@ public class UnitCara : MonoBehaviour {
 
     IEnumerator AniamtionDeath()
     {
-        m_isInAnimation = true;
+        //m_isInAnimation = true;
         if (Unit_Animator != null)
         {
             unit_Animator.SetTrigger("Jacky_Mort");
         }
-        yield return new WaitForSeconds(1.5f);             //Temps de l'animation de la mort
+        yield return new WaitForSeconds(1f);             //Temps de l'animation de la mort
 
         if(Player.m_UnitsInGameDisplay[nbrInTheList] != null)
         {
@@ -933,8 +933,12 @@ public class UnitCara : MonoBehaviour {
         {
             Player.CheckTeamStatus(false);
         }
+        if(GetComponent<UnitCara>() == Player._onActiveUnit)
+        {
+            Player.OnTurnPassed();
+        }
         Destroy(gameObject);
-        m_isInAnimation = false;
+        //m_isInAnimation = false;
 
     }
 }
