@@ -336,6 +336,7 @@ namespace Pathfinding.Examples {
                 {
                     //Player._onActiveUnit.Unit_Animator.applyRootMotion = true;
                     Vector3 gitano = new Vector3(10, 0, 0);
+                    Debug.Log("JJ");
                     Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto2");
                     Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
                     //Player._onActiveUnit.Unit_Animator.SetTrigger("Shoot");
@@ -583,8 +584,8 @@ namespace Pathfinding.Examples {
                     {
                         if(unit.Unit_Animator != null && target.Unit_Animator != null)
                         {
-                            //unit.Unit_Animator.SetTrigger("Shoot");
-                            //unit.Unit_mesh.transform.LookAt(target.transform.position);
+                            unit.Unit_Animator.SetTrigger("Jacky_Auto2");
+                            unit.Unit_mesh.transform.LookAt(target.transform.position);
                         }
                         target.OnTakingDamage(unit.Damage);
                     }
@@ -746,7 +747,10 @@ namespace Pathfinding.Examples {
 
                 yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
                 Player._onActiveUnit.m_isInAnimation = false;
-                Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
+                if (Player._onActiveUnit.Unit_mesh != null)
+                {
+                    Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
+                }
                 if (!target.IsStunByLasso)
                 {
                     if (target.OnCheckIfCCWorks())
@@ -792,7 +796,11 @@ namespace Pathfinding.Examples {
 
             yield return new WaitForSeconds(0.5f);                                //Temps de l'anim de l'attaque
             Player._onActiveUnit.m_isInAnimation = false;
-            Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
+            if (Player._onActiveUnit.Unit_mesh != null)
+            {
+                Player._onActiveUnit.Unit_mesh.transform.LookAt(target.transform.position);
+            }
+            
 
 
             float spellDamage = target.unitStats.m_heatlh * (unit.GetComponent<UnitCara>().OnUsedSpell1.m_spellDamage / 100f);

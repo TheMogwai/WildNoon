@@ -45,10 +45,17 @@ public class AnimationFunctionCalling : MonoBehaviour
         {
             if(other.GetComponentInParent<UnitCara>() == Player._onActiveUnit)
             {
-                Player.OnTurnPassed();
+                //StartCoroutine(gitaneri());
             }
             other.GetComponentInParent<UnitCara>().OnTakingDamage(10000);
         }
+    }
+
+    IEnumerator gitaneri()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Player.OnTurnPassed();
+
     }
 
 }

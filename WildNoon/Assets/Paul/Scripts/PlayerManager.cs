@@ -471,8 +471,8 @@ public class PlayerManager : MonoBehaviour
                 else
                 {
                     m_teamArtWork[i].sprite = m_UnitDead;
-                    m_teamHealth[i].sprite = null;
-                    m_teamArmor[i].sprite = null;
+                    m_teamHealth[i].fillAmount = 0;
+                    m_teamArmor[i].fillAmount = 0;
                 }
             }
             playerTurnTopLeft.GetComponent<Image>().sprite = player2;
@@ -694,7 +694,10 @@ public class PlayerManager : MonoBehaviour
         m_UnitsInGameDisplay = UnitsInGameLayout.GetComponentsInChildren<Image>();
         for (int i = 0, l = m_UnitsInGameCara.Length; i < l; ++i)
         {
-            m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+            if(m_UnitsInGameDisplay[i] != null)
+            {
+                m_UnitsInGameDisplay[i].sprite = m_UnitsInGameCara[i].UnitWheelArt;
+            }
         }
     }
 
@@ -718,7 +721,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnTurnPassed()
     {
-        if (!TurnBasedManager.IsMoving && !_onActiveUnit.m_isInAnimation)
+        if (!TurnBasedManager.IsMoving && !_onActiveUnit.m_isInAnimation && _onActiveUnit != null)
         {
             ResetArray();
             TurnCount--;
@@ -899,10 +902,12 @@ public class PlayerManager : MonoBehaviour
             if (_onActiveUnit.CoolDownCount[i] != 0)
             {
                 SpellsButton[i].GetComponentInChildren<Text>().text = _onActiveUnit.CoolDownCount[i].ToString();
+                //SpellsButton[i].interactable = false;
             }
             else
             {
-                SpellsButton[i].GetComponentInChildren<Text>().text = "Spell " + i;
+                //SpellsButton[i].interactable = true;
+                SpellsButton[i].GetComponentInChildren<Text>().text = "";
             }
         }
         _statsValue[0].text = string.Format("{0}", _onActiveUnit.LifePoint);

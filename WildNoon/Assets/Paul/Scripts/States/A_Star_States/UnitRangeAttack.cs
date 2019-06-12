@@ -22,7 +22,14 @@ public class UnitRangeAttack : IState
         if(m_TurnBaseManager.Player._onActiveUnit.Unit_Animator != null)
         {
             m_TurnBaseManager.Player._onActiveUnit.Unit_mesh.transform.LookAt(m_TurnBaseManager.UnitUnderMouse.transform.position);
-            m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
+            var heading = m_TurnBaseManager.UnitUnderMouse.gameObject.transform.position - m_TurnBaseManager.Player._onActiveUnit.gameObject.transform.position;
+            _heading = heading;
+            distanceToPlayer = heading.magnitude;
+
+            if (distanceToPlayer < range)
+            {
+                m_TurnBaseManager.Player._onActiveUnit.Unit_Animator.SetTrigger("Jacky_Auto1");
+            }
         }
     }
 
