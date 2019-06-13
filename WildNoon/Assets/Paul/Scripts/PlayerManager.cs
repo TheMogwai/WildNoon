@@ -42,8 +42,11 @@ public class PlayerManager : MonoBehaviour
     [Space]
     [Header("Timer Display")]
     public GameObject m_TimerParent;
+    public GameObject[] Player1Pos;
+    public GameObject[] Player2Pos;
+    public GameObject[] sparkle;
     Text[] m_TimeLeft;
-    Image[] m_SliderTimeLeft;
+    public Image[] m_SliderTimeLeft;
     float[] timeleft;
     float[] minutes;
     float[] seconds;
@@ -319,7 +322,7 @@ public class PlayerManager : MonoBehaviour
 
         #region Time Management Var
         m_TimeLeft = m_TimerParent.GetComponentsInChildren<Text>();
-        m_SliderTimeLeft = m_TimerParent.GetComponentsInChildren<Image>();
+        //m_SliderTimeLeft = m_TimerParent.GetComponentsInChildren<Image>();
         timeleft = new float[2];
         minutes = new float[2];
         seconds = new float[2];
@@ -376,6 +379,15 @@ public class PlayerManager : MonoBehaviour
     {
         RopeMethod();
         TimerMethod();
+        float posx = sparkle[0].transform.position.x;
+        posx = Mathf.Lerp(Player1Pos[1].transform.position.x, Player1Pos[0].transform.position.x, m_SliderTimeLeft[0].fillAmount);
+        sparkle[0].transform.position = new Vector3(posx, sparkle[0].transform.position.y, sparkle[0].transform.position.z);
+        float po2x = sparkle[1].transform.position.x;
+        po2x = Mathf.Lerp(Player2Pos[1].transform.position.x, Player2Pos[0].transform.position.x, m_SliderTimeLeft[1].fillAmount);
+        sparkle[1].transform.position = new Vector3(po2x, sparkle[1].transform.position.y, sparkle[1].transform.position.z);
+        /*m_SliderTimeLeft[0].fillAmount = Mathf.InverseLerp(0, m_time, timeleft[0]);
+        m_SliderTimeLeft[1].fillAmount = Mathf.InverseLerp(0, m_time, timeleft[1]);*/
+
         if (m_actionPointsCosts.gameObject.activeSelf)
         {
 
@@ -554,8 +566,8 @@ public class PlayerManager : MonoBehaviour
                 
                 TimeCount(1);
 
-                OnSwitchDisplay(0, 1);
                 OnSwitchDisplay(1, 0);
+                OnSwitchDisplay(0, 1);
                 
             }
         }
@@ -595,6 +607,7 @@ public class PlayerManager : MonoBehaviour
 
         if(m_SliderTimeLeft[i] != null)
         {
+            
             m_SliderTimeLeft[i].fillAmount = Mathf.InverseLerp(0, m_time, timeleft[a]);
         }
     }
