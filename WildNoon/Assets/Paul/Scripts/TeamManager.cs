@@ -362,7 +362,7 @@ public class TeamManager : MonoBehaviour
     IEnumerator Gitanerie()
     {
         yield return new WaitForSeconds(0.2f);  
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
         DontDestroyOnLoad(m_unit_Spawer);
     }
 
